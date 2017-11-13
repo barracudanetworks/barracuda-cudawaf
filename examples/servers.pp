@@ -35,6 +35,4 @@ wafservers{ 'WAFSERVER-3':
   comments => 'Creating the server'
 }
 
-
 }
-

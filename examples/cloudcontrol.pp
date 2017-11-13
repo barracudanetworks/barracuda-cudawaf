@@ -4,9 +4,8 @@ wafcloudcontrol{ 'WAFCouldControl-1':
   ensure => present,
   connect_mode => 'cloud',
   state => 'connected',
-  username => 'rprakashbarracuda.com',
-  password => 'password'
+  username => 'aravindan.acct@selahcloud.in',
+  password => 'bcc4me123!'
 }
 
 }
-

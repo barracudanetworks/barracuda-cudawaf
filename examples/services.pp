@@ -3,19 +3,19 @@ class barracudawaf {
 wafservices  { 'WAFSVC-1':
   ensure        => present,
   name          => 'bhanu',
-  type		=> 'http',
-  dps_enabled	=> 'no',
-  mask		=> '255.255.255.255',
-  ip_address	=> '3.3.3.3',
-  port		=> '80',
-  group		=> 'default',
-  vsite		=> 'default',
-  status		=> 'On',
-  address_version	=> 'ipv4',
-  comments	=> 'Updating the comments',
-  app_id		=> '1',
+  type          => 'http',
+  dps_enabled   => 'no',
+  mask          => '255.255.255.255',
+  ip_address    => '3.3.3.3',
+  port          => '80',
+  group         => 'default',
+  vsite         => 'default',
+  status                => 'On',
+  address_version       => 'ipv4',
+  comments      => 'Updating the comments',
+  app_id                => '1',
   enable_access_logs => 'Yes',
-  session_timeout	=> '60',
+  session_timeout       => '60',
 }
 
 wafservices { 'WAFSVC-2':
@@ -53,29 +53,4 @@ wafservices { 'WAFSVC-3':
   enable_access_logs => 'Yes',
   session_timeout       => '60',
 }
-
-#wafservices { 'WAFSVC-4':
- # ensure        => present,
- #name   => 'demo_service_12',
-#}
-
-#wafservices { 'WAFSVC-5':
-# ensure        => present,
-#  name          => 'WAFGETALLSERVICES',
-#  type          => 'http',
-#  mask          => '255.255.255.255',
-#  ip_address    => '3.3.3.3',
-#  port          => '80',
-#  group         => 'default',
-#  vsite         => 'default',
-#  status                => 'On',
-#  address_version       => 'ipv4',
-#  comments      => 'testing',
-#  app_id                => '1',
-#  enable_access_logs => 'Yes',
-#  session_timeout       => '60',
-#  svcname => 'demo_service_11',
-#  api_method => 'GETALLSERVICES',
-#}
-
 }
