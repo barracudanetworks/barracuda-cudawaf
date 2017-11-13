@@ -10,12 +10,12 @@ require 'logger'
 require 'rest-client'
 Puppet::Type.type(:wafcertificates).provide(:wafcertificatesprovider) do
 
-Puppet.info("Inside wafcertificatesprovider:")
+Puppet.debug("Inside wafcertificatesprovider:")
 
 mk_resource_methods
 
 def exists?
-  Puppet.info("Calling exists methods of wafcertificatesprovider:")
+  Puppet.debug("Calling exists methods of wafcertificatesprovider:")
   @property_hash[:ensure] == :present
 
   cerName=@resource[:name]
@@ -52,7 +52,7 @@ end
 # this method will return the instances array
 def self.instances
 
-  Puppet.info("Inside self instances method")
+  Puppet.debug("Inside self instances method")
   instances = []
   config = SwaggerClient::Configuration.new
   @config= config
@@ -62,7 +62,7 @@ def self.instances
   auth_header = login_instance.get_auth_header
   # get all certificates  from WAF
   response = RestClient.get base_url+"/certificates", {:Authorization => "#{auth_header}"}
-  Puppet.info("WAF certificates GET certificate name response : #{response}")
+  Puppet.debug("WAF certificates GET certificate name response : #{response}")
   parsed_response = JSON.parse(response)
   data = parsed_response["data"]
   data.each do |certObj|
@@ -77,7 +77,7 @@ def self.instances
 end
 
 def self.prefetch(resources)
-  Puppet.info("Inside Self.Prefetch method of wafcertificates provider :")
+  Puppet.debug("Inside Self.Prefetch method of wafcertificates provider :")
   certificates = instances
   resources.keys.each do |name|
     if provider = certificates.find { |certificate| certificate.name == name}
@@ -87,7 +87,7 @@ def self.prefetch(resources)
 end
 
 def flush
-    Puppet.info("inside flush method: there is no put call for waf certificates")
+    Puppet.debug("inside flush method: there is no put call for waf certificates")
 end
 
 def message(object)
@@ -168,7 +168,7 @@ def message(object)
 end
 
 def create
-  Puppet.info("WAF certificates create method: ")
+  Puppet.debug("WAF certificates create method: ")
   config = SwaggerClient::Configuration.new
   @config= config
   base_url = @config.base_url
@@ -233,7 +233,7 @@ def create
 end
 
 def destroy
-  Puppet.info("Calling WAF certificates destroy method:  ")
+  Puppet.debug("Calling WAF certificates destroy method:  ")
   config = SwaggerClient::Configuration.new
   @config= config
   base_url = @config.base_url
@@ -248,7 +248,7 @@ def destroy
   Puppet.debug("certificate name is:  #{name}")
 
   response=RestClient.delete base_url+"/certificates/"+"#{name}", {:Authorization => "#{auth_header}",accept: :json}
-  Puppet.info("WAF certificates destroy method response: #{response}")
+  Puppet.debug("WAF certificates destroy method response: #{response}")
   # We clear the hash here to stop flush from triggering.
   @property_hash.clear
   return response

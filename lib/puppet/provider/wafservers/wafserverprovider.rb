@@ -9,7 +9,7 @@ require 'logger'
 require 'rest-client'
 Puppet::Type.type(:wafservers).provide(:wafserverprovider) do
 
-  Puppet.info("Inside wafserverprovider: ")
+  Puppet.debug("Inside wafserverprovider: ")
 
   mk_resource_methods
 
@@ -45,7 +45,7 @@ def exists?
   if service_status_code === '200'
    # call get server
     data,status_code,headers=server_instance.services_web_application_name_servers_server_name_get(auth_header,serviceName,serverName)
-    Puppet.info("status_code received from WAF api GET server:  #{status_code}")
+    Puppet.debug("status_code received from WAF api GET server:  #{status_code}")
 
     if status_code === 200
       true
@@ -68,7 +68,7 @@ end
 #this method get all servers from WAF system and builds the instances array
 def self.instances()
 
- Puppet.info("Callling getInstances method of wafserverprovider: ")
+ Puppet.debug("Callling getInstances method of wafserverprovider: ")
 #  serviceName=@resource[:service_name]
   serviceName="demo_service_13"
   Puppet.debug("Service Name : #{serviceName}")
@@ -109,7 +109,7 @@ end
 # this method compares the name attribute from instances and resources. If it matches then sets the provider
 def self.prefetch(resources)
 
-  Puppet.info("Calling self.prefetch method of wafserverprovider: ")
+  Puppet.debug("Calling self.prefetch method of wafserverprovider: ")
   servers = instances
   resources.keys.each do |name|
      if provider = servers.find { |server| server.name == name}
@@ -121,7 +121,7 @@ def self.prefetch(resources)
 
 # this method does a put call to waf servers. This will be triggered with ensure is present and exists method return true.
 def flush
-  Puppet.info("Calling  flush method of wafserverprovider: ")
+  Puppet.debug("Calling  flush method of wafserverprovider: ")
   if @property_hash != {}
      login_instance = Login.new
      auth_header = login_instance.get_auth_header
@@ -135,7 +135,7 @@ def flush
      if status_code == 200 
         return data
      else
-        Puppet.info("There is some problem to process the request. status_code is #{status_code}")
+        Puppet.debug("There is some problem to process the request. status_code is #{status_code}")
         return
      end
   end    
@@ -215,7 +215,7 @@ end
 
 # this method does a POST call to create a server in WAF.this method will be called if the ensure is present and exists method return false
 def create
-  Puppet.info("Calling create method of wafserverprovider:")
+  Puppet.debug("Calling create method of wafserverprovider:")
   serviceName=@resource[:service_name]
   # getting the authorization token for WAF.
   login_instance = Login.new
@@ -230,7 +230,7 @@ end
 
 # this method will call the delete api of a WAF service 
 def destroy
-  Puppet.info("Calling wafserverprovider destroy method: ")
+  Puppet.debug("Calling wafserverprovider destroy method: ")
   # getting the authorization token for WAF.
   login_instance = Login.new
   auth_header = login_instance.get_auth_header

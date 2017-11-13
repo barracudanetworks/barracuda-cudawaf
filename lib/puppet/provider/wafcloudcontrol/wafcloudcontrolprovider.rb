@@ -7,26 +7,26 @@ require 'uri'
 require 'logger'
 require 'rest-client'
 Puppet::Type.type(:wafcloudcontrol).provide(:wafcloudcontrolprovider) do
-  Puppet.info("Inside wafcloudcontrolprovider: ")
+  Puppet.debug("Inside wafcloudcontrolprovider: ")
   mk_resource_methods
 
 # this method will get service/servicename and return true or false 
 def exists?
-  Puppet.info("Calling exists method of wafcloudcontrolprovider: ")
+  Puppet.debug("Calling exists method of wafcloudcontrolprovider: ")
   @property_hash[:ensure] == :present
   return true
 end
 
 #this method get all services from WAF system and builds the instances array
 def self.instances
-  Puppet.info("Callling self.instances method of wafcloudcontrolprovider: ")
+  Puppet.debug("Callling self.instances method of wafcloudcontrolprovider: ")
   instances = []
   return instances
 end
 
 # this method compares the name attribute from instances and resources. If it matches then sets the provider
 def self.prefetch(resources)
-  Puppet.info("Calling self.prefetch method of wafcloudcontrolprovider: ")
+  Puppet.debug("Calling self.prefetch method of wafcloudcontrolprovider: ")
   cloudobj = instances
   resources.keys.each do |state|
      if provider = cloudobj.find { |cloud| cloud.state == state}
@@ -37,7 +37,7 @@ end
 
 # this method does a put call to waf service. This will be triggered with ensure is present and exists method return true.
 def flush
-  Puppet.info("Calling  flush method of wafcloudcontrolprovider: ")
+  Puppet.debug("Calling  flush method of wafcloudcontrolprovider: ")
   if @property_hash != {}
      login_instance = Login.new
      auth_header = login_instance.get_auth_header
@@ -55,14 +55,14 @@ end
 
 # this method does not do anything for cloudcontrol
 def create
-  Puppet.info("Calling create method of wafclouodcontrolprovider:")
+  Puppet.debug("Calling create method of wafclouodcontrolprovider:")
   # We clear the hash here to stop flush from triggering.
   @property_hash.clear
 end
 
 # this method does not do anything for cloudcontrol 
 def destroy
-  Puppet.info("Calling wafcloudcontrolprovider destroy method: ")
+  Puppet.debug("Calling wafcloudcontrolprovider destroy method: ")
   login_instance = Login.new
   auth_header = login_instance.get_auth_header
   Puppet.debug("WAF authorization token:  #{auth_header}")
