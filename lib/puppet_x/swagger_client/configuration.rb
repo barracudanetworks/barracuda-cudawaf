@@ -128,8 +128,13 @@ module SwaggerClient
     attr_accessor :force_ending_format
 
     def initialize
+      hostinfo = `cat /etc/puppetlabs/puppet/credentials.json`
+      hostinfo_json = JSON.parse(hostinfo)
+      ip = hostinfo_json ["host"]
+      port = hostinfo_json ["port"]
       @scheme = 'http'
-      @host = '10.36.73.244:8000'
+      wafinfo="#{ip}:#{port}"
+      @host = wafinfo
       @base_path = '/restapi/v3'
       @api_key = {}
       @api_key_prefix = {}
