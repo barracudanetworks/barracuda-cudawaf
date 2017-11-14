@@ -15,7 +15,7 @@
 ## Description
 
 With the Barracuda Web Application Firewall, administrators do not need to wait for clean code or even know how an application works to secure their applications. Organizations can ensure robust security with a Barracuda Web Application Firewall hardware or virtual appliance, deployed either on-premises or in the cloud.
-This module enables management of the Barracuda Web Application Firewall using Puppet.
+This module enables management of the Barracuda Web Application Firewall using Puppet..
 
 ## Resource Types
 
