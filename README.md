@@ -250,46 +250,81 @@ Specifies a description for the server
 
 ### Signed Certificate Parameters
 #### `upload`
+The certificate file to be uploaded should be specified with the path
+
 #### `name`
+Specifies the name for the certificate
+
 #### `type`
+Specifies the type for the certificate. Options are pkcs12 and pem
+
 #### `key_type`
+Specifies the key type for the certificate being uploaded
+
 #### `signed_certificate`
+Specifies the signed certificate file
+
 #### `assign_associated_key`
+Specifies if the uploaded certificate should be associates with a private key that is stored on the WAF system
+
 #### `key`
+Specifies the private key file
+
 #### `intermediary_certificate`
+Specifies the intermediary certificate to be used with the signed certificate during the upload
+
 #### `allow_private_key_export`
+Specifies if the WAF should allow the private key is to be exported when the certificate is exported
+
 #### `password`
+Specifies the password for the pkcs12 certificate
+
 
 ### Trusted Server Certificate Parameters
+
 #### `upload`
+The certificate file to be uploaded should be specified with the path
+
 #### `name`
+Specifies the name for the certificate
+
 #### `trusted_server_certificate`
+Specifies the trusted server certificate file
+
 
 ### Trusted CA Certificate Parameters
+
 #### `upload`
+The certificate file to be uploaded should be specified with the path
+
 #### `name`
+Specifies the name for the certificate
+
 #### `trusted_certificate`
+The certificate file to be uploaded should be specified with the path
+
+
 
 ### Self Signed Certificate Parameters
-#### `allow_private_key_export` "yes",
-#### `city` "string",
-#### `common_name` "string",
-#### `country_code` "string",
-#### `curve_type` "secp256r1",
-#### `key_size` "1024",
-#### `key_type`: "rsa",
-#### `name`: "string",
-#### `organization_name`: "string",
-#### `organization_unit`: "string",
+```
+city:
+common_name:
+country_code:
+curve_type:
+key_size:
+key_type:
+name:
+organization_name:
+organization_unit:
+san_certificate[
+  "DNS:<domain name>,"
+  "Email:<email address>,"
+  "URI:<Provide the URI.>",
+  "IP:<Provide the IP.>"
+]
+state:
 
-#### `san_certificate[`
-####    `"DNS:<Provide the DNS domain name.>",`
-####    `"Email:<Provide the Email.>",`
-####    `"URI:<Provide the URI.>",`
-####    `"IP:<Provide the IP.>"`
-####  `]`
-
-#### `state`: "string"
+```
 
 ### `Cloud Control`
 
