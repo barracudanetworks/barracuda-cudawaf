@@ -1,111 +1,141 @@
 Puppet::Type.newtype(:wafcertificates) do
- @doc = 'Type representing a Certificate  object on the Barracuda Web Application Firewall.'
+  @doc = 'Defines all possible types for Creation/Upload of a Certificate object on the Barracuda Web Application Firewall.'
 
-ensurable
-newparam(:name, :namevar => true) do
-    desc 'WAF Certificate Name'
+  ensurable
+
+
+  newparam(:name, :namevar => true) do
+    desc "Certificate Name"
     validate do |value|
-      fail 'name should not be blank' if value == ''
+      fail("Invalid name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/
     end
   end
 
-  newproperty(:allow_private_key_export) do
-    desc 'allow_private_key_export'
-    defaultto:yes
-  end
-  
-   newparam(:cer_name) do
-   desc:'certificate name'
-   end
 
-  
-  newproperty(:city) do
-    desc 'city'
-    defaultto:'city'
-  end
-
-  newproperty(:common_name) do
-    desc 'common_name'
-    defaultto:'common_name'
-  end
-  
   newproperty(:country_code) do
-    desc 'country_code'
-    defaultto:'country_code'
+    desc "Country"
+    validate do |value|
+      fail("Invalid country_code #{value}, Illegal characters present") unless value =~ /^[A-Za-z0-9\.\_\s\@\/\*\-]+$/
+    end
   end
 
-  newproperty(:curve_type) do
-    desc 'curve_type'
-    defaultto:'secp256r1'
+
+  newproperty(:allow_private_key_export) do
+    desc "Allow Private Key Export"
+    defaultto :Yes 
+    newvalues(:Yes, :No)
   end
 
-  newproperty(:key_size) do
-    desc 'key_size'
-    defaultto:'key_size'
-  end
 
   newproperty(:key_type) do
-    desc 'key_type'
-    defaultto:'key_type'
+    desc "Select Key Type:"
+    defaultto :rsa
+    newvalues(:rsa, :ecdsa)
   end
+
+
+  newproperty(:key_size) do
+    desc "Key Size"
+    defaultto 1024
+    newvalues(1024, 2048, 4096)
+  end
+
 
   newproperty(:organization_name) do
-    desc 'organization_name'
-    defaultto:'organization_name'
+    desc "Organization Name"
+    validate do |value|
+      fail("Invalid organization_name #{value}, Illegal characters present") unless value =~ /^[A-Za-z0-9\.\,\_\&\'\(\)\-\s\@\/\*]+$/
+    end
   end
 
-  newproperty(:organization_unit) do
-    desc 'organization_unit'
-    defaultto:'organization_unit'
+
+  newproperty(:san_certificate) do
+    desc "san certificate"
   end
+
 
   newproperty(:state) do
-    desc 'state'
-    defaultto:'state'
+    desc "State or Province"
+    validate do |value|
+      fail("Invalid state #{value}, Illegal characters present") unless value =~ /^[A-Za-z0-9\.\_\s\@\/\*\-]+$/
+    end
   end
 
-  newparam(:type) do
-    desc 'type'
+
+  newproperty(:common_name) do
+    desc "Common Name"
+    validate do |value|
+      fail("Invalid common_name #{value}, Illegal characters present") unless value =~ /^[A-Za-z0-9\.\_\s\@\/\*\-]+$/
+    end
   end
+
+
+  newproperty(:city) do
+    desc "Locality Name"
+    validate do |value|
+      fail("Invalid city #{value}, Illegal characters present") unless value =~ /^[A-Za-z0-9\.\_\s\@\/\*\-]+$/
+    end
+  end
+
+
+  newproperty(:organization_unit) do
+    desc "Organizational Unit Name"
+    validate do |value|
+      fail("Invalid organizational_unit #{value}, Illegal characters present") unless value =~ /^[A-Za-z0-9\.\_\'\s\@\/\*\-]+$/
+    end
+  end
+
+
+  newproperty(:curve_type) do
+    desc "Elliptic Curve Name"
+    defaultto :secp256r1
+    newvalues(:secp256r1, :secp384r1, :secp521r1)
+  end
+
 
   newproperty(:signed_certificate) do
-    desc 'signed_certificate'
-    defaultto:'signed_certificate'
+    desc "Signed Certificate File Path"
   end
+
 
   newproperty(:assign_associated_key) do
-    desc 'assign_associated_key'
-    defaultto:'no'
+    desc "Assign Associated Key"
+    defaultto :No
+    newvalues(:No, :Yes)
   end
+
 
   newproperty(:key) do
-    desc 'key'
-    defaultto:'key'
+    desc "Certificate Key"
   end
+
 
   newproperty(:intermediary_certificate) do
-    desc 'intermediary_certificate'
+    desc "Intermediary Certificate File Path"
   end
+
 
   newproperty(:password) do
-    desc 'password'
-    defaultto:'password'
-  end
-  
-  newproperty(:upload) do
-    desc 'upload'
-    defaultto:'signed'
-  end
- 
-  newproperty(:trusted_certificate) do
-    desc 'trusted_certificate'
-    defaultto:'trusted_certificate'
+    desc "Certificate Password"
   end
 
-  newproperty(:trusted_server_certificate) do
-    desc 'trusted_server_certificate'
-    defaultto:'trusted_server_certificate'
+
+  newproperty(:upload) do
+    desc 'Upload Type'
+    defaultto :signed
+    newvalues(:signed, :trusted, :trusted_server)
   end
+
+
+  newproperty(:trusted_certificate) do
+    desc 'Trusted Certificate File Path'
+  end
+
+
+  newproperty(:trusted_server_certificate) do
+    desc 'Trusted Server Certificate File Path'
+  end
+
 
 end
 

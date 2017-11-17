@@ -1,61 +1,80 @@
 Puppet::Type.newtype(:wafservers) do
-  @doc = 'Type representing a Server object on the Barracuda Web Application Firewall.'
+  @doc = 'Defines all possible types for a Server object on the Barracuda Web Application Firewall.'
 
-ensurable
+  ensurable
+
   newparam(:name, :namevar => true) do
-    desc 'Server Name'
+    desc "Server Name"
     validate do |value|
-      fail 'name should not be blank' if value == ''
+      fail("Invalid name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._:\-]*$/
     end
   end
 
-    newparam(:service_name, :namevar => true) do
+
+  newparam(:service_name, :namevar => true) do
     desc 'Service Name'
     validate do |value|
-      fail 'service name should not be blank' if value == ''
+      fail("Invalid service_name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._:\-]*$/
     end
   end
+
+
+  newproperty(:address_version) do
+    desc "Version"
+    defaultto :IPv4
+    newvalues(:IPv4, :IPv6)
+  end
+
+
+  newproperty(:status) do
+    desc "Status"
+    defaultto 'In Service'
+    newvalues('In Service', 'Out of Service Maintenance', 'Out of Service Sticky', 'Out of Service All')
+  end
+
+
+  newproperty(:hostname) do
+    desc "Hostname"
+    validate do |value|
+      fail("Invalid hostname #{value}, Illegal characters present") unless value =~ /(^([a-zA-Z0-9\.\-\_]+))$/
+    end
+  end
+
+
+  newproperty(:comments) do
+    desc "Comments"
+  end
+
+
+  newproperty(:port) do
+    desc "Server Port"
+    defaultto 80
+    munge do |value|
+      Integer(value)
+    end
+    validate do |value|
+      fail("Invalid port #{value}, Must not be lesser than 0") if value < 0
+      fail("Invalid port #{value}, Must not be greater than 65535") if value > 65535
+    end
+  end
+
+
+  newproperty(:identifier) do
+    desc "Identifier"
+    defaultto 'IP Address'
+    newvalues('IP Address', 'Hostname')
+  end
+
+
+  newproperty(:ip_address) do
+    desc "Server IP"
+  end
+
 
   def self.title_patterns
      [ [ /(.*)/m, [ [:name] ] ] ]
   end
 
-=begin
-  newparam(:service_name) do
-   desc 'service_name'
-  end
-=end
-  newproperty(:identifier) do
-    desc 'Identifier'
-    defaultto:'255.255.255.255'
-  end
-
-  newparam(:port) do
-   desc 'Server Port'
-   defaultto:'80'
-  end
-
-  newparam(:comments) do
-    desc 'Comments'
-    defaultto:comments
-  end
-
-  newproperty(:address_version) do
-    desc 'Version'
-    defaultto:IPv4
-  end
-
-  newparam(:hostname) do
-    desc 'Hostname'
-  end
-
-  newproperty(:status) do
-    desc 'Status'
-    defaultto:'In Service'
-  end
-
-  newparam(:ip_address) do
-    desc 'Server IP'
-  end
 
 end
+
