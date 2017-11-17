@@ -1,16 +1,16 @@
 class samplehttps {
-  certificates{ 'WAFCER-1':
-    ensure => present,
-    name  => 'createdcert1',
-    city   =>'Bangalore',
-    state => 'Karnataka',
-    common_name=> 'waf.test.local',
-    country_code => 'IN',
-    key_size => 1024,
-    key_type => 'rsa',
-    organization_name => 'Barracuda Networks',
-    organization_unit => 'Engineering',
-    allow_private_key_export =>'Yes',
+  certificates  {  'WAFCER-1':
+    ensure                   => present,
+    name                     => 'createdcert1',
+    city                     => 'Bangalore',
+    state                    => 'Karnataka',
+    common_name              => 'waf.test.local',
+    country_code             => 'IN',
+    key_size                 => 1024,
+    key_type                 => 'rsa',
+    organization_name        => 'Barracuda Networks',
+    organization_unit        => 'Engineering',
+    allow_private_key_export => 'Yes',
   }
 
   services  { 'WAFSVC-1':
