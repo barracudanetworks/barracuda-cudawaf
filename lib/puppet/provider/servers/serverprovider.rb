@@ -7,14 +7,14 @@ require 'base64'
 require 'uri'
 require 'logger'
 require 'rest-client'
-Puppet::Type.type(:wafservers).provide(:wafserverprovider) do
+Puppet::Type.type(:servers).provide(:serverprovider) do
 
-  Puppet.debug("Inside wafserverprovider: ")
+  Puppet.debug("Inside serverprovider: ")
   mk_resource_methods
 
 # this method will get server/servername and return true or false
 def exists?
-  Puppet.debug("Calling exists method of wafsererprovider: ")
+  Puppet.debug("Calling exists method of serverprovider: ")
   @property_hash[:ensure] == :present
 
   # getting waf authorization token
@@ -31,7 +31,6 @@ def exists?
   Puppet.debug("WAF server name in manifest:  #{serverName}")
   Puppet.debug("WAF service name in manifest : #{serviceName}")
   # Check for the existance of the Service before calling the server api.
-#  options={}
   serviceresponse = service_instance.services_web_application_name_get(auth_header,serviceName,{})
   service_parsed_response = JSON.parse(serviceresponse)
   service_status_code=service_parsed_response["status_code"]
@@ -75,7 +74,7 @@ def self.instances()
  services.each do |service|
 
    svc = service
-   Puppet.debug("Callling getInstances method of wafserverprovider: ")
+   Puppet.debug("Calling getInstances method of serverprovider: ")
    serviceName=svc
    Puppet.debug("Service Name : #{serviceName}")
    login_instance = Login.new
@@ -111,7 +110,7 @@ end
 #this method get all services from WAF system and builds the instances array
 def self.getservices
 
-  Puppet.debug("Callling getservices  method of wafserverprovider: ")
+  Puppet.debug("Calling getservices  method of serverprovider: ")
   service_instances = []
 
   login_instance = Login.new
@@ -143,7 +142,7 @@ end
 # this method compares the name attribute from instances and resources. If it matches then sets the provider
 def self.prefetch(resources)
 
-  Puppet.debug("Calling self.prefetch method of wafserverprovider: ")
+  Puppet.debug("Calling self.prefetch method of serverprovider: ")
   servers = instances
   resources.each do |name,service_name|
      if provider = servers.find { |server| server.name == name && server.service_name == service_name}
@@ -155,7 +154,7 @@ def self.prefetch(resources)
 
 # this method does a put call to waf servers. This will be triggered with ensure is present and exists method return true.
 def flush
-  Puppet.debug("Calling  flush method of wafserverprovider: ")
+  Puppet.debug("Calling  flush method of serverprovider: ")
   if @property_hash != {}
      login_instance = Login.new
      auth_header = login_instance.get_auth_header
@@ -249,7 +248,7 @@ end
 
 # this method does a POST call to create a server in WAF.this method will be called if the ensure is present and exists method return false
 def create
-  Puppet.debug("Calling create method of wafserverprovider:")
+  Puppet.debug("Calling create method of serverprovider:")
   serviceName=@resource[:service_name]
   # getting the authorization token for WAF.
   login_instance = Login.new
@@ -264,7 +263,7 @@ end
 
 # this method will call the delete api of a WAF service
 def destroy
-  Puppet.debug("Calling wafserverprovider destroy method: ")
+  Puppet.debug("Calling serverprovider destroy method: ")
   # getting the authorization token for WAF.
   login_instance = Login.new
   auth_header = login_instance.get_auth_header

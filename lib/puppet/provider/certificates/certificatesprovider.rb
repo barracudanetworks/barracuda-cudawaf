@@ -7,12 +7,12 @@ require 'uri'
 require 'logger'
 require 'rest-client'
 
-Puppet::Type.type(:wafcertificates).provide(:wafcertificatesprovider) do
+Puppet::Type.type(:certificates).provide(:certificatesprovider) do
 
   mk_resource_methods
 
   def exists?
-    Puppet.debug("Calling exists methods of wafcertificatesprovider:")
+    Puppet.debug("Calling exists methods of certificatesprovider:")
     @property_hash[:ensure] == :present
 
     name=@resource[:name]
@@ -88,7 +88,7 @@ Puppet::Type.type(:wafcertificates).provide(:wafcertificatesprovider) do
   end
 
   def self.prefetch(resources)
-    Puppet.debug("Inside Self.Prefetch method of wafcertificates provider")
+    Puppet.debug("Inside Self.Prefetch method of certificates provider")
 
     certificates = instances
     resources.keys.each do |name|

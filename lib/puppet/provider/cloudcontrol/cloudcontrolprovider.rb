@@ -7,29 +7,29 @@ require 'uri'
 require 'logger'
 require 'rest-client'
 
-Puppet::Type.type(:wafcloudcontrol).provide(:wafcloudcontrolprovider) do
+Puppet::Type.type(:cloudcontrol).provide(:cloudcontrolprovider) do
 
-  Puppet.debug("Inside wafcloudcontrolprovider: ")
+  Puppet.debug("Inside cloudcontrolprovider: ")
 
   mk_resource_methods
 
   # this method will get service/servicename and return true or false 
   def exists?
-    Puppet.debug("Calling exists method of wafcloudcontrolprovider: ")
+    Puppet.debug("Calling exists method of cloudcontrolprovider: ")
     @property_hash[:ensure] == :present
     return true
   end
 
   #this method get all services from WAF system and builds the instances array
   def self.instances
-    Puppet.debug("Callling self.instances method of wafcloudcontrolprovider: ")
+    Puppet.debug("Callling self.instances method of cloudcontrolprovider: ")
     instances = []
     return instances
   end
 
   # this method compares the name attribute from instances and resources. If it matches then sets the provider
   def self.prefetch(resources)
-    Puppet.debug("Calling self.prefetch method of wafcloudcontrolprovider: ")
+    Puppet.debug("Calling self.prefetch method of cloudcontrolprovider: ")
     cloudobj = instances
     resources.keys.each do |state|
       if provider = cloudobj.find { |cloud| cloud.state == state}
@@ -40,7 +40,7 @@ Puppet::Type.type(:wafcloudcontrol).provide(:wafcloudcontrolprovider) do
 
   # this method does a put call to waf service. This will be triggered with ensure is present and exists method return true.
   def flush
-    Puppet.debug("Calling  flush method of wafcloudcontrolprovider: ")
+    Puppet.debug("Calling  flush method of cloudcontrolprovider: ")
     if @property_hash != {}
 
       config = SwaggerClient::Configuration.new
@@ -68,7 +68,7 @@ Puppet::Type.type(:wafcloudcontrol).provide(:wafcloudcontrolprovider) do
 
   # this method does not do anything for cloudcontrol
   def create
-    Puppet.debug("Calling create method of wafclouodcontrolprovider:")
+    Puppet.debug("Calling create method of cloudcontrolprovider:")
 
     # Clear the hash here to stop flush from triggering.
     @property_hash.clear
@@ -76,7 +76,7 @@ Puppet::Type.type(:wafcloudcontrol).provide(:wafcloudcontrolprovider) do
 
   # this method does not do anything for cloudcontrol 
   def destroy
-    Puppet.debug("Calling wafcloudcontrolprovider destroy method: ")
+    Puppet.debug("Calling cloudcontrolprovider destroy method: ")
 
     config = SwaggerClient::Configuration.new
     @config = config

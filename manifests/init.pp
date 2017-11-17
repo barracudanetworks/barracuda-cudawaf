@@ -1,5 +1,5 @@
 class samplehttps {
-  wafcertificates{ 'WAFCER-1':
+  certificates{ 'WAFCER-1':
     ensure => present,
     name  => 'createdcert1',
     city   =>'Bangalore',
@@ -13,7 +13,7 @@ class samplehttps {
     allow_private_key_export =>'Yes',
   }
 
-  wafservices  { 'WAFSVC-1':
+  services  { 'WAFSVC-1':
     ensure        => present,
     name          => 'httpsApp1',
     type          => 'HTTPS',
@@ -27,7 +27,7 @@ class samplehttps {
     comments      => 'Updating the comments',
   }
 
-  wafservers{ 'WAFSERVER-2':
+  servers  { 'WAFSERVER-2':
     ensure => present,
     name => 'waftestserver2',
     identifier => 'Hostname',
@@ -40,7 +40,7 @@ class samplehttps {
     comments => 'Creating the server'
   }
 
-  wafcloudcontrol{ 'WAFCLOUDCONTROL-1':
+  cloudcontrol  { 'WAFCLOUDCONTROL-1':
     ensure => present,
     state => 'connected',
     connect_mode => 'cloud',

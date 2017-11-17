@@ -1,4 +1,4 @@
-Puppet::Type.newtype(:wafservices) do
+Puppet::Type.newtype(:services) do
   @doc = 'Defines all possible types for a Service object on the Barracuda Web Application Firewall.'
 
 

@@ -1,4 +1,4 @@
-Puppet::Type.newtype(:wafcertificates) do
+Puppet::Type.newtype(:certificates) do
   @doc = 'Defines all possible types for Creation/Upload of a Certificate object on the Barracuda Web Application Firewall.'
 
   ensurable

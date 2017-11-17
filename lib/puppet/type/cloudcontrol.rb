@@ -1,4 +1,4 @@
-Puppet::Type.newtype(:wafcloudcontrol) do
+Puppet::Type.newtype(:cloudcontrol) do
   @doc = 'Type representing a Cloud Control object on the Barracuda Web Application Firewall.'
 
   ensurable

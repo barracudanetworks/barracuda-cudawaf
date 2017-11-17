@@ -80,92 +80,92 @@ The following example manifests can be used to create resources on the Barracuda
 
 ### To create a HTTP Service:
 ``` puppet
-wafservices  { 'WAFSVC-1':
-  ensure        => present,
-  name          => 'WAFSERVICE',
-  type          => 'http',
-  mask          => '255.255.255.255',
-  ip_address    => '10.0.0.1',
-  port          => '80',
-  group         => 'default',
-  vsite         => 'default',
+services  { 'WAFSVC-1':
+  ensure        		=> present,
+  name          		=> 'WAFSERVICE',
+  type          		=> 'http',
+  mask          		=> '255.255.255.255',
+  ip_address    		=> '10.0.0.1',
+  port          		=> '80',
+  group         		=> 'default',
+  vsite         		=> 'default',
   status                => 'On',
   address_version       => 'ipv4',
-  enable_access_logs => 'Yes',
-  svcname => 'ProdService',
+  enable_access_logs 	=> 'Yes',
+  svcname 				=> 'ProdService'
 }
 ```
 ### To create a Real server:
 ``` puppet
-wafservers { 'WAFSERVER-2':
-  ensure => present,
-  name => 'server2',
-  identifier=> 'IP Address',
-  address_version => 'IPv4',
-  status => 'In Service',
-  ip_address => '192.168.1.10',
-  service_name => 'ProdService',
-  port => '80',
-  comments => 'Server for ProdService',
+servers { 'WAFSERVER-2':
+  ensure 			=> present,
+  name 				=> 'server2',
+  identifier		=> 'IP Address',
+  address_version   => 'IPv4',
+  status 			=> 'In Service',
+  ip_address 		=> '192.168.1.10',
+  service_name 		=> 'ProdService',
+  port 				=> '80',
+  comments 			=> 'Server for ProdService'
 }
 ```
 
 ### To Upload a Signed Certificate:
 ``` puppet
-wafcertificates { 'WAFUPLOADSIGNEDCER-1':
-  ensure => present,
-  name => 'signedcert1',
-  signed_certificate => '/home/wafcertificates/root.pem',
-  allow_private_key_export => 'yes',
-  type => 'pem',
-  key =>'/home/wafcertificates/privkey.pem',
-  assign_associated_key => 'no',
-  upload => 'signed'
+certificates  {  'WAFUPLOADSIGNEDCER-1':
+  ensure 					=> present,
+  name 						=> 'signedcert1',
+  signed_certificate 		=> '/home/wafcertificates/root.pem',
+  allow_private_key_export  => 'yes',
+  type 						=> 'pem',
+  key 						=>'/home/wafcertificates/privkey.pem',
+  assign_associated_key 	=> 'no',
+  upload 					=> 'signed'
 }
 
 ```
 ### To Upload a Trusted Certificate:
 ``` puppet
-wafcertificates { 'WAFUPLOADTRUSTEDCER-1':
-  ensure => present,
-  name => 'trustedcert1',
-  trusted_certificate => '/home/wafcertificates/cer.pem',
-  upload => 'trusted'
+certificates  {  'WAFUPLOADTRUSTEDCER-1':
+  ensure 				=> present,
+  name 					=> 'trustedcert1',
+  trusted_certificate 	=> '/home/wafcertificates/cer.pem',
+  upload 				=> 'trusted'
 }
 
 ```
 ### To Upload a Intermediary Signed Certificate:
 ``` puppet
-wafcertificates { 'WAFUPLOADINTERMEDIATESIGNEDCER-1':
-  ensure => present,
-  name => 'signedcertint1',
-  signed_certificate => '/home/wafcertificates/root.pem',
-  intermediary_certificate => '/home/wafcertificates/inter.pem',
-  allow_private_key_export => 'no',
-  type => 'pem',
-  key =>'/home/wafcertificates/privkey.pem',
-  assign_associated_key => 'no',
-  upload => 'signed'
+certificates  {  'WAFUPLOADINTERMEDIATESIGNEDCER-1':
+  ensure 					=> present,
+  name 						=> 'signedcertint1',
+  signed_certificate 		=> '/home/wafcertificates/root.pem',
+  intermediary_certificate  => '/home/wafcertificates/inter.pem',
+  allow_private_key_export  => 'no',
+  type 					    => 'pem',
+  key 						=>'/home/wafcertificates/privkey.pem',
+  assign_associated_key 	=> 'no',
+  upload 					=> 'signed'
 }
 
 ```
 ### To Upload a Trusted Server Certificate:
 ``` puppet
-wafcertificates { 'WAFUPLOADTRUSTEDSERVERCER-1':
-  ensure => present,
-  name => 'trustedservercert1',
+certificates  {  'WAFUPLOADTRUSTEDSERVERCER-1':
+  ensure 					 => present,
+  name 						 => 'trustedservercert1',
   trusted_server_certificate => '/home/wafcertificates/cer.pem',
-  upload => 'trusted_server'
+  upload 					 => 'trusted_server'
 }
 ```
 ### To connect the WAF to Barracuda Cloud Control
 ``` puppet
-wafcloudcontrol { 'WAFCouldControl-1':
-  ensure => present,
-  connect_mode => 'cloud',
-  state => 'connected',
-  username => 'testmail@barracuda.com',
-  password => 'password'
+cloudcontrol  {  'WAFCouldControl-1':
+  ensure 			=> present,
+  connect_mode 		=> 'cloud',
+  state 			=> 'connected',
+  username 			=> '<username>',
+  password 			=> '<password>'
 }
 ```
 ## Reference - An under-the-hood peek at what the module is doing and how
