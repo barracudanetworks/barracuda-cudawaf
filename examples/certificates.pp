@@ -15,7 +15,7 @@ class barracudawaf {
 	  state 				   => 'Karnataka'
 }
   certificates  { 'WAFUPLOADTRUSTEDCER-1':
-	  ensure 			  => present,
+	  ensure 			  	=> present,
 	  name 				  => 'trustedcert1',
 	  trusted_certificate => '/home/wafcertificates/cer.pem',
 	  upload 			  => 'trusted'
