@@ -55,10 +55,12 @@ puppet module install puppetlabs-cudawaf
 puppet module install puppetlabs-cudawaf --environment=<env-name>
 ```
 
-### Installing the gem files on the Puppet Agent node:
+### Installing the gem files on the Puppet Master:
 ``` bash
-/opt/puppetlabs/puppet/bin/gem install typoheus
-/opt/puppetlabs/puppet/bin/gem install rest-client
+/opt/puppetlabs/bin/puppetserver gem install mime-types -v 2.6.2
+/opt/puppetlabs/bin/puppetserver gem install rest-client -v 1.8.0
+/opt/puppetlabs/bin/puppetserver gem install typhoeus
+
 ```
 ### Create a credentials file on the Puppet Agent node:
 
@@ -69,7 +71,9 @@ Example "credentials.json"
 ```
 {
   "username":"admin",
-  "password":"admin"
+  "password":"<password>",
+  "host":"ip-address",
+  "port":"<management-port>"
 }
 ```
 
