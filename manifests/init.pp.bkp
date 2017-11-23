@@ -12,6 +12,7 @@ class barracudawaf {
     organization_unit        => 'Engineering',
     allow_private_key_export => 'Yes',
   }
+
   services  {  'WAFSVC-1':
     ensure                => present,
     name                  => 'httpsApp1',
@@ -25,9 +26,10 @@ class barracudawaf {
     address_version       => 'IPv4',
     comments              => 'Updating the comments',
   }
-  servers  {  'WAFSERVER-1':
+
+  servers  {  'WAFSERVER-2':
     ensure          => present,
-    name            => 'waftestserver1',
+    name            => 'waftestserver2',
     identifier      => 'Hostname',
     address_version => 'IPv4',
     status          => 'In Service',
@@ -36,7 +38,8 @@ class barracudawaf {
     service_name    => 'httpsApp1',
     port            => 80,
     comments        => 'Creating the server'
-  } 
+  }
+
   cloudcontrol  {  'WAFCLOUDCONTROL-1':
     ensure        => present,
     state         => 'connected',
@@ -44,5 +47,4 @@ class barracudawaf {
     username      => 'rprakash@barracuda.com',
     password      => 'password'
   }
-
 }
