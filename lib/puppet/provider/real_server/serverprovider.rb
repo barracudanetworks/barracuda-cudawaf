@@ -7,7 +7,7 @@ require 'base64'
 require 'uri'
 require 'logger'
 require 'rest-client'
-Puppet::Type.type(:servers).provide(:serverprovider) do
+Puppet::Type.type(:real_server).provide(:serverprovider) do
 
   Puppet.debug("Inside serverprovider: ")
   mk_resource_methods

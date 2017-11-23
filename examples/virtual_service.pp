@@ -1,6 +1,6 @@
 ##init.pp##
 class barracudawaf {
-	services  {  'WAFSVC-1':
+	virtual_service  {  'WAFSVC-1':
 	  ensure        	=> present,
 	  name          	=> 'bhanu',
 	  type          	=> 'http',
@@ -18,7 +18,7 @@ class barracudawaf {
 	  session_timeout       => '60'
 	}
 
-	services  {  'WAFSVC-2':
+	virtual_service  {  'WAFSVC-2':
 	  ensure        	=> present,
 	  name          	=> 'demo_service_12',
 	  type          	=> 'http',
@@ -36,7 +36,7 @@ class barracudawaf {
 	  session_timeout       => '60'
 	}
 
-	services  {  'WAFSVC-3':
+	virtual_service  {  'WAFSVC-3':
 	  ensure        	=> present,
 	  name          	=> 'demo_service_13',
 	  type          	=> 'http',

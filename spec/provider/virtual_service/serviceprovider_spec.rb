@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:services).provider(:serviceprovider)
+provider_class = Puppet::Type.type(:virtual_service).provider(:serviceprovider)
 
 describe provider_class do
   let(:resource) {
-    Puppet::Type.type(:services).new(
+    Puppet::Type.type(:virtual_service).new(
       name: 'httpsApp1',
       type: 'HTTPS',
       ip_address: '10.36.73.245',
@@ -21,6 +21,6 @@ describe provider_class do
   let(:provider) { resource.provider }
 
   it 'should be an instance of the serviceprovider' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:services).provider(:serviceprovider)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:virtual_service).provider(:serviceprovider)
   end
 end

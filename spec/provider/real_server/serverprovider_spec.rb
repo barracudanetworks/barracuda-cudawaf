@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:servers).provider(:serverprovider)
+provider_class = Puppet::Type.type(:real_server).provider(:serverprovider)
 
 describe provider_class do
   let(:resource) {
-    Puppet::Type.type(:servers).new(
+    Puppet::Type.type(:real_server).new(
       name: 'waftestserver1',
       identifier: 'Hostname',
       ip_address: '10.36.73.245',
@@ -20,6 +20,6 @@ describe provider_class do
   let(:provider) { resource.provider }
 
   it 'should be an instance of the serverprovider' do
-    expect(provider).to be_an_instance_of Puppet::Type.type(:servers).provider(:serverprovider)
+    expect(provider).to be_an_instance_of Puppet::Type.type(:real_server).provider(:serverprovider)
   end
 end

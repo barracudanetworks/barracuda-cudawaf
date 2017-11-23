@@ -1,9 +1,7 @@
-Puppet::Type.newtype(:services) do
+Puppet::Type.newtype(:virtual_service) do
   @doc = 'Defines all possible types for a Service object on the Barracuda Web Application Firewall.'
 
-
   ensurable
-
 
   newparam(:name, :namevar => true) do
     desc "Web Application Name"

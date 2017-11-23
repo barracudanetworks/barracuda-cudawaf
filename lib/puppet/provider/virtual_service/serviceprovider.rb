@@ -6,7 +6,7 @@ require 'base64'
 require 'uri'
 require 'logger'
 require 'rest-client'
-Puppet::Type.type(:services).provide(:serviceprovider) do
+Puppet::Type.type(:virtual_service).provide(:serviceprovider) do
 
   Puppet.debug("Inside serviceprovider: ")
 

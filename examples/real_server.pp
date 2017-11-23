@@ -1,6 +1,6 @@
 ##init.pp##
 class barracudawaf {
-	servers  {  'WAFSERVER-1':
+	real_server  {  'WAFSERVER-1':
 	  ensure 	    => present,
 	  name 		    => 'waftestserver1',
 	  identifier	    => 'IP Address',
@@ -11,7 +11,7 @@ class barracudawaf {
 	  port 		    => '80',
 	  comments 	    => 'Creating the server'
 	}
-	servers  {  'WAFSERVER-2':
+	real_server  {  'WAFSERVER-2':
 	  ensure 	    => present,
 	  name 		    => 'waftestserver2',
 	  identifier 	    => 'Hostname',
@@ -24,7 +24,7 @@ class barracudawaf {
 	  comments 	    => 'Creating the server'
 	}
 
-	servers  {  'WAFSERVER-3':
+	real_server  {  'WAFSERVER-3':
 	  ensure 	    => present,
 	  name 		    => 'waftestserver3',
 	  address_version   => 'IPv4',

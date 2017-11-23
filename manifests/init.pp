@@ -12,7 +12,7 @@ class barracudawaf {
     organization_unit        => 'Engineering',
     allow_private_key_export => 'Yes',
   }
-  services  {  'WAFSVC-1':
+  virtual_service  {  'WAFSVC-1':
     ensure                => present,
     name                  => 'httpsApp1',
     type                  => 'HTTPS',
@@ -25,7 +25,7 @@ class barracudawaf {
     address_version       => 'IPv4',
     comments              => 'Updating the comments',
   }
-  servers  {  'WAFSERVER-1':
+  real_server  {  'WAFSERVER-1':
     ensure          => present,
     name            => 'waftestserver1',
     identifier      => 'Hostname',

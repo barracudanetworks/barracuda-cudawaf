@@ -80,7 +80,7 @@ The following example manifests can be used to create resources on the Barracuda
 
 ### To create a HTTP Service:
 ``` puppet
-services  { 'WAFSVC-1':
+virtual_service  { 'WAFSVC-1':
   ensure        		=> present,
   name          		=> 'WAFSERVICE',
   type          		=> 'http',
@@ -97,7 +97,7 @@ services  { 'WAFSVC-1':
 ```
 ### To create a Real server:
 ``` puppet
-servers { 'WAFSERVER-2':
+real_server { 'WAFSERVER-2':
   ensure 			=> present,
   name 				=> 'server2',
   identifier		=> 'IP Address',

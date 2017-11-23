@@ -1,31 +1,25 @@
 require 'rspec-puppet'
 #require 'puppetlabs_spec_helper/module_spec_helper'
 
-type_class = Puppet::Type.type(:services)
+type_class = Puppet::Type.type(:real_server)
 
 describe type_class do
 
   let :params do
     [
       :name,
+      :service_name,
     ]
   end
 
   let :properties do
     [
-      :type,
-      :status,
       :address_version,
-      :certificate,
+      :status,
+      :hostname,
       :comments,
       :port,
-      :vsite,
-      :group,
-      :mask,
-      :enable_access_logs,
-      :session_timeout,
-      :app_id,
-      :dps_enabled,
+      :identifier,
       :ip_address,
     ]
   end
@@ -49,7 +43,7 @@ describe type_class do
   end
 
   it 'should support :present as a value to :ensure' do
-    type_class.new(:name => 'httpsApp1', :ensure => :present)
+    type_class.new(:name => 'waftestserver1', :ensure => :present)
   end
 
 end
