@@ -44,5 +44,9 @@ class barracudawaf {
     username      => 'rprakash@barracuda.com',
     password      => 'password'
   }
+  security_policy  {  'secuirtypolicy1':
+    ensure        => present,
+    name          => 'mytestpolicy'
+  }
 
 }
