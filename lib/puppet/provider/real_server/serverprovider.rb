@@ -189,7 +189,7 @@ def message(object)
     "comments"=>@resource[:comments]
   }
 =end
-  if parameters.has_key?(:identifier) && parameters[:identifier] == "Hostname"
+  if parameters.has_key?(:identifier) && parameters[:identifier] == :Hostname
      hostname = nil
      if parameters.key?:hostname
        hostname = parameters[:hostname]
