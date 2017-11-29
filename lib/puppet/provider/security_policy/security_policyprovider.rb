@@ -6,15 +6,15 @@ require 'base64'
 require 'uri'
 require 'logger'
 
-Puppet::Type.type(:security_policy).provide(:securitypolicyprovider) do
+Puppet::Type.type(:security_policy).provide(:security_policyprovider) do
 
-  Puppet.debug("Inside securitypolicyprovider: ")
+  Puppet.debug("Inside security_policyprovider: ")
 
   mk_resource_methods
 
 # this method will get secuirty policy/secuirty policyname and return true or false
 def exists?
-  Puppet.debug("Calling exists method of securitypolicyprovider: ")
+  Puppet.debug("Calling exists method of security_policyprovider: ")
   @property_hash[:ensure] == :present
 
   # getting waf authorization token
@@ -50,7 +50,7 @@ end
 #this method get all secuirty policys from WAF system and builds the instances array
 def self.instances
 
-  Puppet.debug("Calling self.instances method of securitypolicyprovider: ")
+  Puppet.debug("Calling self.instances method of security_policyprovider: ")
   instances = []
 
   login_instance = Login.new
@@ -83,7 +83,7 @@ end
 # this method compares the name attribute from instances and resources. If it matches then sets the provider
 def self.prefetch(resources)
 
-  Puppet.debug("Calling self.prefetch method of securitypolicyprovider: ")
+  Puppet.debug("Calling self.prefetch method of security_policyprovider: ")
   secuirty_policies = instances
   resources.keys.each do |name|
      if provider = secuirty_policies.find { |secuirty_policy| secuirty_policy.name == name}
@@ -95,7 +95,7 @@ end
 
 # this method does a put call to waf secuirty policy. This will be triggered with ensure is present and exists method return true.
 def flush
-  Puppet.debug("Calling  flush method of securitypolicyprovider: ")
+  Puppet.debug("Calling  flush method of security_policyprovider: ")
   if @property_hash != {}
      login_instance = Login.new
      auth_header = login_instance.get_auth_header
@@ -135,7 +135,7 @@ end
 
 # this method does a POST call to create a secuirty policy in WAF.this method will be called if the ensure is present and exists method return false
 def create
-  Puppet.debug("Calling create method of securitypolicyprovider:")
+  Puppet.debug("Calling create method of security_policyprovider:")
 
   # getting the authorization token for WAF.
   login_instance = Login.new
@@ -158,7 +158,7 @@ end
 
 # this method will call the delete api of a WAF secuirty policy
 def destroy
-  Puppet.debug("Calling securitypolicyprovider destroy method: ")
+  Puppet.debug("Calling securitypolicy_provider destroy method: ")
   # getting the authorization token for WAF.
   login_instance = Login.new
   auth_header = login_instance.get_auth_header

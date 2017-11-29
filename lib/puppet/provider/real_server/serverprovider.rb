@@ -177,6 +177,7 @@ end
 # this is a util method to build the JSON array to post the request to WAF
 def message(object)
 
+  Puppet.debug("Object.......... #{object}")
   parameters = object.to_hash
   Puppet.debug("Parameters.......... #{parameters}")
   serverName=@resource[:name]
@@ -189,7 +190,13 @@ def message(object)
     "comments"=>@resource[:comments]
   }
 =end
-  if parameters.has_key?(:identifier) && parameters[:identifier] == "Hostname"
+  val = parameters.has_key?(:identifier)
+  val2 = parameters[:identifier]
+
+  Puppet.debug("val => #{val} val2 => #{val2}")
+
+  if parameters.has_key?(:identifier) && parameters[:identifier] == :Hostname
+     Puppet.debug("Inside Parameters if Check....1111111111111")
      hostname = nil
      if parameters.key?:hostname
        hostname = parameters[:hostname]
