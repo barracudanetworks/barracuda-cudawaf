@@ -8,6 +8,7 @@ Puppet::Type.newtype(:certificates) do
     desc "Certificate Name"
     validate do |value|
       fail("Invalid name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 512 characters") if value.length > 512
     end
   end
 
@@ -16,6 +17,8 @@ Puppet::Type.newtype(:certificates) do
     desc "Country"
     validate do |value|
       fail("Invalid country_code #{value}, Illegal characters present") unless value =~ /^[A-Za-z0-9\.\_\s\@\/\*\-]+$/
+      fail("Invalid country_code #{value}, Must be no longer than 2 characters") if value.length > 2
+      fail("Invalid country_code #{value}, Must be no shorter than 2 characters") if value.length < 2
     end
   end
 
@@ -45,6 +48,7 @@ Puppet::Type.newtype(:certificates) do
     desc "Organization Name"
     validate do |value|
       fail("Invalid organization_name #{value}, Illegal characters present") unless value =~ /^[A-Za-z0-9\.\,\_\&\'\(\)\-\s\@\/\*]+$/
+      fail("Invalid organization_name #{value}, Must be no longer than 64 characters") if value.length > 64
     end
   end
 
@@ -58,6 +62,7 @@ Puppet::Type.newtype(:certificates) do
     desc "State or Province"
     validate do |value|
       fail("Invalid state #{value}, Illegal characters present") unless value =~ /^[A-Za-z0-9\.\_\s\@\/\*\-]+$/
+      fail("Invalid state #{value}, Must be no longer than 128 characters") if value.length > 128
     end
   end
 
@@ -66,6 +71,7 @@ Puppet::Type.newtype(:certificates) do
     desc "Common Name"
     validate do |value|
       fail("Invalid common_name #{value}, Illegal characters present") unless value =~ /^[A-Za-z0-9\.\_\s\@\/\*\-]+$/
+      fail("Invalid common_name #{value}, Must be no longer than 64 characters") if value.length > 64
     end
   end
 
@@ -74,6 +80,7 @@ Puppet::Type.newtype(:certificates) do
     desc "Locality Name"
     validate do |value|
       fail("Invalid city #{value}, Illegal characters present") unless value =~ /^[A-Za-z0-9\.\_\s\@\/\*\-]+$/
+      fail("Invalid city #{value}, Must be no longer than 128 characters") if value.length > 128
     end
   end
 
@@ -82,6 +89,7 @@ Puppet::Type.newtype(:certificates) do
     desc "Organizational Unit Name"
     validate do |value|
       fail("Invalid organizational_unit #{value}, Illegal characters present") unless value =~ /^[A-Za-z0-9\.\_\'\s\@\/\*\-]+$/
+      fail("Invalid organizational_unit #{value}, Must be no longer than 64 characters") if value.length > 64
     end
   end
 

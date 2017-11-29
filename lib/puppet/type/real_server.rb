@@ -7,6 +7,7 @@ Puppet::Type.newtype(:real_server) do
     desc "Server Name"
     validate do |value|
       fail("Invalid name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._:\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 255 characters") if value.length > 255
     end
   end
 
@@ -15,6 +16,7 @@ Puppet::Type.newtype(:real_server) do
     desc 'Service Name'
     validate do |value|
       fail("Invalid service_name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._:\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
     end
   end
 
