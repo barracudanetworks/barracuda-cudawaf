@@ -7,6 +7,7 @@ Puppet::Type.newtype(:virtual_service) do
     desc "Web Application Name"
     validate do |value|
       fail("Invalid name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
     end
   end
 
@@ -80,6 +81,7 @@ Puppet::Type.newtype(:virtual_service) do
     desc "Service Group"
     validate do |value|
       fail("Invalid group #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/
+      fail("Invalid group #{value}, Must be no longer than 64 characters") if value.length > 64
     end
   end
 
@@ -107,6 +109,7 @@ Puppet::Type.newtype(:virtual_service) do
     desc "Vsite"
     validate do |value|
       fail("Invalid vsite #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/
+      fail("Invalid vsite #{value}, Must be no longer than 64 characters") if value.length > 64
     end
   end
 
