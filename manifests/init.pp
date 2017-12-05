@@ -13,7 +13,7 @@ class samplehttps {
     allow_private_key_export => 'Yes',
   }
 
-  services  {  'WAFSVC-1':
+  virtual_service  {  'WAFSVC-1':
     ensure           => present,
     name             => 'httpsApp1',
     type             => 'HTTPS',
@@ -27,7 +27,7 @@ class samplehttps {
     comments         => 'Updating the comments',
   }
 
-  servers  {  'WAFSERVER-2':
+  real_server  {  'WAFSERVER-2':
     ensure           => present,
     name             => 'waftestserver2',
     identifier       => 'Hostname',
