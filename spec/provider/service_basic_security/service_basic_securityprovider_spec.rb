@@ -5,9 +5,9 @@ provider_class = Puppet::Type.type(:service_basic_security).provider(:service_ba
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_basic_security).new(
-       
-       
-       
+    name:'httpsApp1',
+    mode:'Active',
+    web_firewall_policy: 'owa'       
     )
   }
 

@@ -5,9 +5,9 @@ provider_class = Puppet::Type.type(:service_caching).provider(:service_cachingpr
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_caching).new(
-       
-       
-       
+    name:'httpsApp1',
+    status:'On',
+    expiry_age: 61
     )
   }
 

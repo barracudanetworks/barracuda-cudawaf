@@ -5,9 +5,8 @@ provider_class = Puppet::Type.type(:service_load_balancing).provider(:service_lo
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_load_balancing).new(
-       
-       
-       
+    name:'httpsApp1',
+    algorithm:'Least Requests'
     )
   }
 

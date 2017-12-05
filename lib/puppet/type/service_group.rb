@@ -3,8 +3,8 @@ Puppet::Type.newtype(:service_group) do
 
   ensurable
 
-  newproperty(:service_group, :array_matching => :all) do
-    desc "Service Group"
+  newparam(:name, :namevar => true) do
+    desc "Service Group Name"
     validate do |value|
       fail("Invalid service_group #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/
     end

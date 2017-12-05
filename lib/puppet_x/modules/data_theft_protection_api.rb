@@ -28,8 +28,8 @@ module SwaggerClient
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def security_policies_policy_name_protected_data_types_data_theft_element_name_delete(authorization, policy_name, data_theft_element_name, opts = {})
-      security_policies_policy_name_protected_data_types_data_theft_element_name_delete_with_http_info(authorization, policy_name, data_theft_element_name, opts)
-      return nil
+       data, status_code, headers = security_policies_policy_name_protected_data_types_data_theft_element_name_delete_with_http_info(authorization, policy_name, data_theft_element_name, opts)
+      return data, status_code, headers
     end
 
     # DELETE Information of Data Theft Protection
@@ -94,8 +94,8 @@ module SwaggerClient
     # @option opts [Array<String>] :fields 
     # @return [nil]
     def security_policies_policy_name_protected_data_types_data_theft_element_name_get(authorization, policy_name, data_theft_element_name, opts = {})
-      security_policies_policy_name_protected_data_types_data_theft_element_name_get_with_http_info(authorization, policy_name, data_theft_element_name, opts)
-      return nil
+       data, status_code, headers = security_policies_policy_name_protected_data_types_data_theft_element_name_get_with_http_info(authorization, policy_name, data_theft_element_name, opts)
+      return data, status_code, headers
     end
 
     # FETCH Information of Data Theft Protection
@@ -123,7 +123,7 @@ module SwaggerClient
         fail ArgumentError, "Missing the required parameter 'data_theft_element_name' when calling DataTheftProtectionApi.security_policies_policy_name_protected_data_types_data_theft_element_name_get"
       end
       # resource path
-      local_var_path = "/security-policies/{Policy Name}/protected-data-types/{Data Theft Element Name} ".sub('{' + 'Policy Name' + '}', policy_name.to_s).sub('{' + 'Data Theft Element Name' + '}', data_theft_element_name.to_s)
+      local_var_path = "/security-policies/{Policy Name}/protected-data-types/{Data Theft Element Name}".sub('{' + 'Policy Name' + '}', policy_name.to_s).sub('{' + 'Data Theft Element Name' + '}', data_theft_element_name.to_s)
 
       # query parameters
       query_params = {}
@@ -162,8 +162,8 @@ module SwaggerClient
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def security_policies_policy_name_protected_data_types_data_theft_element_name_put(authorization, policy_name, data_theft_element_name, data_theft_protection, opts = {})
-      security_policies_policy_name_protected_data_types_data_theft_element_name_put_with_http_info(authorization, policy_name, data_theft_element_name, data_theft_protection, opts)
-      return nil
+       data, status_code, headers = security_policies_policy_name_protected_data_types_data_theft_element_name_put_with_http_info(authorization, policy_name, data_theft_element_name, data_theft_protection, opts)
+      return data, status_code, headers
     end
 
     # EDIT Information of Data Theft Protection
@@ -195,7 +195,7 @@ module SwaggerClient
         fail ArgumentError, "Missing the required parameter 'data_theft_protection' when calling DataTheftProtectionApi.security_policies_policy_name_protected_data_types_data_theft_element_name_put"
       end
       # resource path
-      local_var_path = "/security-policies/{Policy Name}/protected-data-types/{Data Theft Element Name}  ".sub('{' + 'Policy Name' + '}', policy_name.to_s).sub('{' + 'Data Theft Element Name' + '}', data_theft_element_name.to_s)
+      local_var_path = "/security-policies/{Policy Name}/protected-data-types/{Data Theft Element Name}".sub('{' + 'Policy Name' + '}', policy_name.to_s).sub('{' + 'Data Theft Element Name' + '}', data_theft_element_name.to_s)
 
       # query parameters
       query_params = {}
@@ -232,8 +232,8 @@ module SwaggerClient
     # @option opts [Array<String>] :fields 
     # @return [nil]
     def security_policies_policy_name_protected_data_types_get(authorization, policy_name, opts = {})
-      security_policies_policy_name_protected_data_types_get_with_http_info(authorization, policy_name, opts)
-      return nil
+       data, status_code, headers = security_policies_policy_name_protected_data_types_get_with_http_info(authorization, policy_name, opts)
+      return data, status_code, headers
     end
 
     # FETCH Information of Data Theft Protection
@@ -256,7 +256,7 @@ module SwaggerClient
         fail ArgumentError, "Missing the required parameter 'policy_name' when calling DataTheftProtectionApi.security_policies_policy_name_protected_data_types_get"
       end
       # resource path
-      local_var_path = "/security-policies/{Policy Name}/protected-data-types ".sub('{' + 'Policy Name' + '}', policy_name.to_s)
+      local_var_path = "/security-policies/{Policy Name}/protected-data-types".sub('{' + 'Policy Name' + '}', policy_name.to_s)
 
       # query parameters
       query_params = {}
@@ -294,8 +294,8 @@ module SwaggerClient
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def security_policies_policy_name_protected_data_types_post(authorization, policy_name, data_theft_protection, opts = {})
-      security_policies_policy_name_protected_data_types_post_with_http_info(authorization, policy_name, data_theft_protection, opts)
-      return nil
+       data, status_code, headers = security_policies_policy_name_protected_data_types_post_with_http_info(authorization, policy_name, data_theft_protection, opts)
+      return data, status_code, headers
     end
 
     # ADD Information of Data Theft Protection

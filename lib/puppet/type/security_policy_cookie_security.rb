@@ -55,9 +55,8 @@ Puppet::Type.newtype(:security_policy_cookie_security) do
 
   newproperty(:days_allowed) do
     desc "Days Allowed"
-    defaultto :7
+    defaultto 7
     validate do |value|
-      fail("Invalid days_allowed #{value}, Illegal characters present") unless value =~ /^((Never)|(Always)|([1-9]+[0-9]*))$/
       fail("Invalid days_allowed #{value}, Must not be greater than 999999999") if value > 999999999
     end
   end

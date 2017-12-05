@@ -12,6 +12,15 @@ Puppet::Type.newtype(:server_advanced_configuration) do
   end
 
 
+  newparam(:service_name, :namevar => true) do
+    desc 'Service Name'
+    validate do |value|
+      fail("Invalid service_name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._:\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
+    end
+  end
+
+
   newproperty(:client_impersonation) do
     desc "Client Impersonation"
     defaultto :No
@@ -101,5 +110,9 @@ Puppet::Type.newtype(:server_advanced_configuration) do
     end
   end
 
+
+  def self.title_patterns
+     [ [ /(.*)/m, [ [:name] ] ] ]
+  end
 
 end

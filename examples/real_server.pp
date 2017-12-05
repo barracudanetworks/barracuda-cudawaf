@@ -1,4 +1,4 @@
-##init.pp##
+#init.pp##
 class barracudawaf {
 	real_server  {  'WAFSERVER-1':
 	  ensure 	    => present,
@@ -8,7 +8,7 @@ class barracudawaf {
 	  status 	    => 'In Service',
 	  ip_address 	    => '1.1.1.1',
 	  service_name	    => 'demo_service_12',
-	  port 		    => '80',
+	  port 		    => 80,
 	  comments 	    => 'Creating the server'
 	}
 	real_server  {  'WAFSERVER-2':
@@ -20,7 +20,7 @@ class barracudawaf {
 	  ip_address 	    => '4.4.4.4',
 	  hostname 	    => 'imdb.com',
 	  service_name 	    => 'demo_service_13',
-	  port 		    => '80',
+	  port 		    => 80,
 	  comments 	    => 'Creating the server'
 	}
 
@@ -31,7 +31,7 @@ class barracudawaf {
 	  status 	    => 'In Service',
 	  ip_address 	    => '3.3.3.3',
 	  service_name 	    => 'bhanu',
-	  port 		    => '80',
+	  port 		    => 80,
 	  comments 	    => 'Creating the server'
 	}
 

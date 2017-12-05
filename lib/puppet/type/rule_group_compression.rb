@@ -12,6 +12,15 @@ Puppet::Type.newtype(:rule_group_compression) do
   end
 
 
+  newparam(:service_name, :namevar => true) do
+    desc 'Service Name'
+    validate do |value|
+      fail("Invalid service_name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._:\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
+    end
+  end
+
+
   newproperty(:compress_unknown_content_types) do
     desc "Compress Others"
     defaultto :No
@@ -22,7 +31,7 @@ Puppet::Type.newtype(:rule_group_compression) do
   newproperty(:content_types, :array_matching => :all) do
     desc "Content Types"
     validate do |value|
-      fail("Invalid content_types #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z\-]*[/].*$/
+      fail("Invalid content_types #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z\-]*\[\/\].*$/
     end
   end
 
@@ -44,6 +53,11 @@ Puppet::Type.newtype(:rule_group_compression) do
     desc "Status"
     defaultto :Off
     newvalues(:On, :Off)
+  end
+
+
+  def self.title_patterns
+     [ [ /(.*)/m, [ [:name] ] ] ]
   end
 
 

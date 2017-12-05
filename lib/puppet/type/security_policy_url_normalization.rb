@@ -21,8 +21,8 @@ Puppet::Type.newtype(:security_policy_url_normalization) do
 
   newproperty(:default_charset) do
     desc "Default Character Set"
-    defaultto :UTF-8
-    newvalues(:ASCII, :ISO-8859-1, :UTF-8, :GBK, :GB2312, :ISO-2022-CN, :HZ, :BIG5, :EUC-TW, :Shift-JIS, :EUC-JP, :ISO-2022-JP, :EUC-KR, :JOHAB, :ISO-2022-KR)
+    defaultto "UTF-8"
+    newvalues("ASCII", "ISO-8859-1", "UTF-8", "GBK", "GB2312", "ISO-2022-CN", "HZ", "BIG5", "EUC-TW", "Shift-JIS", "EUC-JP", "ISO-2022-JP", "EUC-KR", "JOHAB", "ISO-2022-KR")
   end
 
 

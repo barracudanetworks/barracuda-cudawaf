@@ -1,6 +1,6 @@
-require_relative '../../../puppet_x/modules/service_api.rb'
+require_relative '../../../puppet_x/modules/service/service_api.rb'
 require_relative '../../../puppet_x/modules/login_info.rb'
-require_relative '../../../puppet_x/modules/slow_client_attack_api.rb'
+require_relative '../../../puppet_x/modules/service/slow_client_attack_api.rb'
 require 'json'
 require 'base64'
 require 'logger'
@@ -21,7 +21,7 @@ Puppet::Type.type(:service_slow_client_attack).provide(:service_slow_client_atta
     #call get service_slow_client_attack
     svcName=@resource[:name]
     Puppet.debug("WAF service name in manifest:  #{svcName}")
-    data,status_code,headers=service_instance.services_web_application_name_get.services_web_application_name_slow_client_attack_get(auth_header,svcName)
+    data,status_code,headers= service_slowattack_instance.services_web_application_name_slow_client_attack_get(auth_header,svcName)
     if status_code == 200
        true
     elsif status_code == 404
@@ -39,7 +39,7 @@ Puppet::Type.type(:service_slow_client_attack).provide(:service_slow_client_atta
     service_instance = SwaggerClient::ServiceApi.new
     # get all service_slow_client_attack from WAF
     data,status_code,headers = service_instance.services_get(auth_header,{})
-    Puppet.debug("WAF Get all service_slow_client_attack response:    #{data}"
+    Puppet.debug("WAF Get all service_slow_client_attack response:    #{data}")
     unless data == '{}'
       if status_code == 200
       response = JSON.parse(data)
@@ -78,7 +78,7 @@ Puppet::Type.type(:service_slow_client_attack).provide(:service_slow_client_atta
                 service_slowattack_instance = SwaggerClient::SlowClientAttackApi.new
 		svcName=@resource[:name]
 		data,status_code,headers= service_slowattack_instance.services_web_application_name_slow_client_attack_put(auth_header,svcName,message(resource),{})
-		Puppet.debug("WAF services PUT response:  #{data}"
+		Puppet.debug("WAF services PUT response:  #{data}")
     end
     return data
   end

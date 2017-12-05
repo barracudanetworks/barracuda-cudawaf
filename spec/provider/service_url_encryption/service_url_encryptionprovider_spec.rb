@@ -4,10 +4,9 @@ provider_class = Puppet::Type.type(:service_url_encryption).provider(:service_ur
 
 describe provider_class do
   let(:resource) {
-    Puppet::Type.type(:service_url_encryption).new(
-       
-       
-       
+    Puppet::Type.type(:service_url_encryption).new(    
+        name: 'httpsApp1',
+        status: 'On'       
     )
   }
 

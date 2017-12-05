@@ -69,7 +69,7 @@ Puppet::Type.newtype(:service_load_balancing) do
 
   newproperty(:persistence_cookie_path) do
     desc "Persistence Cookie Path"
-    defaultto :/
+    defaultto "/"
   end
 
 

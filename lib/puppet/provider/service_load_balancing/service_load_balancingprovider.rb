@@ -1,6 +1,6 @@
-require_relative '../../../puppet_x/modules/service_api.rb'
+require_relative '../../../puppet_x/modules/service/service_api.rb'
 require_relative '../../../puppet_x/modules/login_info.rb'
-require_relative '../../../puppet_x/modules/load_balancing_api.rb'
+require_relative '../../../puppet_x/modules/service/load_balancing_api.rb'
 require 'json'
 require 'base64'
 require 'logger'
@@ -42,7 +42,7 @@ Puppet::Type.type(:service_load_balancing).provide(:service_load_balancingprovid
     service_instance = SwaggerClient::ServiceApi.new
     # get all service_load_balancing from WAF
     data,status_code,headers = service_instance.services_get(auth_header,{})
-    Puppet.debug("WAF Get all service_load_balancing response:    #{data}"
+    Puppet.debug("WAF Get all service_load_balancing response:    #{data}")
     unless data == '{}'
       if status_code == 200
       response = JSON.parse(data)
@@ -82,7 +82,7 @@ Puppet::Type.type(:service_load_balancing).provide(:service_load_balancingprovid
 		service_loadbalance_instance = SwaggerClient::LoadBalancingApi.new
 		svcName=@resource[:name]
 		data,status_code,headers= service_loadbalance_instance.services_web_application_name_load_balancing_put(auth_header,svcName,message(resource),{})
-		Puppet.debug("WAF services PUT response:  #{data}"
+		Puppet.debug("WAF services PUT response:  #{data}")
     end
     return data
   end
@@ -115,7 +115,7 @@ Puppet::Type.type(:service_load_balancing).provide(:service_load_balancingprovid
     service_loadbalance_instance = SwaggerClient::LoadBalancingApi.new
     svcName=@resource[:name]
     data,status_code,headers= service_loadbalance_instance.services_web_application_name_load_balancing_post(auth_header,svcName,message(resource),{})
-    Puppet.debug("WAF services CREATE response:  #{data}"
+    Puppet.debug("WAF services CREATE response:  #{data}")
     if status_code == 201
       @property_hash.clear
       return data

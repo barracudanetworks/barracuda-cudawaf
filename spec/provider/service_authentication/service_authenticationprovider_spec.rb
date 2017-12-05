@@ -5,9 +5,8 @@ provider_class = Puppet::Type.type(:service_authentication).provider(:service_au
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_authentication).new(
-       
-       
-       
+        name:'httpsApp1',
+        status:'On'      
     )
   }
 

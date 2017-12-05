@@ -1,6 +1,6 @@
-require_relative '../../../puppet_x/modules/service_api.rb'
+require_relative '../../../puppet_x/modules/service/service_api.rb'
 require_relative '../../../puppet_x/modules/login_info.rb'
-require_relative '../../../puppet_x/modules/instant_ssl_api.rb'
+require_relative '../../../puppet_x/modules/service/instant_ssl_api.rb'
 require 'json'
 require 'base64'
 require 'logger'
@@ -43,7 +43,7 @@ Puppet::Type.type(:service_instant_ssl).provide(:service_instant_sslprovider) do
     service_instance = SwaggerClient::ServiceApi.new
     # get all service_instant_ssl from WAF
     data,status_code,headers = service_instance.services_get(auth_header,{})
-    Puppet.debug("WAF Get all service_instant_ssl response:    #{data}"
+    Puppet.debug("WAF Get all service_instant_ssl response:    #{data}")
     unless data == '{}'
       if status_code == 200
       response = JSON.parse(data)
@@ -83,7 +83,7 @@ Puppet::Type.type(:service_instant_ssl).provide(:service_instant_sslprovider) do
     service_instantssl_instance= SwaggerClient::InstantSslApi.new
     svcName=@resource[:name]
     data,status_code,headers= service_instantssl_instance.services_web_application_name_instant_ssl_put(auth_header,svcName,message(resource),{})
-    Puppet.debug("WAF services PUT response:  #{data}"
+    Puppet.debug("WAF services PUT response:  #{data}")
     end
     return data
   end

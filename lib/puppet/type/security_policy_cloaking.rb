@@ -34,7 +34,7 @@ Puppet::Type.newtype(:security_policy_cloaking) do
       Integer(value)
     end
     validate do |value|
-      fail("Invalid return_codes_to_exempt #{value}, Illegal characters present") unless value =~ /(^[^,()@;:\/\[\]\?={}"<>\x7F\x00-\x20]*$)/
+#      fail("Invalid return_codes_to_exempt #{value}, Illegal characters present") unless value =~ /(^[^,()@;:\/\[\]\?={}"<>\x7F\x00-\x20]*$)/
       fail("Invalid return_codes_to_exempt #{value}, Must not be lesser than 400") if value < 400
       fail("Invalid return_codes_to_exempt #{value}, Must not be greater than 599") if value > 599
     end

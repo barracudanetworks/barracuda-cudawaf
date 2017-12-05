@@ -28,8 +28,8 @@ module SwaggerClient
     # @option opts [Array<String>] :fields 
     # @return [nil]
     def security_policies_policy_name_global_acls_get(authorization, policy_name, opts = {})
-      security_policies_policy_name_global_acls_get_with_http_info(authorization, policy_name, opts)
-      return nil
+       data, status_code, headers = security_policies_policy_name_global_acls_get_with_http_info(authorization, policy_name, opts)
+      return data, status_code, headers
     end
 
     # FETCH Information of Global ACL
@@ -52,7 +52,7 @@ module SwaggerClient
         fail ArgumentError, "Missing the required parameter 'policy_name' when calling GlobalACLApi.security_policies_policy_name_global_acls_get"
       end
       # resource path
-      local_var_path = "/security-policies/{Policy Name}/global-acls ".sub('{' + 'Policy Name' + '}', policy_name.to_s)
+      local_var_path = "/security-policies/{Policy Name}/global-acls".sub('{' + 'Policy Name' + '}', policy_name.to_s)
 
       # query parameters
       query_params = {}
@@ -90,8 +90,8 @@ module SwaggerClient
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def security_policies_policy_name_global_acls_post(authorization, policy_name, global_acl, opts = {})
-      security_policies_policy_name_global_acls_post_with_http_info(authorization, policy_name, global_acl, opts)
-      return nil
+       data, status_code, headers = security_policies_policy_name_global_acls_post_with_http_info(authorization, policy_name, global_acl, opts)
+      return data, status_code, headers
     end
 
     # ADD Information of Global ACL
@@ -155,8 +155,8 @@ module SwaggerClient
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def security_policies_policy_name_global_acls_urlacl_name_delete(authorization, policy_name, url_acl_name, opts = {})
-      security_policies_policy_name_global_acls_urlacl_name_delete_with_http_info(authorization, policy_name, url_acl_name, opts)
-      return nil
+       data, status_code, headers = security_policies_policy_name_global_acls_urlacl_name_delete_with_http_info(authorization, policy_name, url_acl_name, opts)
+      return data, status_code, headers
     end
 
     # DELETE Information of Global ACL
@@ -221,8 +221,8 @@ module SwaggerClient
     # @option opts [Array<String>] :fields 
     # @return [nil]
     def security_policies_policy_name_global_acls_urlacl_name_get(authorization, policy_name, url_acl_name, opts = {})
-      security_policies_policy_name_global_acls_urlacl_name_get_with_http_info(authorization, policy_name, url_acl_name, opts)
-      return nil
+       data, status_code, headers = security_policies_policy_name_global_acls_urlacl_name_get_with_http_info(authorization, policy_name, url_acl_name, opts)
+      return data, status_code, headers
     end
 
     # FETCH Information of Global ACL
@@ -250,7 +250,7 @@ module SwaggerClient
         fail ArgumentError, "Missing the required parameter 'url_acl_name' when calling GlobalACLApi.security_policies_policy_name_global_acls_urlacl_name_get"
       end
       # resource path
-      local_var_path = "/security-policies/{Policy Name}/global-acls/{URL ACL Name} ".sub('{' + 'Policy Name' + '}', policy_name.to_s).sub('{' + 'URL ACL Name' + '}', url_acl_name.to_s)
+      local_var_path = "/security-policies/{Policy Name}/global-acls/{URL ACL Name}".sub('{' + 'Policy Name' + '}', policy_name.to_s).sub('{' + 'URL ACL Name' + '}', url_acl_name.to_s)
 
       # query parameters
       query_params = {}
@@ -289,8 +289,8 @@ module SwaggerClient
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def security_policies_policy_name_global_acls_urlacl_name_put(authorization, policy_name, url_acl_name, global_acl, opts = {})
-      security_policies_policy_name_global_acls_urlacl_name_put_with_http_info(authorization, policy_name, url_acl_name, global_acl, opts)
-      return nil
+       data, status_code, headers = security_policies_policy_name_global_acls_urlacl_name_put_with_http_info(authorization, policy_name, url_acl_name, global_acl, opts)
+      return data, status_code, headers
     end
 
     # EDIT Information of Global ACL
@@ -322,7 +322,7 @@ module SwaggerClient
         fail ArgumentError, "Missing the required parameter 'global_acl' when calling GlobalACLApi.security_policies_policy_name_global_acls_urlacl_name_put"
       end
       # resource path
-      local_var_path = "/security-policies/{Policy Name}/global-acls/{URL ACL Name}  ".sub('{' + 'Policy Name' + '}', policy_name.to_s).sub('{' + 'URL ACL Name' + '}', url_acl_name.to_s)
+      local_var_path = "/security-policies/{Policy Name}/global-acls/{URL ACL Name}".sub('{' + 'Policy Name' + '}', policy_name.to_s).sub('{' + 'URL ACL Name' + '}', url_acl_name.to_s)
 
       # query parameters
       query_params = {}

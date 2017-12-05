@@ -5,9 +5,9 @@ provider_class = Puppet::Type.type(:service_clickjacking).provider(:service_clic
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_clickjacking).new(
-       
-       
-       
+    name:'httpsApp1',
+    status:'On',
+    options:'Never'
     )
   }
 

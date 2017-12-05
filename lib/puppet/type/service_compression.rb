@@ -15,7 +15,7 @@ Puppet::Type.newtype(:service_compression) do
   newproperty(:content_types) do
     desc "Content Types"
     validate do |value|
-      fail("Invalid content_types #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z\-]*[/].*$/
+      fail("Invalid content_types #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z\-]*\[\/\].*$/
       fail("Invalid content_types #{value}, Must be no longer than 256 characters") if value.length > 256
     end
   end

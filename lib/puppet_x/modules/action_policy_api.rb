@@ -29,8 +29,8 @@ module SwaggerClient
     # @option opts [Array<String>] :fields 
     # @return [nil]
     def security_policies_policy_name_action_policies_attack_action_name_get(authorization, policy_name, attack_action_name, opts = {})
-      security_policies_policy_name_action_policies_attack_action_name_get_with_http_info(authorization, policy_name, attack_action_name, opts)
-      return nil
+      data, status_code, headers = security_policies_policy_name_action_policies_attack_action_name_get_with_http_info(authorization, policy_name, attack_action_name, opts)
+      return data, status_code, headers
     end
 
     # FETCH Information of Action Policy
@@ -97,8 +97,8 @@ module SwaggerClient
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def security_policies_policy_name_action_policies_attack_action_name_put(authorization, policy_name, attack_action_name, action_policy, opts = {})
-      security_policies_policy_name_action_policies_attack_action_name_put_with_http_info(authorization, policy_name, attack_action_name, action_policy, opts)
-      return nil
+      data, status_code, headers = security_policies_policy_name_action_policies_attack_action_name_put_with_http_info(authorization, policy_name, attack_action_name, action_policy, opts)
+      return data, status_code, headers
     end
 
     # EDIT Information of Action Policy
@@ -167,8 +167,8 @@ module SwaggerClient
     # @option opts [Array<String>] :fields 
     # @return [nil]
     def security_policies_policy_name_action_policies_get(authorization, policy_name, opts = {})
-      security_policies_policy_name_action_policies_get_with_http_info(authorization, policy_name, opts)
-      return nil
+      data, status_code, headers = security_policies_policy_name_action_policies_get_with_http_info(authorization, policy_name, opts)
+      return data, status_code, headers
     end
 
     # FETCH Information of Action Policy

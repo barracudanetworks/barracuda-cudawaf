@@ -12,6 +12,15 @@ Puppet::Type.newtype(:server_in_band_health_checks) do
   end
 
 
+  newparam(:service_name, :namevar => true) do
+    desc 'Service Name'
+    validate do |value|
+      fail("Invalid service_name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._:\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
+    end
+  end
+
+
   newproperty(:max_http_errors) do
     desc "Max HTTP Errors"
     defaultto 0
@@ -61,6 +70,11 @@ Puppet::Type.newtype(:server_in_band_health_checks) do
       fail("Invalid max_timeout_failure #{value}, Must not be lesser than 0") if value < 0
       fail("Invalid max_timeout_failure #{value}, Must not be greater than 1024") if value > 1024
     end
+  end
+
+
+  def self.title_patterns
+     [ [ /(.*)/m, [ [:name] ] ] ]
   end
 
 

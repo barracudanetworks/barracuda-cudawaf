@@ -5,9 +5,8 @@ provider_class = Puppet::Type.type(:service_website_profile).provider(:service_w
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_website_profile).new(
-       
-       
-       
+    name:'httpsApp1',
+    strict_profile_check:'Yes'
     )
   }
 

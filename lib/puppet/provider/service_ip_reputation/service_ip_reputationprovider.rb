@@ -1,6 +1,6 @@
-require_relative '../../../puppet_x/modules/service_api.rb'
+require_relative '../../../puppet_x/modules/service/service_api.rb'
 require_relative '../../../puppet_x/modules/login_info.rb'
-require_relative '../../../puppet_x/modules/ip_reputation_api.rb'
+require_relative '../../../puppet_x/modules/service/ip_reputation_api.rb'
 require 'json'
 require 'base64'
 require 'logger'

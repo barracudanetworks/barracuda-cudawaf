@@ -5,9 +5,8 @@ provider_class = Puppet::Type.type(:service_sensitive_parameter_names).provider(
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_sensitive_parameter_names).new(
-       
-       
-       
+    name:'httpsApp1',
+    sensitive_parameter_names:'UserName,Password,CreditCardNumber'
     )
   }
 

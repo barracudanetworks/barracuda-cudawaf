@@ -47,12 +47,8 @@ Puppet::Type.newtype(:service_basic_security) do
 
   newproperty(:web_firewall_log_level) do
     desc "Web Firewall Log Level"
-    defaultto :5-Notice
-    newvalues(:0-Emergency, :1-Alert, :2-Critical, :3-Error, :4-Warning, :5-Notice, :6-Information, :7-Debug)
-    validate do |value|
-      fail("Invalid web_firewall_log_level #{value}, Must not be lesser than 0") if value < 0
-      fail("Invalid web_firewall_log_level #{value}, Must not be greater than 7") if value > 7
-    end
+    defaultto "5-Notice"
+    newvalues("0-Emergency", "1-Alert", "2-Critical", "3-Error", "4-Warning", "5-Notice", "6-Information", "7-Debug")
   end
 
 

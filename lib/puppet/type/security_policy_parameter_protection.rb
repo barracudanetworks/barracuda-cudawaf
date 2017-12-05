@@ -38,7 +38,7 @@ Puppet::Type.newtype(:security_policy_parameter_protection) do
 
   newproperty(:denied_metacharacters) do
     desc "Denied Metacharacters"
-    defaultto :%00%01%04%1b%08%5c%7f
+    defaultto "%00%01%04%1b%08%5c%7f"
     validate do |value|
       fail("Invalid denied_metacharacters #{value}, Illegal characters present") unless value =~ /^(%[0-9a-fA-F][0-9a-fA-F])*$/
       fail("Invalid denied_metacharacters #{value}, Must be no longer than 239 characters") if value.length > 239

@@ -1,6 +1,6 @@
-require_relative '../../../puppet_x/modules/service_api.rb'
+require_relative '../../../puppet_x/modules/service/service_api.rb'
 require_relative '../../../puppet_x/modules/login_info.rb'
-require_relative '../../../puppet_x/modules/ftp_security_api.rb'
+require_relative '../../../puppet_x/modules/service/ftp_security_api.rb'
 require 'json'
 require 'base64'
 require 'logger'

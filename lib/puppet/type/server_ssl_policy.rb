@@ -12,6 +12,15 @@ Puppet::Type.newtype(:server_ssl_policy) do
   end
 
 
+  newparam(:service_name, :namevar => true) do
+    desc 'Service Name'
+    validate do |value|
+      fail("Invalid service_name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._:\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
+    end
+  end
+
+
   newproperty(:client_certificate) do
     desc "Client Certificate"
   end
@@ -70,6 +79,11 @@ Puppet::Type.newtype(:server_ssl_policy) do
     desc "Validate Server Certificate"
     defaultto :Yes
     newvalues(:Yes, :No)
+  end
+
+
+  def self.title_patterns
+     [ [ /(.*)/m, [ [:name] ] ] ]
   end
 
 

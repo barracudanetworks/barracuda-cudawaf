@@ -5,9 +5,8 @@ provider_class = Puppet::Type.type(:service_slow_client_attack).provider(:servic
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_slow_client_attack).new(
-       
-       
-       
+    name:'httpsApp1',
+    status:'On'      
     )
   }
 

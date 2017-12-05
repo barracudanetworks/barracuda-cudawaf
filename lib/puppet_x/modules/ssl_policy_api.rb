@@ -29,8 +29,8 @@ module SwaggerClient
     # @option opts [Array<String>] :fields 
     # @return [nil]
     def services_web_application_name_servers_web_server_name_ssl_policy_get(authorization, web_application_name, web_server_name, opts = {})
-      services_web_application_name_servers_web_server_name_ssl_policy_get_with_http_info(authorization, web_application_name, web_server_name, opts)
-      return nil
+       data,status_code,headers = services_web_application_name_servers_web_server_name_ssl_policy_get_with_http_info(authorization, web_application_name, web_server_name, opts)
+      return data,status_code,headers
     end
 
     # FETCH Information of ssl policy
@@ -97,8 +97,8 @@ module SwaggerClient
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def services_web_application_name_servers_web_server_name_ssl_policy_put(authorization, web_application_name, web_server_name, ssl_policy, opts = {})
-      services_web_application_name_servers_web_server_name_ssl_policy_put_with_http_info(authorization, web_application_name, web_server_name, ssl_policy, opts)
-      return nil
+       data,status_code,headers = services_web_application_name_servers_web_server_name_ssl_policy_put_with_http_info(authorization, web_application_name, web_server_name, ssl_policy, opts)
+      return data,status_code,headers
     end
 
     # EDIT Information of ssl policy
@@ -130,7 +130,7 @@ module SwaggerClient
         fail ArgumentError, "Missing the required parameter 'ssl_policy' when calling SslPolicyApi.services_web_application_name_servers_web_server_name_ssl_policy_put"
       end
       # resource path
-      local_var_path = "/services/{Web Application Name}/servers/{Web Server Name}/ssl-policy ".sub('{' + 'Web Application Name' + '}', web_application_name.to_s).sub('{' + 'Web Server Name' + '}', web_server_name.to_s)
+      local_var_path = "/services/{Web Application Name}/servers/{Web Server Name}/ssl-policy".sub('{' + 'Web Application Name' + '}', web_application_name.to_s).sub('{' + 'Web Server Name' + '}', web_server_name.to_s)
 
       # query parameters
       query_params = {}

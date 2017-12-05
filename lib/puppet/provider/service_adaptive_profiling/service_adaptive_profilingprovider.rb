@@ -1,5 +1,5 @@
-require_relative '../../../puppet_x/modules/service_api.rb'
-require_relative '../../../puppet_x/modules/adaptive_profiling_api.rb'
+require_relative '../../../puppet_x/modules/server/service_api.rb'
+require_relative '../../../puppet_x/modules/server/adaptive_profiling_api.rb'
 require_relative '../../../puppet_x/modules/login_info.rb'
 
 require 'json'

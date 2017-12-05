@@ -5,9 +5,9 @@ provider_class = Puppet::Type.type(:service_instant_ssl).provider(:service_insta
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_instant_ssl).new(
-       
-       
-       
+    name:'httpsApp1',
+    status:'On',
+    secure_site_domain:'www.example.com'
     )
   }
 

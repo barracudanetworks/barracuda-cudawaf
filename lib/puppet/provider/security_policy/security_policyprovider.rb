@@ -1,4 +1,4 @@
-require_relative '../../../puppet_x/modules/security_policy_api.rb'
+require_relative '../../../puppet_x/modules/security_policy/security_policy_api.rb'
 require_relative '../../../puppet_x/modules/login_info.rb'
 
 require 'json'
@@ -30,7 +30,7 @@ def exists?
   data, status_code, headers=security_policy_instance.security_policies_policy_name_get(auth_header,policyName)
  # parsed_response = JSON.parse(response)
  # status_code=parsed_response["status_code"]
-  Puppet.debug("status_code received from WAF api GET secuirty policy:  #{status_code}")
+  Puppet.debug("status_code received from WAF api GET security policy:  #{status_code}")
 
   if data.to_s.empty?
     fail("Not able to process the request. Please check the request parameters")
@@ -55,6 +55,7 @@ def self.instances
 
   login_instance = Login.new
   auth_header = login_instance.get_auth_header
+  Puppet.debug(" auth header;;;;;;;;;;;;;; #{auth_header}")
   security_policy_instance = SwaggerClient::SecurityPolicyApi.new
 
 # get all secuirty policys from WAF

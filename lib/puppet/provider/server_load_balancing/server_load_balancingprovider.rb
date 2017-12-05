@@ -1,7 +1,7 @@
-require_relative '../../../puppet_x/modules/service_api.rb'
-require_relative '../../../puppet_x/modules/server_api.rb'
+require_relative '../../../puppet_x/modules/service/service_api.rb'
+require_relative '../../../puppet_x/modules/server/server_api.rb'
 require_relative '../../../puppet_x/modules/login_info.rb'
-require_relative '../../../puppet_x/modules/load_balancing_api.rb'
+require_relative '../../../puppet_x/modules/server/load_balancing_api.rb'
 require 'json'
 require 'base64'
 require 'logger'
@@ -77,7 +77,7 @@ Puppet::Type.type(:server_load_balancing).provide(:server_load_balancingprovider
       serviceName = response["Service"]
       Puppet.debug("The DATA:::::: #{svrData}")
       if svrData
-         svcData.each do |key,value|
+         svrData.each do |key,value|
            servname = value["name"]
            val= value
            instances <<  new(
@@ -119,7 +119,7 @@ Puppet::Type.type(:server_load_balancing).provide(:server_load_balancingprovider
     Puppet.debug("Calling prefetch method of server_load_balancingprovider: ")
     servers = instances
     resources.keys.each do |name,service_name|
-      if provider = services.find { |server| server.name == name && server.service_name == service_name}
+      if provider = servers.find { |server| server.name == name && server.service_name == service_name}
          resources[name].provider=provider
       end
     end
@@ -133,7 +133,7 @@ Puppet::Type.type(:server_load_balancing).provide(:server_load_balancingprovider
       server_instance = SwaggerClient::ServerApi.new
       load_bal_api_instance = SwaggerClient::LoadBalancingApi.new
       serverName=@resource[:name]
-      serviceName=@resource[:name]
+      serviceName=@resource[:service_name]
       data,status_code,headers = load_bal_api_instance.services_web_application_name_servers_web_server_name_load_balancing_put(auth_header,serviceName,serverName,message(resource),{})
       Puppet.debug("WAF services PUT response:  #{data}")
         if status_code == 200
@@ -152,6 +152,8 @@ Puppet::Type.type(:server_load_balancing).provide(:server_load_balancingprovider
     opts.delete(:provider)
     opts.delete(:ensure)
     opts.delete(:loglevel)
+    opts.delete(:name)
+    opts.delete(:service_name)
     opts=convert_underscores(opts)
     params=opts
     Puppet.debug("PARAM....................#{params}")

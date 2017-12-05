@@ -4,10 +4,9 @@ provider_class = Puppet::Type.type(:service_compression).provider(:service_compr
 
 describe provider_class do
   let(:resource) {
-    Puppet::Type.type(:service_compression).new(
-       
-       
-       
+    Puppet::Type.type(:service_compression).new(   
+    name:'httpsApp1',
+    status:'On'
     )
   }
 

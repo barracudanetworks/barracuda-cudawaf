@@ -12,6 +12,15 @@ Puppet::Type.newtype(:rule_group) do
   end
 
 
+  newparam(:service_name, :namevar => true) do
+    desc 'Service Name'
+    validate do |value|
+      fail("Invalid service_name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._:\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
+    end
+  end
+
+
   newproperty(:access_log) do
     desc "Access Log"
     defaultto :Enable
@@ -160,6 +169,11 @@ Puppet::Type.newtype(:rule_group) do
 
   newproperty(:web_firewall_policy) do
     desc "Web Firewall Policy"
+  end
+
+
+  def self.title_patterns
+     [ [ /(.*)/m, [ [:name] ] ] ]
   end
 
 

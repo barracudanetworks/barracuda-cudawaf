@@ -12,6 +12,15 @@ Puppet::Type.newtype(:rule_group_caching) do
   end
 
 
+  newparam(:service_name, :namevar => true) do
+    desc 'Service Name'
+    validate do |value|
+      fail("Invalid service_name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._:\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
+    end
+  end
+
+
   newproperty(:cache_negative_responses) do
     desc "Cache Negative Responses"
     defaultto :No
@@ -84,6 +93,11 @@ Puppet::Type.newtype(:rule_group_caching) do
     desc "Status"
     defaultto :Off
     newvalues(:On, :Off)
+  end
+
+
+  def self.title_patterns
+     [ [ /(.*)/m, [ [:name] ] ] ]
   end
 
 

@@ -1,7 +1,7 @@
-require_relative '../../../puppet_x/modules/service_api.rb'
-require_relative '../../../puppet_x/modules/server_api.rb'
+require_relative '../../../puppet_x/modules/service/service_api.rb'
+require_relative '../../../puppet_x/modules/server/server_api.rb'
 require_relative '../../../puppet_x/modules/login_info.rb'
-require_relative '../../../puppet_x/modules/out_of_band_health_checks_api.rb'
+require_relative '../../../puppet_x/modules/server/out_of_band_health_checks_api.rb'
 require 'json'
 require 'base64'
 require 'logger'
@@ -77,7 +77,7 @@ Puppet::Type.type(:server_out_of_band_health_checks).provide(:server_out_of_band
       serviceName = response["Service"]
       Puppet.debug("The DATA:::::: #{svrData}")
       if svrData
-         svcData.each do |key,value|
+         svrData.each do |key,value|
            servname = value["name"]
            val= value
            instances <<  new(
@@ -119,7 +119,7 @@ Puppet::Type.type(:server_out_of_band_health_checks).provide(:server_out_of_band
     Puppet.debug("Calling prefetch method of server_out_of_band_health_checksprovider: ")
     servers = instances
     resources.keys.each do |name,service_name|
-      if provider = services.find { |server| server.name == name && server.service_name == service_name}
+      if provider = servers.find { |server| server.name == name && server.service_name == service_name}
          resources[name].provider=provider
       end
     end
@@ -133,7 +133,7 @@ Puppet::Type.type(:server_out_of_band_health_checks).provide(:server_out_of_band
       server_instance = SwaggerClient::ServerApi.new
       out_band_health_check_instance = SwaggerClient::OutOfBandHealthChecksApi.new
       serverName=@resource[:name]
-      serviceName=@resource[:name]
+      serviceName=@resource[:service_name]
       data,status_code,headers = out_band_health_check_instance.services_web_application_name_servers_web_server_name_out_of_band_health_checks_put(auth_header,serviceName,serverName,message(resource),{})
       Puppet.debug("WAF services PUT response:  #{data}")
         if status_code == 200
@@ -152,6 +152,8 @@ Puppet::Type.type(:server_out_of_band_health_checks).provide(:server_out_of_band
     opts.delete(:provider)
     opts.delete(:ensure)
     opts.delete(:loglevel)
+    opts.delete(:name)
+    opts.delete(:service_name)
     opts=convert_underscores(opts)
     params=opts
     Puppet.debug("PARAM....................#{params}")

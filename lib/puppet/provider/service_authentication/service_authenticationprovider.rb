@@ -1,6 +1,6 @@
-require_relative '../../../puppet_x/modules/service_api.rb'
+require_relative '../../../puppet_x/modules/service/service_api.rb'
 require_relative '../../../puppet_x/modules/login_info.rb'
-require_relative '../../../puppet_x/modules/authentication_api.rb'
+require_relative '../../../puppet_x/modules/service/authentication_api.rb'
 require 'json'
 require 'base64'
 require 'logger'
@@ -93,7 +93,7 @@ Puppet::Type.type(:service_authentication).provide(:service_authenticationprovid
     service_auth_instance = SwaggerClient::AuthenticationApi.new
     svcName=@resource[:name]
     data,status_code,headers= service_auth_instance.services_web_application_name_authentication_put(auth_header,svcName,message(resource),{})
-    Puppet.debug("WAF services PUT response:  #{data}"
+    Puppet.debug("WAF services PUT response:  #{data}")
     end
     return data
   end

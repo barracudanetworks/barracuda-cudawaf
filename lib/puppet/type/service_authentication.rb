@@ -14,13 +14,13 @@ Puppet::Type.newtype(:service_authentication) do
 
   newproperty(:login_page) do
     desc "Login Page"
-    defaultto :default-login-page
+    defaultto "default-login-page"
   end
 
 
   newproperty(:dual_login_page) do
     desc "Dual Login Page"
-    defaultto :default-dual-login-page
+    defaultto "default-dual-login-page"
   end
 
 
@@ -36,7 +36,7 @@ Puppet::Type.newtype(:service_authentication) do
 
   newproperty(:login_failed_page) do
     desc "Login Failed Page"
-    defaultto :default-login-failed-page
+    defaultto "default-login-failed-page"
   end
 
 
@@ -47,7 +47,7 @@ Puppet::Type.newtype(:service_authentication) do
 
   newproperty(:login_processor_path) do
     desc "Login Processor Path"
-    defaultto :/nclogin.submit
+    defaultto "/nclogin.submit"
   end
 
 
@@ -83,7 +83,7 @@ Puppet::Type.newtype(:service_authentication) do
 
   newproperty(:login_successful_page) do
     desc "Login Successful Page"
-    defaultto :default-login-success-page
+    defaultto "default-login-success-page"
   end
 
 
@@ -127,7 +127,7 @@ Puppet::Type.newtype(:service_authentication) do
 
   newproperty(:logout_successful_page) do
     desc "Logout Successful Page"
-    defaultto :default-logout-success-page
+    defaultto "default-logout-success-page"
   end
 
 
@@ -139,13 +139,13 @@ Puppet::Type.newtype(:service_authentication) do
 
   newproperty(:logout_page) do
     desc "Logout Page"
-    defaultto :default-login-success-page
+    defaultto "default-login-success-page"
   end
 
 
   newproperty(:access_denied_page) do
     desc "Access Denied Page"
-    defaultto :default-access-denied-page
+    defaultto "default-access-denied-page"
   end
 
 
@@ -158,13 +158,13 @@ Puppet::Type.newtype(:service_authentication) do
 
   newproperty(:cookie_path) do
     desc "Session Cookie Path"
-    defaultto :/
+    defaultto "/"
   end
 
 
   newproperty(:login_challenge_page) do
     desc "Login Challenge Page"
-    defaultto :default-challenge-page
+    defaultto "default-challenge-page"
   end
 
 
@@ -203,7 +203,7 @@ Puppet::Type.newtype(:service_authentication) do
 
   newproperty(:post_processor_path) do
     desc "Post Processor Path"
-    defaultto :/saml.sso/saml2/post
+    defaultto "/saml.sso/saml2/post"
   end
 
 
@@ -293,7 +293,7 @@ Puppet::Type.newtype(:service_authentication) do
 
   newproperty(:logout_processor_path) do
     desc "Logout Processor Path"
-    defaultto :/saml.sso/slo/redirect
+    defaultto "/saml.sso/slo/redirect"
   end
 
 

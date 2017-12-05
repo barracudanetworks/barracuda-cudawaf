@@ -1,7 +1,7 @@
-require_relative '../../../puppet_x/modules/service_api.rb'
-require_relative '../../../puppet_x/modules/server_api.rb'
+require_relative '../../../puppet_x/modules/service/service_api.rb'
+require_relative '../../../puppet_x/modules/server/server_api.rb'
 require_relative '../../../puppet_x/modules/login_info.rb'
-require_relative '../../../puppet_x/modules/'
+require_relative '../../../puppet_x/modules/server/'
 require 'json'
 require 'base64'
 require 'logger'
@@ -75,7 +75,7 @@ Puppet::Type.type(:server_redirect).provide(:server_redirectprovider) do
       serviceName = response["Service"]
       Puppet.debug("The DATA:::::: #{svrData}")
       if svrData
-         svcData.each do |key,value|
+         svrData.each do |key,value|
            servname = value["name"]
            val= value
            instances <<  new(
@@ -117,7 +117,7 @@ Puppet::Type.type(:server_redirect).provide(:server_redirectprovider) do
     Puppet.debug("Calling prefetch method of server_redirectprovider: ")
     servers = instances
     resources.keys.each do |name,service_name|
-      if provider = services.find { |server| server.name == name && server.service_name == service_name
+      if provider = servers.find { |server| server.name == name && server.service_name == service_name
          resources[name].provider=provider
       end
     end
@@ -130,7 +130,7 @@ Puppet::Type.type(:server_redirect).provide(:server_redirectprovider) do
       auth_header = login_instance.get_auth_header
       server_instance = SwaggerClient::ServerApi.new
       serverName=@resource[:name]
-      serviceName=@resource[:name]
+      serviceName=@resource[:service_name]
       data,status_code,headers = server_instance.services_web_application_name_servers_server_name_put(auth_header,serviceName,serverName,message(resource),{})
       Puppet.debug("WAF services PUT response:  #{data}")
         if status_code == 200
@@ -149,6 +149,8 @@ Puppet::Type.type(:server_redirect).provide(:server_redirectprovider) do
     opts.delete(:provider)
     opts.delete(:ensure)
     opts.delete(:loglevel)
+    opts.delete(:name)
+    opts.delete(:service_name)
     opts=convert_underscores(opts)
     params=opts
     Puppet.debug("PARAM....................#{params}")
