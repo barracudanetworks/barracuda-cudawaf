@@ -21,6 +21,6 @@ class barracudawaf {
     name            => 'Rule1',
     service_name    => 'httpsApp1',
     status          => 'On',
-    min_size        => '10111'
+    min_size        => 10111
   }
 }

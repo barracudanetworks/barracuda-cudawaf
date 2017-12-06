@@ -4,13 +4,15 @@ type_class = Puppet::Type.type(:service_clickjacking)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:allowed_origin,
+	:options,
+	:status,
     ]
   end
 

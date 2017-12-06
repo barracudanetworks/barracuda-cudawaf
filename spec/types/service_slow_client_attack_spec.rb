@@ -4,13 +4,19 @@ type_class = Puppet::Type.type(:service_slow_client_attack)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:data_transfer_rate,
+	:status,
+	:incremental_request_timeout,
+	:exception_clients,
+	:incremental_response_timeout,
+	:max_request_timeout,
+	:max_response_timeout,      
     ]
   end
 

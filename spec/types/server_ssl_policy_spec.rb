@@ -11,7 +11,15 @@ describe type_class do
 
   let :properties do
     [
-      
+      :client_certificate,
+      :enable_https,
+      :enable_sni,
+      :enable_ssl_3,
+      :enable_ssl_compatibility_mode,
+      :enable_tls_1,
+      :enable_tls_1_1,
+      :enable_tls_1_2,
+      :validate_certificate,      
     ]
   end
 

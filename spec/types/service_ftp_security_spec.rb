@@ -4,13 +4,17 @@ type_class = Puppet::Type.type(:service_ftp_security)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:allowed_verb_status,
+	:allowed_verbs,
+	:attack_prevention_status,
+	:pasv_ports,
+	:pasv_ip_address,      
     ]
   end
 

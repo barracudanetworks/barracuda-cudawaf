@@ -181,22 +181,11 @@ def message(object)
   parameters = object.to_hash
   Puppet.debug("Parameters.......... #{parameters}")
   serverName=@resource[:name]
-=begin
-  opts = {
-    "address-version"=> @resource[:address_version],
-    "status"=> @resource[:status],
-    "name"=>@resource[:name],
-    "port"=> @resource[:port],
-    "comments"=>@resource[:comments]
-  }
-=end
+
   val = parameters.has_key?(:identifier)
   val2 = parameters[:identifier]
 
-  Puppet.debug("val => #{val} val2 => #{val2}")
-
   if parameters.has_key?(:identifier) && parameters[:identifier] == :Hostname
-     Puppet.debug("Inside Parameters if Check....1111111111111")
      hostname = nil
      if parameters.key?:hostname
        hostname = parameters[:hostname]
@@ -207,8 +196,6 @@ def message(object)
      if hostname.nil?
         fail("hostname is empty. Please add a valid hostname since the identifier is set to hostname.")
      else
-       # opts["identifier"] = "Hostname"
-       # opts["hostname"] = hostname
        parameters[:identifier]="Hostname"
        parameters[:hostname]=hostname
      end
@@ -220,8 +207,6 @@ def message(object)
         if ip_address.nil?
            fail("ip_address is empty. Please a valid value for it.")
         else
-           #opts["identifier"] = "IP Address"
-           #opts["ip-address"] = ip_address
             parameters[:identifier]="IP Address"
             parameters[:ip_address]=ip_address
         end
@@ -230,7 +215,6 @@ def message(object)
      end
   end
 
-#  params=opts.to_json
   parameters.delete(:provider)
   parameters.delete(:ensure)
   parameters.delete(:loglevel)

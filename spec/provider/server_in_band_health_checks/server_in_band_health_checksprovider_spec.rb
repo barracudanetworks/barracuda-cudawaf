@@ -5,9 +5,10 @@ provider_class = Puppet::Type.type(:server_in_band_health_checks).provider(:serv
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:server_in_band_health_checks).new(
-       
-       
-       
+	name:'wafServer2',
+	service_name:'httpsApp1',
+	max_http_errors:'11',
+	max_refused:'11',       
     )
   }
 

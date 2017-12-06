@@ -5,9 +5,8 @@ provider_class = Puppet::Type.type(:security_policy_url_normalization).provider(
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:security_policy_url_normalization).new(
-       
-       
-       
+	name:'owa',
+	parameter_separators:'Ampersand and Semicolon',       
     )
   }
 

@@ -5,9 +5,9 @@ provider_class = Puppet::Type.type(:server_load_balancing).provider(:server_load
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:server_load_balancing).new(
-       
-       
-       
+	name:'wafServer2',
+	service_name:'httpsApp1',
+	weight:'2',       
     )
   }
 

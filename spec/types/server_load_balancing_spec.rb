@@ -11,7 +11,9 @@ describe type_class do
 
   let :properties do
     [
-      
+      :backup_server,
+      :weight,
+
     ]
   end
 

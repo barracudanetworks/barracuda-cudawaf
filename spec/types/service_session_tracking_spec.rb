@@ -4,13 +4,17 @@ type_class = Puppet::Type.type(:service_session_tracking)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:identifiers,
+	:exception_clients,
+	:status,
+	:max_interval,
+	:max_sessions_per_ip,      
     ]
   end
 

@@ -5,9 +5,9 @@ provider_class = Puppet::Type.type(:server_ssl_policy).provider(:server_ssl_poli
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:server_ssl_policy).new(
-       
-       
-       
+	name:'wafServer2',
+	service_name:'httpsApp1',
+	enable_https:'Yes',       
     )
   }
 

@@ -4,13 +4,20 @@ type_class = Puppet::Type.type(:service_caching)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:cache_negative_response,
+	:expiry_age,
+	:ignore_response_headers,
+	:status,
+	:min_size,
+	:file_extensions,
+	:ignore_request_headers,
+	:max_size,      
     ]
   end
 

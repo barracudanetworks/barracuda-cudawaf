@@ -4,13 +4,19 @@ type_class = Puppet::Type.type(:service_adaptive_profiling)
 describe type_class do
   let :params do
     [
-       
+      :name,  
     ]
   end
 
   let :properties do
     [
-      
+      :ignore_parameters,
+      :content_types,
+      :trusted_host_group,
+      :status,
+      :navigation_parameters,
+      :response_learning,
+      :request_learning,
     ]
   end
 

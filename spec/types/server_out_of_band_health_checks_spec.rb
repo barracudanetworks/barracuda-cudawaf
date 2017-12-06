@@ -11,7 +11,8 @@ describe type_class do
 
   let :properties do
     [
-      
+      :enable_OOB_health_checks,
+      :interval,      
     ]
   end
 

@@ -5,9 +5,10 @@ provider_class = Puppet::Type.type(:server_advanced_configuration).provider(:ser
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:server_advanced_configuration).new(
-       
-       
-       
+	name:'wafServer2',
+	service_name:'httpsApp1',
+	max_keepalive_requests:'121',
+	max_spare_connections:'11',       
     )
   }
 

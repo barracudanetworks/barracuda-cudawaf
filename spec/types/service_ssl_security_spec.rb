@@ -4,13 +4,33 @@ type_class = Puppet::Type.type(:service_ssl_security)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:ciphers,
+	:enable_sni,
+	:certificate,
+	:status,
+	:hsts_max_age,
+	:enable_strict_sni_check,
+	:sni_certificate,
+	:ecdsa_certificate,
+	:domain,
+	:override_ciphers_ssl3,
+	:override_ciphers_tls_1,
+	:override_ciphers_tls_1_1,
+	:enable_ssl_3,
+	:enable_tls_1_1,
+	:enable_hsts,
+	:enable_tls_1_2,
+	:include_hsts_sub_domains,
+	:selected_ciphers,
+	:sni_ecdsa_certificate,
+	:enable_pfs,
+	:enable_tls_1,      
     ]
   end
 

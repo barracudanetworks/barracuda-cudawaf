@@ -11,7 +11,8 @@ describe type_class do
 
   let :properties do
     [
-      
+      :enable_connection_pooling,
+      :keepalive_timeout,      
     ]
   end
 

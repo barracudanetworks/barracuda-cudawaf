@@ -12,6 +12,24 @@ Puppet::Type.newtype(:rule_group_server) do
   end
 
 
+  newparam(:service_name, :namevar => true) do
+    desc 'Service Name'
+    validate do |value|
+      fail("Invalid service_name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._:\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
+    end
+  end
+
+
+  newparam(:rule_group_name, :namevar => true) do
+    desc "Rule Group Name"
+    validate do |value|
+      fail("Invalid name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
+    end
+  end
+
+
   newproperty(:address_version) do
     desc "Version"
     defaultto :IPv4
@@ -81,6 +99,11 @@ Puppet::Type.newtype(:rule_group_server) do
       fail("Invalid weight #{value}, Must not be lesser than 0") if value < 0
       fail("Invalid weight #{value}, Must not be greater than 65535") if value > 65535
     end
+  end
+
+
+  def self.title_patterns
+     [ [ /(.*)/m, [ [:name] ] ] ]
   end
 
 

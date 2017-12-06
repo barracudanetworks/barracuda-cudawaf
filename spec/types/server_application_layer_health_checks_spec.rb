@@ -11,7 +11,12 @@ describe type_class do
 
   let :properties do
     [
-      
+      :additional_headers,
+      :domain,
+      :match_content_string,
+      :method,
+      :status_code,
+      :url,       
     ]
   end
 

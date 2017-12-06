@@ -4,13 +4,18 @@ type_class = Puppet::Type.type(:service_website_profile)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:allowed_domains,
+	:use_profile,
+	:mode,
+	:include_url_patterns,
+	:strict_profile_check,
+	:exclude_url_patterns,      
     ]
   end
 

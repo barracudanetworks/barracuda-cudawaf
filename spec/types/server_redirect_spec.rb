@@ -5,7 +5,6 @@ describe type_class do
   let :params do
     [
        :name,
-       :service_name,
     ]
   end
 

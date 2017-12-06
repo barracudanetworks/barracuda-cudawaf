@@ -11,7 +11,10 @@ describe type_class do
 
   let :properties do
     [
-      
+      :max_http_errors,
+      :max_other_failure,
+      :max_refused,
+      :max_timeout_failure,      
     ]
   end
 

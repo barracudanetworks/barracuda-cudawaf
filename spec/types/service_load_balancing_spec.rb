@@ -4,13 +4,23 @@ type_class = Puppet::Type.type(:service_load_balancing)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:persistence_cookie_domain,
+	:algorithm,
+	:source_ip_netmask,
+	:cookie_age,
+	:persistence_method,
+	:persistence_idle_timeout,
+	:persistence_cookie_name,
+	:persistence_cookie_path,
+	:parameter_name,
+	:header_name,
+	:failover_method,      
     ]
   end
 

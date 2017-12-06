@@ -4,13 +4,21 @@ type_class = Puppet::Type.type(:service_basic_security)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:mode,
+	:ignore_case,
+	:web_firewall_policy,
+	:rate_control_status,
+	:rate_control_pool,
+	:web_firewall_log_level,
+	:trusted_hosts_group,
+	:client_ip_addr_header,
+	:trusted_hosts_action,
     ]
   end
 

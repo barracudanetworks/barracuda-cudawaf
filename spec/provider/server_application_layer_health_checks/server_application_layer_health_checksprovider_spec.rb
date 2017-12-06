@@ -5,9 +5,9 @@ provider_class = Puppet::Type.type(:server_application_layer_health_checks).prov
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:server_application_layer_health_checks).new(
-       
-       
-       
+	name:'wafServer2',
+	service_name:'httpsApp1',
+	url:'/index.html',       
     )
   }
 

@@ -4,13 +4,15 @@ type_class = Puppet::Type.type(:service_ssl_ocsp)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:enable,
+	:responder_url,
+	:certificate,      
     ]
   end
 

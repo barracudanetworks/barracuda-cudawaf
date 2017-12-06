@@ -71,7 +71,7 @@ def self.instances
         val= value
         instances <<  new(
           :ensure => :present,
-          :name => val["name"],
+          :name => val["name"]
         ) 
       end
    end # if end

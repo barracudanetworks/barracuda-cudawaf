@@ -5,9 +5,10 @@ provider_class = Puppet::Type.type(:service_advanced_configuration).provider(:se
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_advanced_configuration).new(
-       
-       
-       
+	name:'httpsApp1',
+	enable_vdi:'No',
+	enable_web_application_firewall:'No',
+	enable_websocket:'Yes',       
     )
   }
 

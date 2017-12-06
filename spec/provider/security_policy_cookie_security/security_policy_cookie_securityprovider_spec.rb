@@ -5,9 +5,9 @@ provider_class = Puppet::Type.type(:security_policy_cookie_security).provider(:s
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:security_policy_cookie_security).new(
-       
-       
-       
+	name:'owa',
+    	cookie_max_age:'1414',
+    	days_allowed:'10',       
     )
   }
 

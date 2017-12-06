@@ -4,13 +4,13 @@ type_class = Puppet::Type.type(:service_url_encryption)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:status,      
     ]
   end
 

@@ -4,13 +4,24 @@ type_class = Puppet::Type.type(:service_advanced_configuration)
 describe type_class do
   let :params do
     [
-       
+      :name,       
     ]
   end
 
   let :properties do
     [
-      
+      :enable_vdi,
+      :enable_web_application_firewall,
+      :enable_websocket,
+      :ddos_exception_list,
+      :keepalive_requests,
+      :ntlm_ignore_extra_data,
+      :accept_list_status,
+      :enable_http2,
+      :enable_proxy_protocol,
+      :proxy_list_status,
+      :accept_list,
+      :proxy_list,
     ]
   end
 

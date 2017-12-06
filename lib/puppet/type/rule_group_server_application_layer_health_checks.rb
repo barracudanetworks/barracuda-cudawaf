@@ -12,6 +12,24 @@ Puppet::Type.newtype(:rule_group_server_application_layer_health_checks) do
   end
 
 
+  newparam(:rule_group_name, :namevar => true) do
+    desc "Rule Group Name"
+    validate do |value|
+      fail("Invalid name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
+    end
+  end
+
+
+  newparam(:service_name, :namevar => true) do
+    desc 'Service Name'
+    validate do |value|
+      fail("Invalid service_name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._:\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
+    end
+  end
+
+
   newproperty(:additional_headers, :array_matching => :all) do
     desc "Additional Headers"
   end
@@ -54,6 +72,11 @@ Puppet::Type.newtype(:rule_group_server_application_layer_health_checks) do
       fail("Invalid url #{value}, Must be no longer than 950 characters") if value.length > 950
       fail("Invalid url #{value}, Must be no shorter than 1 characters") if value.length < 1
     end
+  end
+
+
+  def self.title_patterns
+     [ [ /(.*)/m, [ [:name] ] ] ]
   end
 
 

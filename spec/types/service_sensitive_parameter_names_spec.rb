@@ -4,13 +4,13 @@ type_class = Puppet::Type.type(:service_sensitive_parameter_names)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:sensitive_parameter_names,      
     ]
   end
 

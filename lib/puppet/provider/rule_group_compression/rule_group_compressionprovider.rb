@@ -183,6 +183,7 @@ def message(object)
   parameters.delete(:provider)
   parameters.delete(:ensure)
   parameters.delete(:loglevel)
+  parameters.delete(:name)
   parameters.delete(:service_name)
   parameters=convert_underscores(parameters)
   return parameters

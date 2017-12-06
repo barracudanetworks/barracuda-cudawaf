@@ -11,7 +11,7 @@ Swagger Codegen version: 2.2.3
 =end
 
 require "uri"
-
+require_relative "../swagger_client/api_client"
 module SwaggerClient
   class SecurityPolicyApi
     attr_accessor :api_client

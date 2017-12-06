@@ -4,13 +4,21 @@ type_class = Puppet::Type.type(:service_ip_reputation)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:tor_nodes,
+	:geoip_enable_logging,
+	:satellite_provider,
+	:geoip_action,
+	:apply_policy_at,
+	:anonymous_proxy,
+	:enable_ip_reputation_filter,
+	:geo_pool,
+	:barracuda_reputation_blocklist,      
     ]
   end
 

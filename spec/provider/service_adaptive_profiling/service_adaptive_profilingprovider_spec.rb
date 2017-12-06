@@ -5,9 +5,10 @@ provider_class = Puppet::Type.type(:service_adaptive_profiling).provider(:servic
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_adaptive_profiling).new(
-       
-       
-       
+	name:'httpsApp1',
+	status:'On',
+	response_learning:'Successes Only',
+	request_learning:'Successes Only',       
     )
   }
 

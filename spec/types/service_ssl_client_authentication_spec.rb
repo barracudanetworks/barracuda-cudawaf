@@ -4,13 +4,16 @@ type_class = Puppet::Type.type(:service_ssl_client_authentication)
 describe type_class do
   let :params do
     [
-       
+	:name,       
     ]
   end
 
   let :properties do
     [
-      
+	:trusted_certificates,
+	:enforce_client_certificate,
+	:client_authentication,
+	:client_certificate_for_rule,      
     ]
   end
 

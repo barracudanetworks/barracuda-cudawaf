@@ -11,7 +11,14 @@ describe type_class do
 
   let :properties do
     [
-      
+      :client_impersonation,
+      :max_connections,
+      :max_establishing_connections,
+      :max_keepalive_requests,
+      :max_requests,
+      :max_spare_connections,
+      :source_ip_to_connect,
+      :timeout,      
     ]
   end
 
