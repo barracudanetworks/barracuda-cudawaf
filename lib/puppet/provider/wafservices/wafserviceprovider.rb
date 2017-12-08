@@ -1,5 +1,5 @@
-require_relative '../../../puppet_x/modules/service_api.rb'
-require_relative '../../../puppet_x/modules/login_info.rb'
+require 'puppet_x/modules/service_api'
+require 'puppet_x/modules/login_info'
 require 'puppet/provider/cudawaf'
 
 require 'json'
@@ -11,7 +11,10 @@ require 'rest-client'
 Puppet::Type.type(:wafservices).provide(:wafserviceprovider, :parent => Puppet::Provider::Cudawaf) do
   mk_resource_methods
 
-  device = @resource[:node]
+  #
+  #  Retrieve the device node information from the facts.
+  #
+  device = $facts['node']
 
   # this method will get service/servicename and return true or false 
   def exists?
@@ -21,15 +24,15 @@ Puppet::Type.type(:wafservices).provide(:wafserviceprovider, :parent => Puppet::
     #
     #  Use the Puppet::Device::Transport layer to do the API call
     #
-    response = transport.get(device, "Service", "services_web_application_name_get", @resource[:name])
+    response = transport.get(device, "Service", @resource[:name])
   end
 
   #this method get all services from WAF system and builds the instances array
   def self.instances
-    Puppet.debug("Callling self.instances method of wafserviceprovider: ")
+    Puppet.debug("Calling self.instances method of wafserviceprovider: ")
     instances = []
 
-    data,status_code,headers = transport.get(device, "Service", "services_get", {})
+    data,status_code,headers = transport.get(device, "Service", {})
     Puppet.debug("WAF Get all services response: #{data}")
 
     unless data == '{}'
@@ -60,8 +63,8 @@ Puppet::Type.type(:wafservices).provide(:wafserviceprovider, :parent => Puppet::
     services = instances
 
     resources.keys.each do |name|
-      if provider = services.find { |service| service.name == name}
-      resources[name].provider=provider
+      if provider = services.find {|service| service.name == name}
+        resources[name].provider = provider
       end    
     end
   end
@@ -70,7 +73,7 @@ Puppet::Type.type(:wafservices).provide(:wafserviceprovider, :parent => Puppet::
   def flush
     Puppet.debug("Calling flush method of wafserviceprovider: ")
     if @property_hash != {}
-      response = transport.put(device, "Service", "services_web_application_name_put", @resource[:name], transport.message(resource), {})
+      response = transport.put(device, "Service", @resource[:name], transport.message(resource), {})
     end
 
     return response
@@ -80,13 +83,13 @@ Puppet::Type.type(:wafservices).provide(:wafserviceprovider, :parent => Puppet::
   def create
     Puppet.debug("Calling create method of wafserviceprovider:")
 
-    response = transport.post(device, "Service", "services_post_with_http_info", transport.message(resource), {})
+    response = transport.post(device, "Service", transport.message(resource), {})
   end
 
   # this method will call the delete api of a WAF service 
   def destroy
     Puppet.debug("Calling wafserviceprovider destroy method: ")
-    response = transport.delete(device, "Service", "services_web_application_name_delete", @resource[:name], {})
+    response = transport.delete(device, "Service", @resource[:name], {})
 
     # We clear the hash here to stop flush from triggering.
     @property_hash.clear

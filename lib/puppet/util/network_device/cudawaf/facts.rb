@@ -1,5 +1,6 @@
 require 'puppet/util/network_device/cudawaf'
-require '../../../lib/puppet_x/login_info.rb'
+require 'puppet_x/modules/login_info'
+require 'uri'
 
 class Puppet::Util::NetworkDevice::Cudawaf::Facts
   attr_reader :transport, :url
@@ -25,12 +26,14 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
       :firmwareversion => :Cudawaf
     }
 
+    @device_url = URI.parse(url)
+
     #
     #  Need to do an API call to retrieve the facts about each device.
     #  TODO: Loop through all devices in the device.conf and get the facts for each.
     #
     login_instance = Login.new
-    auth_header = login_instance.get_auth_header(device)
+    auth_header = login_instance.get_auth_header(device_url.host)
     Puppet.debug("WAF authorization token:  #{auth_header}")
 
     if response = @transport.get(device, "System", "system_get", {}) and items = response['data']
@@ -62,8 +65,10 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
       facts[fact] = result[fact.to_s]
     end
 
-    # Map hostname.
-    facts[:fqdn] = facts[:hostname]
+    #
+    #  Map the device name to the node name in device.conf to easily identify this WAF.
+    #
+    facts[:node] = device_url.host
 
     Puppet.debug("Facts - #{facts}")
     return facts

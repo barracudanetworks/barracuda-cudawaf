@@ -1,20 +1,37 @@
 require 'puppet/util/network_device'
 require 'puppet/util/network_device/transport'
 require 'puppet/util/network_device/transport/base'
-require_relative '../../../puppet_x/modules/login_info.rb'
+require 'puppet_x/modules/login_info'
+require 'puppet_x/swagger_client/configuration'
 
 require 'json'
 require 'logger'
 require 'base64'
+require 'uri'
+
+$mapped_object_types = { 
+                        "Service" => "web_application_name", 
+                        "SecurityPolicy" => "web_firewall_policy_name", 
+                        "Server" => "server_name",
+                        "RuleGroup" => "rule_group_name",
+                        "RuleGroupServer" => "rg_web_server_name" }
 
 class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDevice::Transport::Base
-  attr_reader :connection
+  attr_accessor :url, :transport
 
   #
-  #  Initialize the connection object using the SwaggerClient SDK for WAF.
+  #  Initialize the transport layer object using the SwaggerClient SDK for WAF.
   #
   def initialize(url, _options = {})
-    @connection = SwaggerClient.new
+    @url = URI.parse(url)
+
+    Puppet.debug("Puppet::Device::Cudawaf: connecting to WAF device #{url.host}")
+
+    #raise ArgumentError, "Invalid scheme #{@url.scheme}. Must be https" unless @url.scheme == 'https'
+    raise ArgumentError, "no user specified" unless @url.user
+    raise ArgumentError, "no password specified" unless @url.password
+
+    @transport ||= SwaggerClient::Configuration.new(url)
   end
 
   #
@@ -31,7 +48,17 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
   #  Example usage:
   #    transport.get(url, "Service", "service_web_application_name_get", "svcName")
   #
-  def get(device, instance, get_method, args)
+  def get(device, instance, *args)
+    *get_args, last = *args
+    instance_plural = convert_plural(instance)
+
+    if last.empty?
+        get_method = instance_plural.downcase + "s_get_with_http_info"
+    else
+        instance_var_name = get_mapped_object_name(instance.downcase)
+        get_method = instance_plural.downcase + "s_" + instance_var_name + "_get_with_http_info"
+    end
+
     auth_header = get_auth_header(device)
 
     #
@@ -43,7 +70,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     instance = object_instantiate.call()
 
     instance_method = instance.method(get_method)
-    response = instance_method.call(auth_header, args)
+    response = instance_method.call(auth_header, *args)
     parsed_response = JSON.parse(response)
     status_code = parsed_response["status_code"]
 
@@ -53,18 +80,19 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
       fail("Not able to process the request. Please check the request parameters.")
     end
 
-    failure?(parsed_response)
-    return parsed_response
+    failure?(response)
+    return response
   end
 
   #
   #  POST method - create a new instance of a Puppet object type.
   #
-  def post(device, instance, post_method, postdata)
+  def post(device, instance, *postdata)
+    instance_plural = convert_plural(instance)
+    post_method = instance_plural + "_post_with_http_info"
+
     if valid_json?(postdata)
       auth_header = get_auth_header(device)
-
-      args = postdata
 
       #
       #  Form the instance based on the URL passed and invoke the appropriate SwaggerClient SDK.
@@ -75,14 +103,14 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
       instance = object_instantiate.call()
 
       instance_method = instance.method(post_method)
-      response = instance_method.call(auth_header, args)
+      response = instance_method.call(auth_header, *postdata)
       parsed_response = JSON.parse(response)
       status_code = parsed_response["status_code"]
 
       Puppet.debug("Response received from WAF for POST operation:  #{parsed_response}")
 
-      failure?(parsed_response)
-      return parsed_response
+      failure?(response)
+      return response
     else
       fail('Invalid JSON detected in API request body.')
     end
@@ -91,11 +119,13 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
   #
   #  PUT method - edit an existing instance of a Puppet object type.
   #
-  def put(device, instance, put_method, postdata)
+  def put(device, instance, *postdata)
+    instance_plural = convert_plural(instance)
+    instance_var_name = get_mapped_object_name(instance.downcase)
+    put_method = instance_plural + instance_var_name + "_put_with_http_info"
+
     if valid_json?(postdata)
       auth_header = get_auth_header(device)
-
-      args = postdata
 
       #
       #  Form the instance based on the URL passed and invoke the appropriate SwaggerClient SDK.
@@ -106,14 +136,14 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
       instance = object_instantiate.call()
 
       instance_method = instance.method(put_method)
-      response = instance_method.call(auth_header, args)
+      response = instance_method.call(auth_header, *postdata)
       parsed_response = JSON.parse(response)
       status_code = parsed_response["status_code"]
 
       Puppet.debug("Response received from WAF for PUT operation:  #{parsed_response}")
 
-      failure?(parsed_response)
-      return parsed_response
+      failure?(response)
+      return response
     else
       fail('Invalid JSON detected in API request body.')
     end
@@ -122,7 +152,11 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
   #
   #  DELETE method - delete an existing instance of a Puppet object type.
   #
-  def delete(device, instance, delete_method, args)
+  def delete(device, instance, *args)
+    instance_plural = convert_plural(instance)
+    instance_var_name = get_mapped_object_name(instance.downcase)
+    delete_method = instance_plural + instance_var_name + "_delete_with_http_info"
+
     auth_header = get_auth_header(device)
 
     #
@@ -134,14 +168,14 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     instance = object_instantiate.call()
 
     instance_method = instance.method(delete_method)
-    response = instance_method.call(auth_header, args)
+    response = instance_method.call(auth_header, *args)
     parsed_response = JSON.parse(response)
     status_code = parsed_response["status_code"]
 
     Puppet.debug("Response received from WAF for DELETE operation:  #{parsed_response}")
 
-    failure?(parsed_response)
-    return parsed_response
+    failure?(response)
+    return response
   end
 
   #
@@ -205,6 +239,31 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
       key = k.to_s.gsub(/_/, '-').to_sym
       obj[key] = v
     end
+  end
+
+  #
+  #  Given an object name, convert it to the plural version since the SDK is written that way.
+  #
+  def convert_plural(object_name)
+    pluralized_string = object_name
+
+    if object_name =~ /y$/
+      pluralized_string = object_name.sub(/y$/, "ies")
+    elsif object_name =~ /s$/
+      pluralized_string = object_name + "es"
+    else
+      pluralized_string = object_name + "s"
+    end
+
+    return pluralized_string.downcase
+  end
+
+  #
+  #  Get the internally mapped object name for an external name.
+  #  Example: "Service" ==> "web_application_name"
+  #
+  def get_mapped_object_name(object)
+    return $mapped_object_types[object]
   end
 
 end
