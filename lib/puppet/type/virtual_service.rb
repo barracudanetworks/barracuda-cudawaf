@@ -95,7 +95,7 @@ Puppet::Type.newtype(:virtual_service) do
 
   newproperty(:dps_enabled) do
     desc "Enable DDoS Prevention Service"
-    defaultto :No
+#    defaultto :No
     newvalues(:Yes, :No)
   end
 

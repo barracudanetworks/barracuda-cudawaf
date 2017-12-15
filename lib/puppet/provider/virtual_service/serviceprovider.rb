@@ -5,18 +5,23 @@ require 'json'
 require 'base64'
 require 'uri'
 require 'logger'
-require 'rest-client'
+
 Puppet::Type.type(:virtual_service).provide(:serviceprovider) do
 
   Puppet.debug("Inside serviceprovider: ")
+  
+ mk_resource_methods
 
-  mk_resource_methods
+  def initialize(value={})
+    super(value)
+    @property_flush = {}
+  end
 
 # this method will get service/servicename and return true or false 
 def exists?
   Puppet.debug("Calling exists method of serviceprovider: ")
   @property_hash[:ensure] == :present
-
+=begin
   # getting waf authorization token
   login_instance = Login.new
   auth_header = login_instance.get_auth_header
@@ -45,6 +50,7 @@ def exists?
   end
 # get service call ends
 
+=end
 end
 
 #this method get all services from WAF system and builds the instances array
@@ -66,16 +72,32 @@ def self.instances
       svcobj = response["object"]
       Puppet.debug("Object is  #{svcobj}")
       svcData = response["data"]
-      Puppet.debug("Service  data:  #{svcData}")
+      Puppet.debug("Service  data>>>>>>>>>>>>>>>>>:  #{svcData}")
       svcData.each do |key,value|
         val= value
         instances <<  new(
           :ensure => :present,
-          :name => val["name"]
+          :name => val["name"],
+          :address_version=>val["address-version"],
+          :status => val["status"],
+          :certificate=>val["certificate"],
+          :comments => val["comments"],
+          :port => val["port"],
+          :enable_access_logs =>val["enable-access-logs"],
+          :session_timeout => val["session-timeout"],
+          :app_id => val["app-id"],
+          :group => val ["group"],
+          :type => val["type"],
+          :dps_enabled => val["dps-enabled"],
+          :ip_address => val["ip-address"],
+          :vsite => val["vsite"],
+          :mask => val["mask"]
         ) 
       end
    end # if end
  end  # unless end
+Puppet.debug("INSTANCES........................... #{instances}")
+
  return instances
 
 end
@@ -95,8 +117,8 @@ end
 
 # this method does a put call to waf service. This will be triggered with ensure is present and exists method return true.
 def flush
-  Puppet.debug("Calling  flush method of serviceprovider: ")
   if @property_hash != {}
+     Puppet.debug("Calling  flush method of serviceprovider: ")
      login_instance = Login.new
      auth_header = login_instance.get_auth_header
      service_instance = SwaggerClient::ServiceApi.new
@@ -104,9 +126,24 @@ def flush
      Puppet.debug("WAF service name in manifest: #{svcName}")     
      response= service_instance.services_web_application_name_put(auth_header,svcName,message(resource),{})
      Puppet.debug("WAF services PUT response:  #{response}")
-  end    
+  end
   return response
 end
+
+# Returns a property of the resource
+  # Override magic method created by mk_resource_methods
+def version
+    @property_hash[:version]
+end
+
+  # Update a property of the resource
+  # Override magic method created by mk_resource_methods
+def version=(value)
+    @property_hash[:version] = value
+    # Store updated properties for flush
+    @property_flush[:version] = value
+end
+
 
 # this is a util method to build the JSON array to post the request to WAF
 def message(object)
@@ -114,11 +151,24 @@ def message(object)
   opts.delete(:provider)
   opts.delete(:ensure)
   opts.delete(:loglevel)  
+  opts.delete(:certificate)
   opts=convert_underscores(opts)
   params=opts
   Puppet.debug("PARAM....................#{params}")
   return params
 end
+
+def postmessage(object)
+  opts=object.to_hash
+  opts.delete(:provider)
+  opts.delete(:ensure)
+  opts.delete(:loglevel)
+  opts=convert_underscores(opts)
+  params=opts
+  Puppet.debug("PARAM....................#{params}")
+  return params
+end
+
 
 def convert_underscores(hash)
     # Here lies some evil magic.  We want to replace all _'s with -'s in the
@@ -142,8 +192,7 @@ def create
   auth_header = login_instance.get_auth_header
   service_instance = SwaggerClient::ServiceApi.new
   # getting token end
-  data,status_code,headers =  result = service_instance.services_post_with_http_info(auth_header, message(resource),{})
-  Puppet.debug("SERVICE CREATE - STATUS Code is #{status_code}")
+  data,status_code,headers =  result = service_instance.services_post_with_http_info(auth_header, postmessage(resource),{})
   
   if status_code == 201
      @property_hash.clear
