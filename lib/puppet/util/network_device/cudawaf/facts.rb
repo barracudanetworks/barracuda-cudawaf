@@ -1,23 +1,19 @@
 require 'puppet/util/network_device/cudawaf'
-require '../../../lib/puppet_x/login_info.rb'
+require 'puppet_x/modules/login_info'
 
 class Puppet::Util::NetworkDevice::Cudawaf::Facts
   attr_reader :transport, :url
 
   def initialize(transport, url)
+    Puppet.debug("Inside Initialize of Facts!")
     @transport = transport
     @url = url
-    Puppet.debug("Inside Initialize of Facts!")
-    facts.merge(parse_device_facts)
   end
 
-  def retrieve
-    Puppet.debug("Retrieving Facts from fact.rb!")
+  def retrieve(url)
+    Puppet.debug("Retrieving Facts from facts.rb!")
 
-    @facts = {}
-    @facts["url"] = @url
-
-    @facts
+    facts = parse_device_facts()
   end
 
   def parse_device_facts
@@ -25,16 +21,16 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
       :firmwareversion => :Cudawaf
     }
 
+    Puppet.debug("Parsing facts for device - " + @url.host)
+    device_url = @url.scheme + "://" + @url.user + ":" + @url.password + "@" + @url.host + ":" + @url.port.to_s + "/"
+    Puppet.debug("Device URL - " + device_url)
+
     #
     #  Need to do an API call to retrieve the facts about each device.
     #  TODO: Loop through all devices in the device.conf and get the facts for each.
     #
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header(device)
-    Puppet.debug("WAF authorization token:  #{auth_header}")
-
-    if response = @transport.get(device, "System", "system_get", {}) and items = response['data']
-      Puppet.debug("Response for System API: #{response}")
+    if response = @transport.get(device_url, "System", "system_get", {}) and items = response['data']['System']
+      Puppet.debug("Response for System API - #{items}")
     else
       Puppet.warning("WARNING: Could not receive device details.")
       return facts
@@ -59,11 +55,14 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
       :domain,
       :time_zone
     ].each do |fact|
-      facts[fact] = result[fact.to_s]
+      api_fact_name = fact.to_s.gsub(/_/, "-")
+      facts[fact] = items[api_fact_name.to_s]
     end
 
-    # Map hostname.
-    facts[:fqdn] = facts[:hostname]
+
+    #
+    #  Map the device name to the node name in device.conf to easily identify this WAF.
+    facts[:node] = device_url
 
     Puppet.debug("Facts - #{facts}")
     return facts

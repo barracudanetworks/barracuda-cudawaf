@@ -1,20 +1,25 @@
 require 'puppet/util/network_device'
 require 'puppet/util/network_device/transport'
 require 'puppet/util/network_device/transport/base'
-require_relative '../../../puppet_x/modules/login_info.rb'
+
+require 'puppet_x/swagger_client/configuration'
+
+require 'puppet_x/modules/login_info'
+require 'puppet_x/modules/system_api'
+require 'puppet_x/modules/service_api'
 
 require 'json'
 require 'logger'
 require 'base64'
 
 class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDevice::Transport::Base
-  attr_reader :connection
+  attr_reader :transport, :url
 
   #
   #  Initialize the connection object using the SwaggerClient SDK for WAF.
   #
   def initialize(url, _options = {})
-    @connection = SwaggerClient.new
+    @transport = SwaggerClient::Configuration.new
   end
 
   #
@@ -39,21 +44,20 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     #  Each provider will pass the object type as the instance and we would instantiate the appropriate SwaggerClient object.
     #
     object_instance = "SwaggerClient::#{instance}Api"
-    object_instantiate = object_instance.method(new)
-    instance = object_instantiate.call()
-
-    instance_method = instance.method(get_method)
-    response = instance_method.call(auth_header, args)
+    Puppet.debug("Invoking GET for URL - " + device + ", Instance - " + instance + ", SDK API - " + object_instance)
+    #object_instantiate = object_instance.method(new)
+    #instance = object_instantiate.call()
+    #instance_method = instance.method(get_method)
+    instance_method = Object.const_get(object_instance).new.method(get_method)
+    response,status_code,headers = instance_method.call(auth_header, args)
     parsed_response = JSON.parse(response)
-    status_code = parsed_response["status_code"]
-
     Puppet.debug("Response received from WAF for GET operation:  #{parsed_response}")
 
     if response.to_s.empty?
       fail("Not able to process the request. Please check the request parameters.")
     end
 
-    failure?(parsed_response)
+    failure?(parsed_response, status_code)
     return parsed_response
   end
 
@@ -71,17 +75,15 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
       #  Each provider will pass the object type as the instance and we would instantiate the appropriate SwaggerClient object.
       #
       object_instance = "SwaggerClient::#{instance}Api"
-      object_instantiate = object_instance.method(new)
-      instance = object_instantiate.call()
 
-      instance_method = instance.method(post_method)
-      response = instance_method.call(auth_header, args)
+      instance_method = Object.const_get(object_instance).new.method(post_method)
+      response,status_code,headers = instance_method.call(auth_header, args)
       parsed_response = JSON.parse(response)
       status_code = parsed_response["status_code"]
 
       Puppet.debug("Response received from WAF for POST operation:  #{parsed_response}")
 
-      failure?(parsed_response)
+      failure?(parsed_response, status_code)
       return parsed_response
     else
       fail('Invalid JSON detected in API request body.')
@@ -102,17 +104,15 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
       #  Each provider will pass the object type as the instance and we would instantiate the appropriate SwaggerClient object.
       #
       object_instance = "SwaggerClient::#{instance}Api"
-      object_instantiate = object_instance.method(new)
-      instance = object_instantiate.call()
 
-      instance_method = instance.method(put_method)
-      response = instance_method.call(auth_header, args)
+      instance_method = Object.const_get(object_instance).new.method(put_method)
+      response,status_code,headers = instance_method.call(auth_header, args)
       parsed_response = JSON.parse(response)
       status_code = parsed_response["status_code"]
 
       Puppet.debug("Response received from WAF for PUT operation:  #{parsed_response}")
 
-      failure?(parsed_response)
+      failure?(parsed_response, status_code)
       return parsed_response
     else
       fail('Invalid JSON detected in API request body.')
@@ -130,17 +130,15 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     #  Each provider will pass the object type as the instance and we would instantiate the appropriate SwaggerClient object.
     #
     object_instance = "SwaggerClient::#{instance}Api"
-    object_instantiate = object_instance.method(new)
-    instance = object_instantiate.call()
 
-    instance_method = instance.method(delete_method)
-    response = instance_method.call(auth_header, args)
+    instance_method = Object.const_get(object_instance).new.method(delete_method)
+    response,status_code,headers = instance_method.call(auth_header, args)
     parsed_response = JSON.parse(response)
     status_code = parsed_response["status_code"]
 
     Puppet.debug("Response received from WAF for DELETE operation:  #{parsed_response}")
 
-    failure?(parsed_response)
+    failure?(parsed_response, status_code)
     return parsed_response
   end
 
@@ -164,11 +162,11 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
   #
   #  Failure stops further processing and returns the error message to the user.
   #
-  def failure?(result)
-    if result["status_code"] == 200 or result["status_code"] == 201 or result["status_code"] == 202 then
-      Puppet.debug("API method successfully executed with status code #{result.status}")
+  def failure?(result, status_code)
+    if status_code == 200 or status_code == 201 or status_code == 202 then
+      Puppet.debug("API method successfully executed with status code #{status_code}")
     else
-      fail("REST failure: HTTP status code #{result.status} detected.  Error is: #{result.body}")
+      fail("REST failure: HTTP status code #{status_code} detected.  Error is: #{result}")
     end
   end
 

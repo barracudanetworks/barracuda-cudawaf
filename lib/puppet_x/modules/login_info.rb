@@ -10,7 +10,7 @@ class Login
     #
     #  Read the customer's input file for WAF info and credentials.
     #
-    def read_credentials(device)
+    def read_credentials(url)
         #
         #  Read the device config file for a particular device URL.
         #  The file is present under /etc/puppetlabs/puppet/ by default.
@@ -20,27 +20,26 @@ class Login
         #      type cudawaf
         #      url https://<USERNAME>:<PASSWORD>@<IP ADDRESS OF WAF:PORT>/
         #
-        filter_device = "[#{device}]"
+        filter_url = "url " + url
 
         File.foreach("/etc/puppetlabs/puppet/device.conf").each_slice(3) do |each_device|
             #
             # each_device is an array containing 3 lines. Read the info for the respective device specified.
             #
-            match_url = each_device[0].strip
-            if (match_url == filter_device)
-                device_url = each_device[2].strip
-                if (device_url =~ /^url https?:\/\/(.*):(.*)\@(.*):(.*)\//)
-                    $user = $1
-                    $pwd = $2
-                    $host = $3
-                    $mgmt_port = $4
-                    break
-                else
-                    print "FATAL: Invalid format specified in device.conf!\n"
-                    return nil
-                end
-            end
-        end
+            match_url = each_device[2].strip
+            if (match_url == filter_url)
+			  if (match_url =~ /^url https?:\/\/(.*):(.*)\@(.*):(.*)\//)
+				$user = $1
+				$pwd = $2
+				$host = $3
+				$mgmt_port = $4
+				break
+			  else
+				print "FATAL: Invalid format specified in device.conf!\n"
+				return nil
+			  end
+			end
+		end
     end
 
     #
@@ -71,8 +70,8 @@ class Login
     #
     #  Login to get a valid token for authenticating API requests.
     #
-    def login_mech(device)
-        read_credentials(device)
+    def login_mech(url)
+        read_credentials(url)
  
         username = $user
         password = $pwd
@@ -103,8 +102,8 @@ class Login
     #
     #  Form the Authorization header in the HTTP request to be sent to the WAF.
     #
-    def get_auth_header(device)
-        login_token = login_mech(device)
+    def get_auth_header(url)
+        login_token = login_mech(url)
 
         login_token = "#{login_token}" + ":"
         login_token.tr!("\"", "")
