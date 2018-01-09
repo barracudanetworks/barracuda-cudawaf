@@ -11,7 +11,6 @@ Puppet::Type.newtype(:real_server) do
     end
   end
 
-
   newparam(:service_name, :namevar => true) do
     desc 'Service Name'
     validate do |value|

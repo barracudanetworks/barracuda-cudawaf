@@ -12,6 +12,15 @@ Puppet::Type.newtype(:global_acl) do
   end
 
 
+  newparam(:policy_name, :namevar => true) do
+    desc "Policy Name"
+    validate do |value|
+      fail("Invalid name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
+    end
+  end
+
+
   newproperty(:action) do
     desc "Action"
     defaultto :Process
@@ -89,20 +98,22 @@ Puppet::Type.newtype(:global_acl) do
     end
   end
 
-
   newproperty(:response_page) do
     desc "Response Page"
     defaultto :default
   end
 
-
   newproperty(:url) do
     desc "URL Match"
-    defaultto :/*
+    defaultto "/*"
     validate do |value|
       fail("Invalid url #{value}, Illegal characters present") unless value =~ /(^\/([^*?<>&\s])*$)|(^\/[^*?<>&\s]*[*][^*?<>&\s]*$)/
       fail("Invalid url #{value}, Must be no longer than 5000 characters") if value.length > 5000
     end
+  end
+
+  def self.title_patterns
+     [ [ /(.*)/m, [ [:name] ] ] ]
   end
 
 

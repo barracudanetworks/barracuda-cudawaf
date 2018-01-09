@@ -11,6 +11,15 @@ Puppet::Type.newtype(:action_policy) do
   end
 
 
+  newparam(:policy_name, :namevar => true) do
+    desc "Policy Name"
+    validate do |value|
+      fail("Invalid name #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/
+      fail("Invalid name #{value}, Must be no longer than 64 characters") if value.length > 64
+    end
+  end
+
+
   newproperty(:action) do
     desc "Action"
     defaultto 'Protect and Log'
@@ -64,6 +73,11 @@ Puppet::Type.newtype(:action_policy) do
     validate do |value|
       fail("Invalid response_page #{value}, Illegal characters present") unless value =~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/
     end
+  end
+
+
+  def self.title_patterns
+     [ [ /(.*)/m, [ [:name] ] ] ]
   end
 
 
