@@ -17,7 +17,7 @@ class Puppet::Util::NetworkDevice::Cudawaf::Device
       "puppet/util/network_device/transport"
     )
     if @autoloader.load("cudawaf")
-      @transport = Puppet::Util::NetworkDevice::Transport::Cudawaf.new(@url, options[:debug])
+      @transport = Puppet::Util::NetworkDevice::Transport::Cudawaf.new(url, options[:debug])
       Puppet.debug("Inside Device Initialize")
     end
   end

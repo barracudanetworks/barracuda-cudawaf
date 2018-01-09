@@ -28,20 +28,18 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
   #  Initialize the transport layer object using the SwaggerClient SDK for WAF.
   #
   def initialize(url, _options = {})
-    @transport = SwaggerClient::Configuration.new
-    #@url = URI.parse(url)
+    @device_url = URI.parse(url)
+    Puppet.debug("Puppet::Device::Cudawaf: connecting to WAF device - " + url)
 
-    #Puppet.debug("Puppet::Device::Cudawaf: connecting to WAF device #{url.host}")
+    #raise ArgumentError, "Invalid scheme #{url.scheme}. Must be https" unless url.scheme == 'https'
+    raise ArgumentError, "no user specified" unless @device_url.user
+    raise ArgumentError, "no password specified" unless @device_url.password
 
-    #raise ArgumentError, "Invalid scheme #{@url.scheme}. Must be https" unless @url.scheme == 'https'
-    #raise ArgumentError, "no user specified" unless @url.user
-    #raise ArgumentError, "no password specified" unless @url.password
-
-    #@transport ||= SwaggerClient::Configuration.new(url)
+    @transport = SwaggerClient::Configuration.new(url)
   end
 
   #
-  #  Support the major API methods via the Transport layer here.
+  #  Support the major API methods via the Transport layer here using the Swagger SDK client.
   #  Supported methods - GET, POST, PUT and DELETE.
   #
   #  Few utility functions are implemented -
@@ -74,7 +72,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     object_instance = "SwaggerClient::#{instance}Api"
     Puppet.debug("Invoking GET for URL - " + device + ", Instance - " + instance + ", SDK API - " + object_instance, ", GET method - " + get_method)
 
-    instance_method = Object.const_get(object_instance).new.method(get_method)
+    instance_method = Object.const_get(object_instance).new(device).method(get_method)
     response,status_code,headers = instance_method.call(auth_header, *args)
     parsed_response = JSON.parse(response)
 
@@ -104,7 +102,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
       #
       object_instance = "SwaggerClient::#{instance}Api"
 
-      instance_method = Object.const_get(object_instance).new.method(post_method)
+      instance_method = Object.const_get(object_instance).new(device).method(post_method)
       response,status_code,headers = instance_method.call(auth_header, *postdata)
       parsed_response = JSON.parse(response)
 
@@ -134,7 +132,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
       #
       object_instance = "SwaggerClient::#{instance}Api"
 
-      instance_method = Object.const_get(object_instance).new.method(put_method)
+      instance_method = Object.const_get(object_instance).new(device).method(put_method)
       response,status_code,headers = instance_method.call(auth_header, *postdata)
       parsed_response = JSON.parse(response)
 
@@ -163,7 +161,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     #
     object_instance = "SwaggerClient::#{instance}Api"
 
-    instance_method = Object.const_get(object_instance).new.method(delete_method)
+    instance_method = Object.const_get(object_instance).new(device).method(delete_method)
     response,status_code,headers = instance_method.call(auth_header, *args)
     parsed_response = JSON.parse(response)
 
@@ -264,4 +262,11 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     return $mapped_object_types[object]
   end
 
+  #
+  #  Support the major API methods via the Transport layer using the RestClient library here.
+  #  Supported methods - GET, POST, PUT and DELETE.
+  #
+  def client_get(device, instance, *args)
+    *get_args, last = *args
+  end
 end

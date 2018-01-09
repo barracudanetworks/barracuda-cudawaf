@@ -17,8 +17,8 @@ module SwaggerClient
   class ServerApi
     attr_accessor :api_client
 
-    def initialize(api_client = ApiClient.default)
-      @api_client = api_client
+    def initialize(url)
+      @api_client = ApiClient.default(url)
     end
 
     # FETCH Information of Server

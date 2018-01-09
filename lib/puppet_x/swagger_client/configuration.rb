@@ -11,6 +11,8 @@ Swagger Codegen version: 2.2.3
 =end
 
 require 'uri'
+require 'puppet/util/network_device'
+require 'puppet/util/network_device/cudawaf'
 
 module SwaggerClient
   class Configuration
@@ -127,24 +129,14 @@ module SwaggerClient
 
     attr_accessor :force_ending_format
 
-    def initialize
-      #Puppet.debug("Defined - " + defined?device_url)
+    def initialize(device_url)
+      @url = URI.parse(device_url)
 
-      #if defined?device_url != "nil"
-      #  Puppet.debug("Device URL - " + device_url.host)
+      Puppet.debug("Initializing Swagger SDK client for device - " + @url.host)
 
-      #  ip = device_url.host
-      #  port = device_url.port
-      #  @scheme = device_url.scheme
-      #else
-        Puppet.debug("Device URL is empty, reading credentials from JSON.")
-
-        hostinfo = `cat /etc/puppetlabs/puppet/credentials.json`
-        hostinfo_json = JSON.parse(hostinfo)
-        ip = hostinfo_json ["host"]
-        port = hostinfo_json ["port"]
-        @scheme = 'http'
-      #end
+      ip = @url.host
+      port = @url.port
+      @scheme = @url.scheme
 
       wafinfo="#{ip}:#{port}"
       @host = wafinfo
@@ -167,8 +159,8 @@ module SwaggerClient
     end
 
     # The default Configuration object.
-    def self.default
-      @@default ||= Configuration.new
+    def self.default(url)
+      @@default ||= Configuration.new(url)
     end
 
     def configure
