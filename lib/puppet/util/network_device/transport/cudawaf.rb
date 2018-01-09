@@ -3,13 +3,11 @@ require 'puppet/util/network_device/transport'
 require 'puppet/util/network_device/transport/base'
 require 'puppet_x/swagger_client/configuration'
 
-Dir["puppet_x/modules/*.rb"].each { |file| require file }
-
-#require 'puppet_x/modules/login_info'
-#require 'puppet_x/modules/system_api'
-#require 'puppet_x/modules/service_api'
-#require 'puppet_x/modules/server_api'
-#require 'puppet_x/modules/security_policy_api'
+require 'puppet_x/modules/login_info'
+require 'puppet_x/modules/system_api'
+require 'puppet_x/modules/service_api'
+require 'puppet_x/modules/server_api'
+require 'puppet_x/modules/security_policy_api'
 
 require 'json'
 require 'logger'
@@ -243,6 +241,9 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
   def convert_plural(object_name)
     pluralized_string = object_name
     Puppet.debug("Pluralizing object - " + object_name)
+
+    object_name = object_name.gsub(/([a-z])([A-Z])/, '\1_\2')
+    Puppet.debug("Pluralized string v1 - " + object_name)
 
     if object_name =~ /^System$/i
       #  do nothing
