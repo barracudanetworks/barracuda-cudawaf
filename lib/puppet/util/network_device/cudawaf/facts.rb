@@ -1,5 +1,7 @@
 require 'puppet/util/network_device/cudawaf'
 require 'puppet_x/modules/login_info'
+require 'puppet_x/modules/system_api'
+require 'uri'
 
 class Puppet::Util::NetworkDevice::Cudawaf::Facts
   attr_reader :transport, :url
@@ -29,7 +31,8 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
     #  Need to do an API call to retrieve the facts about each device.
     #  TODO: Loop through all devices in the device.conf and get the facts for each.
     #
-    if response = @transport.get(device_url, "System", "system_get", {}) and items = response['data']['System']
+    response, status_code = @transport.get(device_url, "System", {})
+    if status_code == 200 and items = response['data']['System']
       Puppet.debug("Response for System API - #{items}")
     else
       Puppet.warning("WARNING: Could not receive device details.")
@@ -59,9 +62,9 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
       facts[fact] = items[api_fact_name.to_s]
     end
 
-
     #
     #  Map the device name to the node name in device.conf to easily identify this WAF.
+    #
     facts[:node] = device_url
 
     Puppet.debug("Facts - #{facts}")

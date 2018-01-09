@@ -128,11 +128,24 @@ module SwaggerClient
     attr_accessor :force_ending_format
 
     def initialize
-      hostinfo = `cat /etc/puppetlabs/puppet/credentials.json`
-      hostinfo_json = JSON.parse(hostinfo)
-      ip = hostinfo_json ["host"]
-      port = hostinfo_json ["port"]
-      @scheme = 'http'
+      #Puppet.debug("Defined - " + defined?device_url)
+
+      #if defined?device_url != "nil"
+      #  Puppet.debug("Device URL - " + device_url.host)
+
+      #  ip = device_url.host
+      #  port = device_url.port
+      #  @scheme = device_url.scheme
+      #else
+        Puppet.debug("Device URL is empty, reading credentials from JSON.")
+
+        hostinfo = `cat /etc/puppetlabs/puppet/credentials.json`
+        hostinfo_json = JSON.parse(hostinfo)
+        ip = hostinfo_json ["host"]
+        port = hostinfo_json ["port"]
+        @scheme = 'http'
+      #end
+
       wafinfo="#{ip}:#{port}"
       @host = wafinfo
       @base_path = '/restapi/v3'
