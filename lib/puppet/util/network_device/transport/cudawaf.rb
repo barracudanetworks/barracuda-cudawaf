@@ -3,10 +3,13 @@ require 'puppet/util/network_device/transport'
 require 'puppet/util/network_device/transport/base'
 require 'puppet_x/swagger_client/configuration'
 
-require 'puppet_x/modules/login_info'
-require 'puppet_x/modules/system_api'
-require 'puppet_x/modules/service_api'
-require 'puppet_x/modules/server_api'
+Dir["puppet_x/modules/*.rb"].each { |file| require file }
+
+#require 'puppet_x/modules/login_info'
+#require 'puppet_x/modules/system_api'
+#require 'puppet_x/modules/service_api'
+#require 'puppet_x/modules/server_api'
+#require 'puppet_x/modules/security_policy_api'
 
 require 'json'
 require 'logger'
@@ -269,4 +272,17 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
   def client_get(device, instance, *args)
     *get_args, last = *args
   end
+
+  def client_put(device, instance, *args)
+    *put_args, last = *args
+  end
+
+  def client_post(device, instance, *args)
+    *post_args, last = *args
+  end
+
+  def client_delete(device, instance, *args)
+    *delete_args, last = *args
+  end
+
 end

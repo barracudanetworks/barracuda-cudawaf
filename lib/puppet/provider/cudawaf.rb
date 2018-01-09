@@ -1,10 +1,6 @@
 require 'puppet/util/network_device/cudawaf'
 require 'puppet/util/network_device/transport/cudawaf'
 
-$rest_client_objects = {
-                        "Certificate" => 1,
-                        "CloudControl" => 1
-                       }
 #
 #  Initialize the Cudawaf device.
 #
@@ -28,19 +24,35 @@ class Puppet::Provider::Cudawaf < Puppet::Provider
   #
 
   def self.get(url, instance, *args)
-    $rest_client_objects.key?(instance) ? transport.client_get(url, instance, *args) : transport.get(url, instance, *args)
+    transport.get(url, instance, *args)
   end
 
   def self.post(url, instance, *args)
-    $rest_client_objects.key?(instance) ? transport.client_post(url, instance, *args) : transport.post(url, instance, *args)
+    transport.post(url, instance, *args)
   end
 
   def self.put(url, instance, *args)
-    $rest_client_objects.key?(instance) ? transport.client_put(url, instance, *args) : transport.put(url, instance, *args)
+    transport.put(url, instance, *args)
   end
 
   def self.delete(url, instance, *args)
-    $rest_client_objects.key?(instance) ? transport.client_delete(url, instance, *args) : transport.delete(url, instance, *args)
+    transport.delete(url, instance, *args)
+  end
+
+  def self.client_get(url, instance, *args)
+    transport.client_get(url, instance, *args)
+  end
+
+  def self.client_post(url, instance, *args)
+    transport.client_post(url, instance, *args)
+  end
+
+  def self.client_put(url, instance, *args)
+    transport.client_put(url, instance, *args)
+  end
+
+  def self.client_delete(url, instance, *args)
+    transport.client_delete(url, instance, *args)
   end
 
   #def self.facts
