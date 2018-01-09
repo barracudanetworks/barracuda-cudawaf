@@ -32,8 +32,8 @@ module SwaggerClient
 
     # Initializes the ApiClient
     # @option config [Configuration] Configuration for initializing the object, default to Configuration.default
-    def initialize(config = Configuration.default)
-      @config = config
+    def initialize(url)
+      @config = Configuration.default(url)
       @user_agent = "Swagger-Codegen/#{VERSION}/ruby"
       @default_headers = {
         'Content-Type' => "application/json",
@@ -41,8 +41,8 @@ module SwaggerClient
       }
     end
 
-    def self.default
-      @@default ||= ApiClient.new
+    def self.default(url)
+      @@default ||= ApiClient.new(url)
     end
 
     # Call an API with given options.
