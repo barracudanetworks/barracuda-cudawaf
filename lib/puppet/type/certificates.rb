@@ -144,6 +144,13 @@ Puppet::Type.newtype(:certificates) do
     desc 'Trusted Server Certificate File Path'
   end
 
+ 
+  newproperty(:type) do
+    desc 'Certificate Type'
+    defaultto :pem
+    newvalues(:pem, :pkcs12)
+  end
+
 
 end
 

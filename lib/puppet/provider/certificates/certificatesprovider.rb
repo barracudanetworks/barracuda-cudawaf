@@ -16,22 +16,15 @@ Puppet::Type.type(:certificates).provide(:certificatesprovider) do
     @property_hash[:ensure] == :present
 
     name=@resource[:name]
-    Puppet.debug("The cerName from manifest  #{name}")
-
     config = SwaggerClient::Configuration.new
     @config = config
     base_url = @config.base_url
-
-    Puppet.debug("BaseURL in exists #{base_url}")
-
     # get the login instance for waf
     login_instance = Login.new
     auth_header = login_instance.get_auth_header
 
     # use rest client to build the request and payload to get the response
     response = RestClient.get base_url + "/certificates/" + "#{name}", {:Authorization => "#{auth_header}", accept: :json, content_type: :json} 
-
-    Puppet.debug("Successful response from API: #{response}")
 
     if response
       return true
@@ -53,43 +46,30 @@ Puppet::Type.type(:certificates).provide(:certificatesprovider) do
 
   # this method will return the instances array
   def self.instances
-
     Puppet.debug("Inside self instances method")
-
     instances = []
-
     config = SwaggerClient::Configuration.new
     @config = config
     base_url = @config.base_url
-
-    Puppet.debug("BaseURL in instances #{base_url}")
-
     login_instance = Login.new
     auth_header = login_instance.get_auth_header
-
     # get all certificates  from WAF
     response = RestClient.get base_url+"/certificates", {:Authorization => "#{auth_header}"}
-
     Puppet.debug("WAF certificates GET certificate name response : #{response}")
-
     parsed_response = JSON.parse(response)
     data = parsed_response["data"]
-
     data.each do |certObj|
       certificate_name = certObj['name']
       instances <<  new(
         :ensure => :present,
-        :name => certObj['name'],
+        :name => certObj['name']
       )
     end
-
-    Puppet.debug("instances : #{instances}")
     return instances
   end
 
   def self.prefetch(resources)
     Puppet.debug("Inside Self.Prefetch method of certificates provider")
-
     certificates = instances
     resources.keys.each do |name|
       if provider = certificates.find { |certificate| certificate.name == name}
@@ -98,13 +78,8 @@ Puppet::Type.type(:certificates).provide(:certificatesprovider) do
     end
   end
 
-  def flush
-    Puppet.notice("def flush")
-    Puppet.debug("inside flush method: there is no put call for waf certificates")
-  end
-
   def message(object)
-    upload = @resource[:upload]
+    upload = @resource[:upload].to_s
     opts = {}
 
     type_resource = @resource.class
@@ -172,7 +147,7 @@ Puppet::Type.type(:certificates).provide(:certificatesprovider) do
         "state"=>@resource[:state]
       }.to_json 
     end
-
+    
     return opts
   end
 
@@ -182,20 +157,12 @@ Puppet::Type.type(:certificates).provide(:certificatesprovider) do
     config = SwaggerClient::Configuration.new
     @config= config
     base_url = @config.base_url
-
-    Puppet.debug("BaseURL in instances #{base_url}")
-
     # getting the authorization token for WAF.
     login_instance = Login.new
     auth_header = login_instance.get_auth_header
-
     payload = message(resource)
-
-    Puppet.debug("Payload............ #{payload}")
-
-    upload = @resource[:upload]
+    upload = @resource[:upload].to_s
     url = base_url + "/certificates"
-
     if upload == "signed" || upload == "trusted" || upload == "trusted_server"
       url = url + "?upload=" + upload
     end
@@ -212,13 +179,10 @@ Puppet::Type.type(:certificates).provide(:certificatesprovider) do
         :key_type => payload["key_type"],
         :multipart => true
       } 
-
       unless payload["intermediary_certificate"].nil?
         signed_payload[:intermediary_certificate] = File.new(payload["intermediary_certificate"], 'rb')
       end
-
       result = RestClient.post url, signed_payload, { :Authorization => "#{auth_header}" }
-
     elsif upload == "trusted"
       result = RestClient.post url, { 
         :name => payload["name"], 
@@ -240,40 +204,25 @@ Puppet::Type.type(:certificates).provide(:certificatesprovider) do
     else
       result = RestClient.post url, payload, {:Authorization => "#{auth_header}",content_type: :json,accept: :json}
     end
-
-    Puppet.debug("WAF certificates POST method response:  #{result}")
-    
+    Puppet.debug("WAF certificates POST method response:  #{result}") 
     # Clear the hash here to stop flush from triggering.
     @property_hash.clear
-
     return result
   end
 
   def destroy
     Puppet.debug("Calling WAF certificates destroy method")
-
     config = SwaggerClient::Configuration.new
     @config = config
     base_url = @config.base_url
-
-    Puppet.debug("BaseURL in instances #{base_url}")
-
     # getting the authorization token for WAF.
     login_instance = Login.new
     auth_header = login_instance.get_auth_header
-
     name = @resource[:name]
-
-    Puppet.debug("certificate name is:  #{name}")
-
     response = RestClient.delete base_url + "/certificates/" + "#{name}", {:Authorization => "#{auth_header}",accept: :json}
-
     Puppet.debug("WAF certificates destroy method response: #{response}")
-
     # Clear the hash here to stop flush from triggering.
     @property_hash.clear
-
     return response
   end
-
 end

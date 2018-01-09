@@ -22,9 +22,36 @@ Puppet::Type.type(:cloudcontrol).provide(:cloudcontrolprovider) do
 
   #this method get all services from WAF system and builds the instances array
   def self.instances
-    Puppet.debug("Callling self.instances method of cloudcontrolprovider: ")
+    Puppet.debug("Inside self instances method of cloud control provider")
     instances = []
+    config = SwaggerClient::Configuration.new
+    @config = config
+    base_url = @config.base_url
+    Puppet.debug("BaseURL in instances #{base_url}")
+    login_instance = Login.new
+    auth_header = login_instance.get_auth_header
+    # get all certificates  from WAF
+    response = RestClient.get base_url+"/control-center", {:Authorization => "#{auth_header}"}
+    Puppet.debug("WAF cloud control GET response : #{response}")
+    parsed_response = JSON.parse(response)
+    Puppet.debug("Parsed...................... #{parsed_response}")
+    cntrlObj = parsed_response["data"]
+    Puppet.debug("Data.......... #{cntrlObj}")
+   # data.each do |cntrlObj|
+      Puppet.debug("OBJ.....#{cntrlObj}")
+      state = cntrlObj['state']
+      Puppet.debug("State .......#{state}")
+      instances <<  new(
+        :ensure => :present,
+        :state => cntrlObj['state'],
+        :connect_mode => 'connected',
+        :username => cntrlObj['username'],
+        :validation_token => cntrlObj['validation_token']
+      )
+    #end
+    Puppet.debug("instances : #{instances}")
     return instances
+
   end
 
   # this method compares the name attribute from instances and resources. If it matches then sets the provider
@@ -54,9 +81,8 @@ Puppet::Type.type(:cloudcontrol).provide(:cloudcontrolprovider) do
 
       Puppet.debug("WAF authorization token:  #{auth_header}")
       base = base_url+"/control-center"
-      Puppet.debug(" BASE>>>>>>>>>> #{base}")
+      connect_mode =@resource['connect_mode']
       response = RestClient.put base, {
-    #  response = RestClient.put base_url+"/control-center", {
         "connect_mode" => @resource["connect_mode"],
         "state" => "connected",
         "username" => @resource["username"],
@@ -66,14 +92,6 @@ Puppet::Type.type(:cloudcontrol).provide(:cloudcontrolprovider) do
       Puppet.debug("Successful response from API: #{response}")
     end    
     return response
-  end
-
-  # this method does not do anything for cloudcontrol
-  def create
-    Puppet.debug("Calling create method of cloudcontrolprovider:")
-
-    # Clear the hash here to stop flush from triggering.
-    @property_hash.clear
   end
 
   # this method does not do anything for cloudcontrol 
