@@ -28,8 +28,8 @@ module SwaggerClient
     # @param [Hash] opts the optional parameters
     # @option opts [Array<String>] :fields 
     # @return [nil]
-    def services_web_application_name_servers_get(authorization, web_application_name, opts = {})
-    data,status_code,headers = services_web_application_name_servers_get_with_http_info(authorization, web_application_name, opts)
+    def servers_get(authorization, web_application_name, opts = {})
+      data,status_code,headers = servers_get_with_http_info(authorization, web_application_name, opts)
       return data,status_code,headers
     end
 
@@ -40,21 +40,20 @@ module SwaggerClient
     # @param [Hash] opts the optional parameters
     # @option opts [Array<String>] :fields 
     # @return [Array<(nil, Fixnum, Hash)>] nil, response status code and response headers
-    def services_web_application_name_servers_get_with_http_info(authorization, web_application_name, opts = {})
+    def servers_get_with_http_info(authorization, web_application_name, opts = {})
       if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: ServerApi.services_web_application_name_servers_get ..."
+        @api_client.config.logger.debug "Calling API: ServerApi.servers_get ..."
       end
       # verify the required parameter 'authorization' is set
       if @api_client.config.client_side_validation && authorization.nil?
-        fail ArgumentError, "Missing the required parameter 'authorization' when calling ServerApi.services_web_application_name_servers_get"
+        fail ArgumentError, "Missing the required parameter 'authorization' when calling ServerApi.servers_get"
       end
       # verify the required parameter 'web_application_name' is set
       if @api_client.config.client_side_validation && web_application_name.nil?
-        fail ArgumentError, "Missing the required parameter 'web_application_name' when calling ServerApi.services_web_application_name_servers_get"
+        fail ArgumentError, "Missing the required parameter 'web_application_name' when calling ServerApi.servers_get"
       end
       # resource path
       local_var_path = "/services/{Web Application Name}/servers".sub('{' + 'Web Application Name' + '}', web_application_name.to_s)
-      Puppet.info("Local VAriable Path :  #{local_var_path}")
       # query parameters
       query_params = {}
       query_params[:'fields'] = @api_client.build_collection_param(opts[:'fields'], :multi) if !opts[:'fields'].nil?
@@ -78,7 +77,7 @@ module SwaggerClient
         :body => post_body,
         :auth_names => auth_names)
       if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: ServerApi#services_web_application_name_servers_get\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+        @api_client.config.logger.debug "API called: ServerApi#servers_get\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
@@ -90,8 +89,8 @@ module SwaggerClient
     # @param server Body Parameter of Server
     # @param [Hash] opts the optional parameters
     # @return [nil]
-    def services_web_application_name_servers_post(authorization, web_application_name, server, opts = {})
-      services_web_application_name_servers_post_with_http_info(authorization, web_application_name, server, opts)
+    def servers_post(authorization, web_application_name, server, opts = {})
+      servers_post_with_http_info(authorization, web_application_name, server, opts)
       return nil
     end
 
@@ -102,21 +101,21 @@ module SwaggerClient
     # @param server Body Parameter of Server
     # @param [Hash] opts the optional parameters
     # @return [Array<(nil, Fixnum, Hash)>] nil, response status code and response headers
-    def services_web_application_name_servers_post_with_http_info(authorization, web_application_name, server, opts = {})
+    def servers_post_with_http_info(authorization, web_application_name, server, opts = {})
       if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: ServerApi.services_web_application_name_servers_post ..."
+        @api_client.config.logger.debug "Calling API: ServerApi.servers_post ..."
       end
       # verify the required parameter 'authorization' is set
       if @api_client.config.client_side_validation && authorization.nil?
-        fail ArgumentError, "Missing the required parameter 'authorization' when calling ServerApi.services_web_application_name_servers_post"
+        fail ArgumentError, "Missing the required parameter 'authorization' when calling ServerApi.servers_post"
       end
       # verify the required parameter 'web_application_name' is set
       if @api_client.config.client_side_validation && web_application_name.nil?
-        fail ArgumentError, "Missing the required parameter 'web_application_name' when calling ServerApi.services_web_application_name_servers_post"
+        fail ArgumentError, "Missing the required parameter 'web_application_name' when calling ServerApi.servers_post"
       end
       # verify the required parameter 'server' is set
       if @api_client.config.client_side_validation && server.nil?
-        fail ArgumentError, "Missing the required parameter 'server' when calling ServerApi.services_web_application_name_servers_post"
+        fail ArgumentError, "Missing the required parameter 'server' when calling ServerApi.servers_post"
       end
       # resource path
       local_var_path = "/services/{Web Application Name}/servers".sub('{' + 'Web Application Name' + '}', web_application_name.to_s)
@@ -143,7 +142,7 @@ module SwaggerClient
         :body => post_body,
         :auth_names => auth_names)
       if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: ServerApi#services_web_application_name_servers_post\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+        @api_client.config.logger.debug "API called: ServerApi#servers_post\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
@@ -155,8 +154,8 @@ module SwaggerClient
     # @param server_name Server Name of Server
     # @param [Hash] opts the optional parameters
     # @return [nil]
-    def services_web_application_name_servers_server_name_delete(authorization, web_application_name, server_name, opts = {})
-      services_web_application_name_servers_server_name_delete_with_http_info(authorization, web_application_name, server_name, opts)
+    def servers_server_name_delete(authorization, web_application_name, server_name, opts = {})
+      servers_server_name_delete_with_http_info(authorization, web_application_name, server_name, opts)
       return nil
     end
 
@@ -167,21 +166,21 @@ module SwaggerClient
     # @param server_name Server Name of Server
     # @param [Hash] opts the optional parameters
     # @return [Array<(nil, Fixnum, Hash)>] nil, response status code and response headers
-    def services_web_application_name_servers_server_name_delete_with_http_info(authorization, web_application_name, server_name, opts = {})
+    def servers_server_name_delete_with_http_info(authorization, web_application_name, server_name, opts = {})
       if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: ServerApi.services_web_application_name_servers_server_name_delete ..."
+        @api_client.config.logger.debug "Calling API: ServerApi.servers_server_name_delete ..."
       end
       # verify the required parameter 'authorization' is set
       if @api_client.config.client_side_validation && authorization.nil?
-        fail ArgumentError, "Missing the required parameter 'authorization' when calling ServerApi.services_web_application_name_servers_server_name_delete"
+        fail ArgumentError, "Missing the required parameter 'authorization' when calling ServerApi.servers_server_name_delete"
       end
       # verify the required parameter 'web_application_name' is set
       if @api_client.config.client_side_validation && web_application_name.nil?
-        fail ArgumentError, "Missing the required parameter 'web_application_name' when calling ServerApi.services_web_application_name_servers_server_name_delete"
+        fail ArgumentError, "Missing the required parameter 'web_application_name' when calling ServerApi.servers_server_name_delete"
       end
       # verify the required parameter 'server_name' is set
       if @api_client.config.client_side_validation && server_name.nil?
-        fail ArgumentError, "Missing the required parameter 'server_name' when calling ServerApi.services_web_application_name_servers_server_name_delete"
+        fail ArgumentError, "Missing the required parameter 'server_name' when calling ServerApi.servers_server_name_delete"
       end
       # resource path
       local_var_path = "/services/{Web Application Name}/servers/{Server Name}".sub('{' + 'Web Application Name' + '}', web_application_name.to_s).sub('{' + 'Server Name' + '}', server_name.to_s)
@@ -208,7 +207,7 @@ module SwaggerClient
         :body => post_body,
         :auth_names => auth_names)
       if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: ServerApi#services_web_application_name_servers_server_name_delete\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+        @api_client.config.logger.debug "API called: ServerApi#servers_server_name_delete\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
@@ -221,8 +220,8 @@ module SwaggerClient
     # @param [Hash] opts the optional parameters
     # @option opts [Array<String>] :fields 
     # @return [nil]
-    def services_web_application_name_servers_server_name_get(authorization, web_application_name, server_name, opts = {})
-    data,status_code,headers= services_web_application_name_servers_server_name_get_with_http_info(authorization, web_application_name, server_name, opts)
+    def servers_server_name_get(authorization, web_application_name, server_name, opts = {})
+    data,status_code,headers= servers_server_name_get_with_http_info(authorization, web_application_name, server_name, opts)
       return data,status_code,headers
     end
 
@@ -234,25 +233,24 @@ module SwaggerClient
     # @param [Hash] opts the optional parameters
     # @option opts [Array<String>] :fields 
     # @return [Array<(nil, Fixnum, Hash)>] nil, response status code and response headers
-    def services_web_application_name_servers_server_name_get_with_http_info(authorization, web_application_name, server_name, opts = {})
+    def servers_server_name_get_with_http_info(authorization, web_application_name, server_name, opts = {})
       if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: ServerApi.services_web_application_name_servers_server_name_get ..."
+        @api_client.config.logger.debug "Calling API: ServerApi.servers_server_name_get ..."
       end
       # verify the required parameter 'authorization' is set
       if @api_client.config.client_side_validation && authorization.nil?
-        fail ArgumentError, "Missing the required parameter 'authorization' when calling ServerApi.services_web_application_name_servers_server_name_get"
+        fail ArgumentError, "Missing the required parameter 'authorization' when calling ServerApi.servers_server_name_get"
       end
       # verify the required parameter 'web_application_name' is set
       if @api_client.config.client_side_validation && web_application_name.nil?
-        fail ArgumentError, "Missing the required parameter 'web_application_name' when calling ServerApi.services_web_application_name_servers_server_name_get"
+        fail ArgumentError, "Missing the required parameter 'web_application_name' when calling ServerApi.servers_server_name_get"
       end
       # verify the required parameter 'server_name' is set
       if @api_client.config.client_side_validation && server_name.nil?
-        fail ArgumentError, "Missing the required parameter 'server_name' when calling ServerApi.services_web_application_name_servers_server_name_get"
+        fail ArgumentError, "Missing the required parameter 'server_name' when calling ServerApi.servers_server_name_get"
       end
       # resource path
       local_var_path = "/services/{Web Application Name}/servers/{Server Name}".sub('{' + 'Web Application Name' + '}', web_application_name.to_s).sub('{' + 'Server Name' + '}', server_name.to_s)
-      Puppet.info("SERVERNAME......... #{local_var_path}EEE")
       # query parameters
       query_params = {}
       query_params[:'fields'] = @api_client.build_collection_param(opts[:'fields'], :multi) if !opts[:'fields'].nil?
@@ -276,7 +274,7 @@ module SwaggerClient
         :body => post_body,
         :auth_names => auth_names)
       if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: ServerApi#services_web_application_name_servers_server_name_get\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+        @api_client.config.logger.debug "API called: ServerApi#servers_server_name_get\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
@@ -289,8 +287,8 @@ module SwaggerClient
     # @param server Body Parameter of Server
     # @param [Hash] opts the optional parameters
     # @return [nil]
-    def services_web_application_name_servers_server_name_put(authorization, web_application_name, server_name, server, opts = {})
-  data,status_code,headers= services_web_application_name_servers_server_name_put_with_http_info(authorization, web_application_name, server_name, server, opts)
+    def servers_server_name_put(authorization, web_application_name, server_name, server, opts = {})
+  data,status_code,headers= servers_server_name_put_with_http_info(authorization, web_application_name, server_name, server, opts)
       return data,status_code,headers
     end
 
@@ -302,25 +300,25 @@ module SwaggerClient
     # @param server Body Parameter of Server
     # @param [Hash] opts the optional parameters
     # @return [Array<(nil, Fixnum, Hash)>] nil, response status code and response headers
-    def services_web_application_name_servers_server_name_put_with_http_info(authorization, web_application_name, server_name, server, opts = {})
+    def servers_server_name_put_with_http_info(authorization, web_application_name, server_name, server, opts = {})
       if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: ServerApi.services_web_application_name_servers_server_name_put ..."
+        @api_client.config.logger.debug "Calling API: ServerApi.servers_server_name_put ..."
       end
       # verify the required parameter 'authorization' is set
       if @api_client.config.client_side_validation && authorization.nil?
-        fail ArgumentError, "Missing the required parameter 'authorization' when calling ServerApi.services_web_application_name_servers_server_name_put"
+        fail ArgumentError, "Missing the required parameter 'authorization' when calling ServerApi.servers_server_name_put"
       end
       # verify the required parameter 'web_application_name' is set
       if @api_client.config.client_side_validation && web_application_name.nil?
-        fail ArgumentError, "Missing the required parameter 'web_application_name' when calling ServerApi.services_web_application_name_servers_server_name_put"
+        fail ArgumentError, "Missing the required parameter 'web_application_name' when calling ServerApi.servers_server_name_put"
       end
       # verify the required parameter 'server_name' is set
       if @api_client.config.client_side_validation && server_name.nil?
-        fail ArgumentError, "Missing the required parameter 'server_name' when calling ServerApi.services_web_application_name_servers_server_name_put"
+        fail ArgumentError, "Missing the required parameter 'server_name' when calling ServerApi.servers_server_name_put"
       end
       # verify the required parameter 'server' is set
       if @api_client.config.client_side_validation && server.nil?
-        fail ArgumentError, "Missing the required parameter 'server' when calling ServerApi.services_web_application_name_servers_server_name_put"
+        fail ArgumentError, "Missing the required parameter 'server' when calling ServerApi.servers_server_name_put"
       end
       # resource path
       local_var_path = "/services/{Web Application Name}/servers/{Server Name}".sub('{' + 'Web Application Name' + '}', web_application_name.to_s).sub('{' + 'Server Name' + '}', server_name.to_s)
@@ -347,7 +345,7 @@ module SwaggerClient
         :body => post_body,
         :auth_names => auth_names)
       if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: ServerApi#services_web_application_name_servers_server_name_put\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+        @api_client.config.logger.debug "API called: ServerApi#servers_server_name_put\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end

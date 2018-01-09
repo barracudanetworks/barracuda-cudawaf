@@ -76,7 +76,6 @@ module SwaggerClient
       end
 
       if opts[:return_type]
-       Puppet.info("Inside the if Condition")
         data = deserialize(response, opts[:return_type])
       else
         data = response.body
