@@ -160,7 +160,7 @@ module SwaggerClient
 
     # The default Configuration object.
     def self.default(url)
-      @@default ||= Configuration.new(url)
+      @@default = Configuration.new(url)
     end
 
     def configure

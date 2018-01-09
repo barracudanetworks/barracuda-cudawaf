@@ -42,7 +42,7 @@ module SwaggerClient
     end
 
     def self.default(url)
-      @@default ||= ApiClient.new(url)
+      @@default = ApiClient.new(url)
     end
 
     # Call an API with given options.
