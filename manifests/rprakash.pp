@@ -1,6 +1,6 @@
 class barracudawaf::rprakash {
 	cudawaf_service  { 'DemoService':
-	  ensure       	    => absent,
+	  ensure       	    => present,
 	  name              => 'MyService',
 	  type              => 'HTTP',
 	  ip_address        => '10.11.1.1',
