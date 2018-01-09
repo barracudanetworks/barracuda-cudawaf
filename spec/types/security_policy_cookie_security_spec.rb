@@ -10,7 +10,15 @@ describe type_class do
 
   let :properties do
     [
-      
+	:allow_unrecognized_cookies,
+	:cookie_max_age,
+	:cookie_replay_protection_type,
+	:cookies_exempted,
+	:custom_headers,
+	:days_allowed,
+	:http_only,
+	:secure_cookie,
+	:tamper_proof_mode,      
     ]
   end
 

@@ -4,13 +4,34 @@ type_class = Puppet::Type.type(:rule_group)
 describe type_class do
   let :params do
     [
-       :name,
+	:name,
+	:service_name,
     ]
   end
 
   let :properties do
     [
-      
+	:access_log,
+	:app_id,
+	:comments,
+	:cookie_age,
+	:extended_match,
+	:extended_match_sequence,
+	:failover_method,	
+	:header_name,
+	:host_match,
+	:lb_algorithm,
+	:mode,
+	:parameter_name,
+	:persistence_cookie_domain,
+	:persistence_cookie_name,
+	:persistence_cookie_path,
+	:persistence_idle_timeout,
+	:persistence_method,
+	:source_ip_netmask,
+	:status,
+	:url_match,
+	:web_firewall_policy,      
     ]
   end
 

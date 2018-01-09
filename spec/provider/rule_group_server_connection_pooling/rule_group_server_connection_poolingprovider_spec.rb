@@ -5,9 +5,10 @@ provider_class = Puppet::Type.type(:rule_group_server_connection_pooling).provid
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:rule_group_server_connection_pooling).new(
-       
-       
-       
+	name:'rgServer1',
+	service_name:'httpsApp1',
+	rule_group_name:'Rule1',
+	keepalive_timeout:900001,       
     )
   }
 

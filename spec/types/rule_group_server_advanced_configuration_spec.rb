@@ -4,13 +4,22 @@ type_class = Puppet::Type.type(:rule_group_server_advanced_configuration)
 describe type_class do
   let :params do
     [
-       :name,
+	:name,
+	:rule_group_name,
+	:service_name,
     ]
   end
 
   let :properties do
     [
-      
+	:client_impersonation,
+	:max_connections,
+	:max_establishing_connections,
+	:max_keepalive_requests,
+	:max_requests,
+	:max_spare_connections,
+	:source_ip_to_connect,
+	:timeout,      
     ]
   end
 

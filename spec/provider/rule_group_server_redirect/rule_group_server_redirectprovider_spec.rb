@@ -5,9 +5,7 @@ provider_class = Puppet::Type.type(:rule_group_server_redirect).provider(:rule_g
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:rule_group_server_redirect).new(
-       
-       
-       
+	name:'rule_group_server_redirect',       
     )
   }
 

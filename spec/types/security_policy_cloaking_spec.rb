@@ -4,13 +4,16 @@ type_class = Puppet::Type.type(:security_policy_cloaking)
 describe type_class do
   let :params do
     [
-       :name,
+	:name,
     ]
   end
 
   let :properties do
     [
-      
+	:filter_response_header,
+	:headers_to_filter,
+	:return_codes_to_exempt,
+	:suppress_return_code,      
     ]
   end
 

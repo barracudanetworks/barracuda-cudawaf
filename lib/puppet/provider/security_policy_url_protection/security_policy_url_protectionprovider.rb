@@ -15,22 +15,6 @@ Puppet::Type.type(:security_policy_url_protection).provide(:security_policy_url_
   def exists?
     Puppet.debug("Calling exists method of security_policy_url_protectionprovider: ")
     @property_hash[:ensure] == :present
-    # getting waf authorization token
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    security_policy_url_protect_instance = SwaggerClient::SecurityPolicyUrlProtectionApi.new
-    Puppet.debug("WAF authorization token:  #{auth_header}")
-    #call get security_policy_url_protection
-    policyName=@resource[:name]
-    Puppet.debug("WAF secuirty policy name in manifest:  #{policyName}")
-    data,status_code,headers= security_policy_url_protect_instance.security_policies_policy_name_url_protection_get(auth_header,policyName)
-    if status_code == 200
-       true
-    elsif status_code == 404
-      false
-    else
-      fail("Not able to process the request. Please check your request parameters.")
-    end
   end
 
  #this method get all secuirty policys from WAF system and builds the instances array 
@@ -53,10 +37,22 @@ Puppet::Type.type(:security_policy_url_protection).provide(:security_policy_url_
          policyData = response["data"]
          Puppet.debug("Service  data:  #{policyData}")
          policyData.each do |key,value|
-           val= value
+           policyName=value["name"]
+           val= value["URL Protection"]
            instances <<  new(
            :ensure => :present,
-           :name => val["name"],
+           :name => policyName,
+           :allowed_content_types => val["allowed-content-types"],
+           :allowed_methods => val["allowed-methods"],
+           :blocked_attack_types => val["blocked-attack-types"],
+           :csrf_prevention => val["csrf-prevention"],
+           :custom_blocked_attack_types => val["custom-blocked-attack-types"],
+           :enable => val["enable"],
+           :exception_patterns => val["exception-patterns"],
+           :max_content_length => val["max-content-length"],
+           :max_parameters => val["max-parameters"],
+           :maximum_parameter_name_length => val["maximum-parameter-name-length"],
+           :maximum_upload_files => val["maximum-upload-files"]
            )
         end
       end # if end

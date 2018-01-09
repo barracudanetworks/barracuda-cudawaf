@@ -21,36 +21,6 @@ Puppet::Type.type(:virtual_service).provide(:serviceprovider) do
 def exists?
   Puppet.debug("Calling exists method of serviceprovider: ")
   @property_hash[:ensure] == :present
-=begin
-  # getting waf authorization token
-  login_instance = Login.new
-  auth_header = login_instance.get_auth_header
-  Puppet.debug("WAF authorization token:  #{auth_header}")
-  service_instance = SwaggerClient::ServiceApi.new
-
-# call get service
-
-  svcName=@resource[:name]
-  Puppet.debug("WAF service name in manifest:  #{svcName}")
-  response=service_instance.services_web_application_name_get(auth_header,svcName)
-  parsed_response = JSON.parse(response)
-  status_code=parsed_response["status_code"]
-  Puppet.debug("status_code received from WAF api GET service:  #{status_code}")
-
-  if response.to_s.empty?
-    fail("Not able to process the request. Please check the request parameters")
-  end
-
-  if status_code === '200'
-     true
-  elsif status_code === '404'
-     false
-  else
-    fail("Not able to process the request. Pleae check your request parameters.")
-  end
-# get service call ends
-
-=end
 end
 
 #this method get all services from WAF system and builds the instances array

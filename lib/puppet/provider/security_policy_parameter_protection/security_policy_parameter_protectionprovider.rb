@@ -15,22 +15,6 @@ Puppet::Type.type(:security_policy_parameter_protection).provide(:security_polic
   def exists?
     Puppet.debug("Calling exists method of security_policy_parameter_protectionprovider: ")
     @property_hash[:ensure] == :present
-    # getting waf authorization token
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    security_policy_param_protect_instance = SwaggerClient::SecurityPolicyParameterProtectionApi.new
-    Puppet.debug("WAF authorization token:  #{auth_header}")
-    #call get security_policy_parameter_protection
-    policyName=@resource[:name]
-    Puppet.debug("WAF secuirty policy name in manifest:  #{policyName}")
-    data,status_code,headers=security_policy_param_protect_instance.security_policies_policy_name_parameter_protection_get(auth_header,policyName)
-    if status_code == 200
-       true
-    elsif status_code == 404
-      false
-    else
-      fail("Not able to process the request. Please check your request parameters.")
-    end
   end
 
  #this method get all secuirty policys from WAF system and builds the instances array 
@@ -53,10 +37,25 @@ Puppet::Type.type(:security_policy_parameter_protection).provide(:security_polic
          policyData = response["data"]
          Puppet.debug("Service  data:  #{policyData}")
          policyData.each do |key,value|
-           val= value
+           policyName=value["name"]
+           val= value["Parameter Protection"]
            instances <<  new(
            :ensure => :present,
-           :name => val["name"],
+           :name => policyName,
+           :allowed_file_upload_type => val["allowed-file-upload-type"],
+           :base64_decode_parameter_value => val["base64-decode-parameter-value"],
+           :blocked_attack_types => val["blocked-attack-types"],
+           :custom_blocked_attack_types => val["custom-blocked-attack-types"],
+           :denied_metacharacters => val["denied-metacharacters"],
+           :enable => val["enable"],
+           :exception_patterns => val["exception-patterns"],
+           :file_upload_extensions => val["file-upload-extensions"],
+           :file_upload_mime_types => val["file-upload-mime-types"],
+           :ignore_parameters => val["ignore-parameters"],
+           :maximum_instances => val["maximum-instances"],
+           :maximum_parameter_value_length => val["maximum-parameter-value-length"],
+           :maximum_upload_file_size => val["maximum-upload-file-size"],
+           :validate_parameter_name => val["validate-parameter-name"]
            )
         end
       end # if end

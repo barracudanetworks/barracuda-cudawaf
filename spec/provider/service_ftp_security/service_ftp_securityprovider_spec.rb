@@ -5,9 +5,9 @@ provider_class = Puppet::Type.type(:service_ftp_security).provider(:service_ftp_
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_ftp_security).new(
-       
-       
-       
+	name:'service_ftp',
+	allowed_verb_status:'Yes',
+	attack_prevention_status:'Yes',       
     )
   }
 

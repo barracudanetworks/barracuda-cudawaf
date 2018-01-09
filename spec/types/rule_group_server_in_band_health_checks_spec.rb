@@ -4,13 +4,18 @@ type_class = Puppet::Type.type(:rule_group_server_in_band_health_checks)
 describe type_class do
   let :params do
     [
-       :name,
+	:name,
+	:rule_group_name,
+	:service_name,
     ]
   end
 
   let :properties do
     [
-      
+	:max_http_errors,
+	:max_other_failure,
+	:max_refused,
+	:max_timeout_failure,      
     ]
   end
 

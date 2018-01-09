@@ -15,57 +15,89 @@ Puppet::Type.type(:service_basic_security).provide(:service_basic_securityprovid
   def exists?
     Puppet.debug("Calling exists method of service_basic_securityprovider: ")
     @property_hash[:ensure] == :present
-
-    # getting waf authorization token
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    Puppet.debug("WAF authorization token:  #{auth_header}")
-    service_basic_security_instance = SwaggerClient::BasicSecurityApi.new	
-    #call get service_basic_security
-    svcName=@resource[:name]
-    Puppet.debug("WAF service name in manifest:  #{svcName}")
-    data,status_code,headers=service_basic_security_instance.services_web_application_name_basic_security_get(auth_header,svcName)
-    if status_code == 200
-       true
-    elsif status_code == 404
-      false
-    else
-      fail("Not able to process the request. Pleae check your request parameters.")
-    end
-
   end
 
 
-  def self.instances
+    #this method get all servers from WAF system and builds the instances array
+def self.instances()
+ Puppet.debug("Calling getservices method")
+ services = getservices()
 
-    Puppet.debug("Calling instances method of service_basic_securityprovider: ")
-    instances = []
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    service_instance = SwaggerClient::ServiceApi.new
-    # get all service_basic_security from WAF
-    data,status_code,headers = service_instance.services_get(auth_header,{})
-    Puppet.debug("WAF Get all service_basic_security response:    #{data}")
-    unless data == '{}'
-      if status_code == 200
+ Puppet.debug("List of services .................. #{services}")
+ instances=[]
+ services.each do |service|
+
+   svc = service
+   Puppet.debug("Calling getInstances method of serverprovider: ")
+   serviceName=svc
+   Puppet.debug("Service Name : #{serviceName}")
+   login_instance = Login.new
+   auth_header = login_instance.get_auth_header
+   service_basic_security_instance = SwaggerClient::BasicSecurityApi.new
+   # get all servers from WAF
+   data,status_code,headers =service_basic_security_instance.services_web_application_name_basic_security_get(auth_header,serviceName,{})
+   Puppet.debug("WAF Get all servers response:    #{data}")
+
+   response = JSON.parse(data)
+   Puppet.debug("parsed response object is #{response}")
+   svrData =response["data"]
+   serviceName = response["Service"]
+   Puppet.debug("The DATA =======>>> #{svrData}")
+   if svrData
+     svrData.each do |key,value|
+       Puppet.debug("Value....... is #{value}")
+       servname = value["name"]
+       val = value["Basic Security"]
+       Puppet.debug("VAL is ... #{val}")
+       instances <<  new(
+          :ensure => :present,
+          :name => servname,
+          :mode => val["mode"],
+          :ignore_case => val["ignore-case"],
+          :web_firewall_policy => val["web-firewall-policy"],
+          :rate_control_status => val["rate-control-status"],
+          :rate_control_pool => val["rate-control-pool"],
+          :web_firewall_log_level => val["web-firewall-log-level"],
+          :trusted_hosts_group => val["trusted-hosts-group"],
+          :client_ip_addr_header => val["client-ip-addr-header"],
+          :trusted_hosts_action => val["trusted-hosts-action"]
+       )
+     end
+   end
+
+  end # do end services
+  return instances
+end
+
+
+#this method get all services from WAF system and builds the instances array
+def self.getservices
+
+  Puppet.debug("Calling getservices  method of serverprovider: ")
+  service_instances = []
+
+  login_instance = Login.new
+  auth_header = login_instance.get_auth_header
+  service_instance = SwaggerClient::ServiceApi.new
+
+# get all services from WAF
+  data,status_code,headers = service_instance.services_get(auth_header,{})
+  Puppet.debug("WAF Get all services response:    #{data}")
+  unless data == '{}'
+    if status_code == 200
       response = JSON.parse(data)
       svcobj = response["object"]
       Puppet.debug("Object is  #{svcobj}")
       svcData = response["data"]
-      Puppet.debug("Service  data:  #{svcData}")
-		svcData.each do |key,value|
-		    val= value
-			instances <<  new(
-			:ensure => :present,
-			:name => val["name"],
-			) 
+      Puppet.debug("Service  data - having servers:  #{svcData}")
+      svcData.each do |key,value|
+        service_instances.push(value["name"])
       end
    end # if end
  end  # unless end
+ return service_instances
 
-    return instances
-  end
-
+end
 
   def self.prefetch(resources)
 
@@ -124,37 +156,12 @@ Puppet::Type.type(:service_basic_security).provide(:service_basic_securityprovid
 
 
   def create
-
     Puppet.debug("Calling create method of service_basic_securityprovider: ")
-=begin
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    service_instance = SwaggerClient::ServiceApi.new
-    svcName=@resource[:name]
-    data,status_code,headers= service_instance.services_web_application_name_put(auth_header,svcName,message(resource),{})
-    Puppet.debug("WAF services CREATE response:  #{data}"
-    if status_code == 201
-      @property_hash.clear
-      return data
-    else
-      fail("Not able to create the service. Please check the service api parameters")
-    end
-=end
   end
 
 
   def destroy
-
     Puppet.debug("Calling destroy method of service_basic_securityprovider: ")
-=begin
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    service_instance = SwaggerClient::ServiceApi.new
-    svcName=@resource[:name]
-    data,status_code,headers= service_instance.services_web_application_name_put(auth_header,svcName,message(resource),{})
-      @property_hash.clear
-      return data
-=end
   end
 
 

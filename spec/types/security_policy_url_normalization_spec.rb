@@ -10,7 +10,10 @@ describe type_class do
 
   let :properties do
     [
-      
+	:apply_double_decoding,
+	:default_charset,
+	:detect_response_charset,
+	:parameter_separators,	      
     ]
   end
 

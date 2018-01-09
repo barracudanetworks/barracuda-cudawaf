@@ -33,7 +33,6 @@ module SwaggerClient
     end
 
     # FETCH Information of ip reput
-ation
     # 
     # @param authorization Login token
     # @param web_application_name Web Application Name of ip reputation

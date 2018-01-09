@@ -10,7 +10,20 @@ describe type_class do
 
   let :properties do
     [
-      
+	:allowed_file_upload_type,
+	:base64_decode_parameter_value,
+	:blocked_attack_types,
+	:custom_blocked_attack_types,
+	:denied_metacharacters,
+	:enable,
+	:exception_patterns,
+	:file_upload_extension,
+	:file_upload_mime_types,
+	:ignore_parameters,
+	:maximum_instances,
+	:maximum_parameter_value_length,
+	:maximum_upload_file_size,
+	:validate_parameter_name,      
     ]
   end
 

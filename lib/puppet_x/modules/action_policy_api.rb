@@ -130,7 +130,7 @@ module SwaggerClient
         fail ArgumentError, "Missing the required parameter 'action_policy' when calling ActionPolicyApi.security_policies_policy_name_action_policies_attack_action_name_put"
       end
       # resource path
-      local_var_path = "/security-policies/{Policy Name}/action-policies/{Attack Action Name} ".sub('{' + 'Policy Name' + '}', policy_name.to_s).sub('{' + 'Attack Action Name' + '}', attack_action_name.to_s)
+      local_var_path = "/security-policies/{Policy Name}/action-policies/{Attack Action Name}".sub('{' + 'Policy Name' + '}', policy_name.to_s).sub('{' + 'Attack Action Name' + '}', attack_action_name.to_s)
 
       # query parameters
       query_params = {}

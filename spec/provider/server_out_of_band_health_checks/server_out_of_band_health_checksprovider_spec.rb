@@ -7,7 +7,7 @@ describe provider_class do
     Puppet::Type.type(:server_out_of_band_health_checks).new(
 	name:'wafServer2',
 	service_name:'httpsApp1',
-	interval:'12',       
+	interval:12,       
     )
   }
 

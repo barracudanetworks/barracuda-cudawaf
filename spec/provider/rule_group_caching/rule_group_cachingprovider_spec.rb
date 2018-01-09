@@ -5,9 +5,10 @@ provider_class = Puppet::Type.type(:rule_group_caching).provider(:rule_group_cac
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:rule_group_caching).new(
-       
-       
-       
+	name:'Rule1',
+    	service_name:'httpsApp1',
+    	status:'On',
+    	max_size:512,       
     )
   }
 

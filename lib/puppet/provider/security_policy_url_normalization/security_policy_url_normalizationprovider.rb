@@ -15,22 +15,6 @@ Puppet::Type.type(:security_policy_url_normalization).provide(:security_policy_u
   def exists?
     Puppet.debug("Calling exists method of security_policy_url_normalizationprovider: ")
     @property_hash[:ensure] == :present
-    # getting waf authorization token
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    security_policy_url_nrml_instance = SwaggerClient::SecurityPolicyUrlNormalizationApi.new
-    Puppet.debug("WAF authorization token:  #{auth_header}")
-    #call get security_policy_url_normalization
-    policyName=@resource[:name]
-    Puppet.debug("WAF secuirty policy name in manifest:  #{policyName}")
-    data,status_code,headers=security_policy_url_nrml_instance.security_policies_policy_name_url_normalization_get(auth_header,policyName)
-    if status_code == 200
-       true
-    elsif status_code == 404
-      false
-    else
-      fail("Not able to process the request. Please check your request parameters.")
-    end
   end
 
  #this method get all secuirty policys from WAF system and builds the instances array 
@@ -53,10 +37,15 @@ Puppet::Type.type(:security_policy_url_normalization).provide(:security_policy_u
          policyData = response["data"]
          Puppet.debug("Service  data:  #{policyData}")
          policyData.each do |key,value|
-           val= value
+           policyName=value["name"]
+           val= value["URL Normalization"]
            instances <<  new(
            :ensure => :present,
-           :name => val["name"],
+           :name => policyName,
+           :apply_double_decoding => val["apply-double-decoding"],
+           :default_charset => val["default-charset"],
+           :detect_response_charset => val["detect-response-charset"],
+           :parameter_separators => val["parameter-separators"]
            )
         end
       end # if end

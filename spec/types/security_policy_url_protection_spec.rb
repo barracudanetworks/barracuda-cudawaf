@@ -10,7 +10,17 @@ describe type_class do
 
   let :properties do
     [
-      
+	:allowed_content_types,
+	:allowed_methods,
+	:blocked_attack_types,
+	:csrf_prevention,
+	:custom_blocked_attack_types,
+	:enable,
+	:exception_patterns,
+	:max_content_length,
+	:max_parameters,
+	:maximum_parameter_name_length,
+	:maximum_upload_files,      
     ]
   end
 

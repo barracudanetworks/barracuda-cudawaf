@@ -4,13 +4,17 @@ type_class = Puppet::Type.type(:rule_group_compression)
 describe type_class do
   let :params do
     [
-       :name,
+	:name,
+	:service_name,
     ]
   end
 
   let :properties do
     [
-      
+	:compress_unknown_content_types,
+	:content_types,
+	:min_size,
+	:status,      
     ]
   end
 

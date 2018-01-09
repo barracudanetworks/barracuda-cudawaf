@@ -5,9 +5,7 @@ provider_class = Puppet::Type.type(:server_redirect).provider(:server_redirectpr
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:server_redirect).new(
-       
-       
-       
+	name:'server_redirect',       
     )
   }
 

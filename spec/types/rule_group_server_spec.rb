@@ -4,13 +4,23 @@ type_class = Puppet::Type.type(:rule_group_server)
 describe type_class do
   let :params do
     [
-       :name,
+	:name,
+	:service_name,
+	:rule_group_name,
     ]
   end
 
   let :properties do
     [
-      
+	:address_version,
+	:backup_server,
+	:comments,
+	:hostname,
+	:identifier,
+	:ip_address,
+	:port,
+	:status,
+	:weight,      
     ]
   end
 

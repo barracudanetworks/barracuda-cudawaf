@@ -16,35 +16,6 @@ Puppet::Type.type(:security_policy).provide(:security_policyprovider) do
 def exists?
   Puppet.debug("Calling exists method of security_policyprovider: ")
   @property_hash[:ensure] == :present
-
-  # getting waf authorization token
-  login_instance = Login.new
-  auth_header = login_instance.get_auth_header
-  Puppet.debug("WAF authorization token:  #{auth_header}")
-  security_policy_instance = SwaggerClient::SecurityPolicyApi.new
-
-# call get security policy
-
-  policyName=@resource[:name]
-  Puppet.debug("WAF security policy name in manifest:  #{policyName}")
-  data, status_code, headers = security_policy_instance.security_policies_policy_name_get(auth_header,policyName)
- # parsed_response = JSON.parse(response)
- # status_code=parsed_response["status_code"]
-  Puppet.debug("status_code received from WAF api GET security policy:  #{status_code}")
-
-  if data.to_s.empty?
-    fail("Not able to process the request. Please check the request parameters")
-  end
-
-  if status_code == 200
-     true
-  elsif status_code == 404
-     false
-  else
-    fail("Not able to process the request. Please check your request parameters----------.")
-  end
-# get security policy call ends
-
 end
 
 #this method get all security policys from WAF system and builds the instances array
@@ -72,7 +43,7 @@ def self.instances
         val = value
         instances <<  new(
           :ensure => :present,
-          :name => val["name"],
+          :name => val["name"]
         )
       end
    end # if end

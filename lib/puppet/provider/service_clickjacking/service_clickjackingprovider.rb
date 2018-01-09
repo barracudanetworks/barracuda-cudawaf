@@ -8,151 +8,138 @@ require 'uri'
 
 Puppet::Type.type(:service_clickjacking).provide(:service_clickjackingprovider) do
 
-  Puppet.debug("Inside service_clickjackingprovider: ")
-
+Puppet.debug("Inside service_clickjackingprovider: ")
   mk_resource_methods
 
-  def exists?
-    Puppet.debug("Calling exists method of service_clickjackingprovider: ")
-    @property_hash[:ensure] == :present
+def exists?
+  Puppet.debug("Calling exists method of service_clickjackingprovider: ")
+  @property_hash[:ensure] == :present
+end
 
-    # getting waf authorization token
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    Puppet.debug("WAF authorization token:  #{auth_header}")
-	service_clickhijack_instance= SwaggerClient::ClickjackingApi.new	
-    #call get service_clickjacking
-    svcName=@resource[:name]
-    Puppet.debug("WAF service name in manifest:  #{svcName}")
-    data,status_code,headers=service_clickhijack_instance.services_web_application_name_clickjacking_get(auth_header,svcName)
+#this method get all servers from WAF system and builds the instances array
+def self.instances()
+ Puppet.debug("Calling getservices method")
+ services = getservices()
+
+ Puppet.debug("List of services .................. #{services}")
+ instances=[]
+ services.each do |service|
+
+   svc = service
+   Puppet.debug("Calling getInstances method of serviceclickhijackprovider: ")
+   serviceName=svc
+   Puppet.debug("Service Name : #{serviceName}")
+   login_instance = Login.new
+   auth_header = login_instance.get_auth_header
+    service_clickhijack_instance= SwaggerClient::ClickjackingApi.new   
+   data,status_code,headers = service_clickhijack_instance.services_web_application_name_clickjacking_get(auth_header,serviceName,{})
+   Puppet.debug("WAF Get all servers response:    #{data}")
+
+   response = JSON.parse(data)
+   Puppet.debug("parsed response object is #{response}")
+   svrData =response["data"]
+   serviceName = response["Service"]
+   Puppet.debug("The DATA =======>>> #{svrData}")
+   if svrData
+     svrData.each do |key,value|
+       Puppet.debug("Value....... is #{value}")
+       servname = value["name"]
+       val = value["Clickjacking"]
+       Puppet.debug("VAL is ... #{val}")
+       instances <<  new(
+          :ensure => :present,
+          :name => servname,
+          :allowed_origin => val["allowed-origin"],
+          :options => val["options"],
+          :status => val["status"]
+       )
+     end
+   end
+
+  end # do end services
+  return instances
+end
+
+
+#this method get all services from WAF system and builds the instances array
+def self.getservices
+
+  Puppet.debug("Calling getservices  method of service clickhijackprovider: ")
+  service_instances = []
+
+  login_instance = Login.new
+  auth_header = login_instance.get_auth_header
+  service_instance = SwaggerClient::ServiceApi.new
+
+# get all services from WAF
+  data,status_code,headers = service_instance.services_get(auth_header,{})
+  Puppet.debug("WAF Get all services response:    #{data}")
+  unless data == '{}'
     if status_code == 200
-       true
-    elsif status_code == 404
-      false
-    else
-      fail("Not able to process the request. Pleae check your request parameters.")
-    end
-
-  end
-
-
-  def self.instances
-
-    Puppet.debug("Calling instances method of service_clickjackingprovider: ")
-    instances = []
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    service_instance = SwaggerClient::ServiceApi.new
-    # get all service_clickjacking from WAF
-    data,status_code,headers = service_instance.services_get(auth_header,{})
-    Puppet.debug("WAF Get all service_clickjacking response:    #{data}")
-    unless data == '{}'
-      if status_code == 200
       response = JSON.parse(data)
       svcobj = response["object"]
       Puppet.debug("Object is  #{svcobj}")
       svcData = response["data"]
-      Puppet.debug("Service  data:  #{svcData}")
-		svcData.each do |key,value|
-		    val= value
-			instances <<  new(
-			:ensure => :present,
-			:name => val["name"],
-			) 
+      Puppet.debug("Service  data - having servers:  #{svcData}")
+      svcData.each do |key,value|
+        service_instances.push(value["name"])
       end
    end # if end
  end  # unless end
+ return service_instances
 
-    return instances
+end
+ 
+def self.prefetch(resources)
+   Puppet.debug("Calling prefetch method of service_clickjackingprovider: ")
+   services = instances
+   resources.keys.each do |name|
+     if provider = services.find { |service| service.name == name}
+        resources[name].provider=provider
+     end
   end
 
+end
 
-  def self.prefetch(resources)
-
-    Puppet.debug("Calling prefetch method of service_clickjackingprovider: ")
-    services = instances
-    resources.keys.each do |name|
-    if provider = services.find { |service| service.name == name}
-       resources[name].provider=provider
-    end
-  end
-
-  end
-
-
-  def flush
-
-    Puppet.debug("Calling flush method of service_clickjackingprovider: ")
-
-    if @property_hash != {}
-
+def flush
+  Puppet.debug("Calling flush method of service_clickjackingprovider: ")
+  if @property_hash != {}
     login_instance = Login.new
     auth_header = login_instance.get_auth_header
     service_clickhijack_instance= SwaggerClient::ClickjackingApi.new
     svcName=@resource[:name]
     data,status_code,headers= service_clickhijack_instance.services_web_application_name_clickjacking_put(auth_header,svcName,message(resource),{})
     Puppet.debug("WAF services PUT response:  #{data}")
-    end
-    return data
+  end
+  return data
+end
+
+def message(object)
+   opts=object.to_hash
+   opts.delete(:provider)
+   opts.delete(:ensure)
+   opts.delete(:loglevel)
+   opts=convert_underscores(opts)
+   params=opts
+   Puppet.debug("PARAM....................#{params}")
+   return params
+end
+
+def convert_underscores(hash)
+   hash.each_with_object({}) do |(k ,v), obj|
+     key = k.to_s.gsub(/_/, '-').to_sym
+     obj[key] = v
   end
 
-
-  def message(object)
-
-    opts=object.to_hash
-    opts.delete(:provider)
-    opts.delete(:ensure)
-    opts.delete(:loglevel)
-    opts=convert_underscores(opts)
-    params=opts
-
-    Puppet.debug("PARAM....................#{params}")
-    return params
-
-  end
+end
 
 
-  def convert_underscores(hash)
+def create
+  Puppet.debug("Calling create method of service_clickjackingprovider: ")
+end
 
-    hash.each_with_object({}) do |(k ,v), obj|
-      key = k.to_s.gsub(/_/, '-').to_sym
-      obj[key] = v
-
-    end
-
-  end
-
-
-  def create
-
-    Puppet.debug("Calling create method of service_clickjackingprovider: ")
-=begin
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    service_instance = SwaggerClient::ServiceApi.new
-    svcName=@resource[:name]
-    data,status_code,headers= service_instance.services_web_application_name_put(auth_header,svcName,message(resource),{})
-    Puppet.debug("WAF services CREATE response:  #{data}"
-    if status_code == 201
-      @property_hash.clear
-      return data
-    else
-      fail("Not able to create the service. Please check the service api parameters")
-    end
-=end
-  end
-
-  def destroy
-    Puppet.debug("Calling destroy method of service_clickjackingprovider: ")
-=begin
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    service_instance = SwaggerClient::ServiceApi.new
-    svcName=@resource[:name]
-    data,status_code,headers= service_instance.services_web_application_name_put(auth_header,svcName,message(resource),{})
-      @property_hash.clear
-      return data
-=end
-  end
+def destroy
+  Puppet.debug("Calling destroy method of service_clickjackingprovider: ")
+end
 end
 

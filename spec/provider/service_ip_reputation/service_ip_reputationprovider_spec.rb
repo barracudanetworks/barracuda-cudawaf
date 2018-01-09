@@ -5,9 +5,10 @@ provider_class = Puppet::Type.type(:service_ip_reputation).provider(:service_ip_
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_ip_reputation).new(
-       
-       
-       
+	name:'service_ip_reputation',
+	tor_nodes:'Allow',
+	satellite_provider:'Allow',
+	geoip_action:'Block',       
     )
   }
 

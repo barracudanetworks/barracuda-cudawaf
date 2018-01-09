@@ -4,13 +4,23 @@ type_class = Puppet::Type.type(:rule_group_server_ssl_policy)
 describe type_class do
   let :params do
     [
-       :name,
+	:name,
+	:rule_group_nam,
+	:service_name,
     ]
   end
 
   let :properties do
     [
-      
+	:client_certificate,
+	:enable_https,
+	:enable_sni,
+	:enable_ssl_3,
+	:enable_ssl_compatibility_mode,
+	:enable_tls_1,
+	:enable_tls_1_1,
+	:enable_tls_1_2,
+	:validate_certificate,      
     ]
   end
 

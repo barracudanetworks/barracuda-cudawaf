@@ -6,8 +6,8 @@ describe provider_class do
   let(:resource) {
     Puppet::Type.type(:security_policy_parameter_protection).new(
 	name:'owa',
-	maximum_instances:'1',
-	maximum_parameter_value_length:'1056',       
+	maximum_instances:1,
+	maximum_parameter_value_length:1056,       
     )
   }
 

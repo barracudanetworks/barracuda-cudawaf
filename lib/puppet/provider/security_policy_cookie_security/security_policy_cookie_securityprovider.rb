@@ -15,22 +15,6 @@ Puppet::Type.type(:security_policy_cookie_security).provide(:security_policy_coo
   def exists?
     Puppet.debug("Calling exists method of security_policy_cookie_securityprovider: ")
     @property_hash[:ensure] == :present
-    # getting waf authorization token
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    security_policy_cookie_security_instance = SwaggerClient::SecurityPolicyCookieSecurityApi.new
-    Puppet.debug("WAF authorization token:  #{auth_header}")
-    #call get security_policy_cookie_security
-    policyName=@resource[:name]
-    Puppet.debug("WAF secuirty policy name in manifest:  #{policyName}")
-    data,status_code,headers= security_policy_cookie_security_instance.security_policies_policy_name_cookie_security_get(auth_header,policyName)
-    if status_code == 200
-       true
-    elsif status_code == 404
-      false
-    else
-      fail("Not able to process the request. Please check your request parameters.")
-    end
   end
 
  #this method get all secuirty policys from WAF system and builds the instances array 
@@ -53,10 +37,20 @@ Puppet::Type.type(:security_policy_cookie_security).provide(:security_policy_coo
          policyData = response["data"]
          Puppet.debug("Service  data:  #{policyData}")
          policyData.each do |key,value|
-           val= value
+           policyName=value["name"]
+           val= value["Cookie Security"]
            instances <<  new(
            :ensure => :present,
-           :name => val["name"],
+           :name => policyName,
+           :allow_unrecognized_cookies => val["allow-unrecognized-cookies"],
+           :cookie_max_age => val["cookie-max-age"],
+           :cookie_replay_protection_type => val["cookie-replay-protection-type"],
+           :cookies_exempted => val["cookies-exempted"],
+           :custom_headers => val["custom-headers"],
+           :days_allowed => val["days-allowed"],
+           :http_only => val["http-only"],
+           :secure_cookie => val["secure-cookie"],
+           :tamper_proof_mode => val["tamper-proof-mode"],
            )
         end
       end # if end

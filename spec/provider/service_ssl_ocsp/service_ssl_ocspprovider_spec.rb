@@ -5,9 +5,8 @@ provider_class = Puppet::Type.type(:service_ssl_ocsp).provider(:service_ssl_ocsp
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_ssl_ocsp).new(
-       
-       
-       
+	name:'service_ssl',
+	enable:'Yes',       
     )
   }
 

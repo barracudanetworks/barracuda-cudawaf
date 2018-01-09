@@ -5,9 +5,9 @@ provider_class = Puppet::Type.type(:service_ssl_client_authentication).provider(
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_ssl_client_authentication).new(
-       
-       
-       
+	name:'client_authentication',
+	enforce_client_certificate:'Yes',
+	client_authentication:'Disable',
     )
   }
 

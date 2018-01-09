@@ -5,9 +5,12 @@ provider_class = Puppet::Type.type(:rule_group_server_in_band_health_checks).pro
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:rule_group_server_in_band_health_checks).new(
-       
-       
-       
+	name:'rgServer1',
+    	service_name:'httpsApp1',
+    	rule_group_name:'Rule1',
+    	max_http_errors:111,
+    	max_other_failure:11,
+    	max_refused:11,       
     )
   }
 

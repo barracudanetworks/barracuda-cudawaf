@@ -1,0 +1,255 @@
+#init.pp##
+
+class barracudawaf {
+  virtual_service  {  'WAFSVC-2':
+          ensure                => present,
+          name                  => 'demo_service_12',
+          type                  => 'http',
+          dps_enabled           => 'no',
+          mask                  => '255.255.255.255',
+          ip_address            => '6.6.6.6',
+          port                  => '80',
+          group                 => 'default',
+          vsite                 => 'default',
+          status                => 'On',
+          address_version       => 'ipv4',
+          comments              => 'Creating the demo_service_12',
+          app_id                => '1',
+          enable_access_logs    => 'Yes',
+          session_timeout       => '60'
+        }
+
+#  server_advanced_configuration {  'ServerAdvancedConfiguration-1':
+#    ensure          => present,
+#    name            => 'wafServer2',
+#    service_name    => 'httpsApp1',
+#    max_keepalive_requests => 122,
+#    max_spare_connections  => 111
+#  }
+
+#  global_acl { 'GlobalAcl-1':
+#    ensure          => present,
+#    name            => 'test1',
+#    policy_name     => 'default',
+#    action          => 'Deny and Log',
+#    deny_response   => 'Response Page',
+#    enable          => 'Yes',
+#    follow_up_action => 'None',
+#    response_page   => 'default',
+#    url             => '/testing/test2'
+#  }
+
+
+#   data_theft_protection { 'DataTheftProtection-1':
+#     ensure          => present,
+#     name            => 'test1',
+#     policy_name     => 'default',
+#     enable          => 'Yes',
+#     action          => 'Cloak',
+#     identity_theft_type => 'Credit Cards',
+#     initial_characters_to_keep => 2,
+#     trailing_characters_to_keep => 5
+#   }
+
+#   action_policy { 'ActionPolicy-1':
+#     ensure          => present,
+#     name            => 'sql-injection-pattern-in-parameter',
+#     policy_name     => 'default',
+#     follow_up_action_time => 60
+#   }
+
+#  rule_group_compression {  'RuleGroupCompression-1':
+#    ensure          => present,
+#    name            => 'Rule1',
+#    service_name    => 'httpsApp1',
+#    status          => 'On',
+#    min_size        => 10111
+#  }
+
+#  rule_group_caching {  'RuleGroupCaching-1':
+#    ensure          => present,
+#    name            => 'Rule1',
+#    service_name    => 'httpsApp1',
+#    status          => 'On',
+#    max_size        => 512
+#  }
+ 
+#   rule_group {  'RuleGroup-1':
+#    ensure          => present,
+#    name            => 'Rule1',
+#    service_name    => 'httpsApp1',
+#    url_match       => '/testing2.html',
+#    host_match      => 'www.example.com'
+#  }
+
+#  rule_group_server_in_band_health_checks { 'RgServerInBandHealthChecks-1':
+#    ensure        => present,
+#    name          => 'rgServer1',
+#    service_name  => 'httpsApp1',
+#    rule_group_name => 'Rule1',
+#    max_http_errors => 111,
+#    max_other_failure => 11,
+#    max_refused   => 12
+#  }
+
+
+
+#  server_in_band_health_checks {  'ServerInBandHealthCheck-1':
+#    ensure          => present,
+#    name            => 'wafServer2',
+#    service_name    => 'httpsApp1',
+#    max_http_errors => 12,
+#    max_refused     => 11
+# }
+
+#   real_server  {  'WAFTestServer-1':
+#          ensure            => present,
+#          name              => 'waftesttest1',
+#          identifier        => 'IP Address',
+#          address_version   => 'IPv4',
+#          status            => 'In Service',
+#          ip_address        => '12.12.12.13',
+#          service_name      => 'httpsApp1',
+#          port              => 80,
+#          comments          => 'Updating comments again'
+#        }
+#  service_exception_profiling {  'ServiceExceptionProfiling-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#  }
+  
+# service_ssl_client_authentication {  'ServiceSSLClientAuthentication-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#  }
+
+  
+#   service_session_tracking {  'ServiceSessionTracking-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#  }
+
+# service_slow_client_attack {  'ServiceSlowClientAttack-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    status          => 'On'
+#  }
+
+
+
+# service_sensitive_parameter_names {  'ServiceSensitiveParamName-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    sensitive_parameter_names => 'UserName,Password,CreditCardNumber'
+#  }
+
+
+#   service_ip_reputation {  'ServiceIPReputation-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#  }
+
+#    service_load_balancing {  'ServiceLoadBalancing-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    algorithm       => 'Least Requests'
+#  }
+
+
+
+# service_instant_ssl {   'ServiceInstantSSL-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    status          => 'On',
+#    secure_site_domain => 'www.example.com'
+#  }
+
+
+#   service_ftp_security {  'ServiceftpSecurity-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#  }
+
+
+#    service_compression {  'ServiceCompression-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    status          => 'On',
+#  }
+
+
+#  service_clickjacking {  'ServiceClickJacking-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    status          => 'On',
+#    options         => 'Never'
+#  }
+ 
+
+#  service_caching {   'ServiceCaching-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    status          => 'On',
+#    expiry_age      => 61
+#  }
+
+#  service_basic_security {   'ServiceBasicSecurity-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    mode            => 'Active',
+#    web_firewall_policy => 'owa'
+#  }
+
+
+ 
+#  service_authentication {   'ServiceAuth-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    status          => 'On'
+#  }
+
+
+#  service_advanced_configuration  {  'ServiceAdvancedConfiguration-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    enable_vdi          => 'No',
+#    enable_web_application_firewall => 'Yes',
+#    enable_websocket => 'Yes'
+#  }
+
+
+
+# service_adaptive_profiling  {  'ServiceAdaptiveProfiling-1':
+ #   ensure          => present,
+ #   name            => 'httpsApp1',
+ #   status          => 'Off',
+ #   response_learning => 'Successes Only',
+ #   request_learning => 'Successes Only'
+ # }
+
+
+#  rule_group_server  { 'RuleGroupServer-1':
+#    ensure        => present,
+#    name          => 'rgServer1',
+#    service_name  => 'httpsApp1',
+#    rule_group_name => 'Rule1',
+#    identifier    => 'Hostname',
+#    hostname      => 'barracuda.com',
+#    comments      => 'updating rule group server',
+#  }
+  
+#   security_policy  {  'securitypolicy1':
+#    ensure        => present,
+#    name          => 'junkpolicy'
+#  }
+
+# security_policy_cloaking {  'SecPolCloaking-1':
+#    ensure          => present,
+#    name            => 'owa',
+#    return_codes_to_exempt => [ 401, 405 ],
+#    headers_to_filter => [ 'X-Forwarder-For', 'Server', 'X-AspNet-Version', 'X-Powered-By' ]
+#  }
+
+
+
+}

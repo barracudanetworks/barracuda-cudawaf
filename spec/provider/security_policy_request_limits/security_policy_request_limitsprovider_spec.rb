@@ -6,8 +6,8 @@ describe provider_class do
   let(:resource) {
     Puppet::Type.type(:security_policy_request_limits).new(
 	name:'owa',
-	max_cookie_name_length:'123',
- 	max_cookie_value_length:'5099',       
+	max_cookie_name_length:123,
+ 	max_cookie_value_length:5099,       
     )
   }
 

@@ -5,9 +5,11 @@ provider_class = Puppet::Type.type(:rule_group_server_ssl_policy).provider(:rule
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:rule_group_server_ssl_policy).new(
-       
-       
-       
+	name:'rgServer1',
+    	service_name:'httpsApp1',
+    	rule_group_name:'Rule1',
+    	enable_https:'On',
+    	enable_ssl_compatibility_mode:'Yes',       
     )
   }
 

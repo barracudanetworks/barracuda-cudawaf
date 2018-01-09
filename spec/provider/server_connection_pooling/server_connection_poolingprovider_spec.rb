@@ -7,7 +7,7 @@ describe provider_class do
     Puppet::Type.type(:server_connection_pooling).new(
 	name:'wafServer2',
 	service_name:'httpsApp1',
-	keepalive_timeout:'910000',
+	keepalive_timeout:910000,
     )
   }
 

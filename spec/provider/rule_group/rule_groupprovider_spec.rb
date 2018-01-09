@@ -4,10 +4,11 @@ provider_class = Puppet::Type.type(:rule_group).provider(:rule_groupprovider)
 
 describe provider_class do
   let(:resource) {
-    Puppet::Type.type(:rule_group).new(
-       
-       
-       
+    Puppet::Type.type(:rule_group).new(       
+	name:'Rule1',
+    	service_name:'httpsApp1',
+    	url_match:'/testing.html',
+    	host_match:'www.example.com'
     )
   }
 

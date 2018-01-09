@@ -10,130 +10,139 @@ Puppet::Type.type(:service_ip_reputation).provide(:service_ip_reputationprovider
   Puppet.debug("Inside service_ip_reputationprovider: ")
   mk_resource_methods
 
-  def exists?
-    Puppet.debug("Calling exists method of service_ip_reputationprovider: ")
-    @property_hash[:ensure] == :present
+def exists?
+  Puppet.debug("Calling exists method of service_ip_reputationprovider: ")
+  @property_hash[:ensure] == :present
+end
 
-    # getting waf authorization token
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    Puppet.debug("WAF authorization token:  #{auth_header}")
-    service_iprep_instance = SwaggerClient::IpReputationApi.new
-    #call get service_ip_reputation
-    svcName=@resource[:name]
-    Puppet.debug("WAF service name in manifest:  #{svcName}")
-    data,status_code,headers=service_iprep_instance.services_web_application_name_ip_reputation_get(auth_header,svcName)
+#this method get all servers from WAF system and builds the instances array
+def self.instances()
+ Puppet.debug("Calling getservices method")
+ services = getservices()
+
+ Puppet.debug("List of services .................. #{services}")
+ instances=[]
+ services.each do |service|
+
+   svc = service
+   Puppet.debug("Calling getInstances method of service ip reputation provider: ")
+   serviceName=svc
+   Puppet.debug("Service Name : #{serviceName}")
+   login_instance = Login.new
+   auth_header = login_instance.get_auth_header
+   service_iprep_instance = SwaggerClient::IpReputationApi.new
+   data,status_code,headers = service_iprep_instance.services_web_application_name_ip_reputation_get(auth_header,serviceName,{})
+   Puppet.debug("WAF Get all servers response:    #{data}")
+
+   response = JSON.parse(data)
+   Puppet.debug("parsed response object is #{response}")
+   svrData =response["data"]
+   serviceName = response["Service"]
+   Puppet.debug("The DATA =======>>> #{svrData}")
+   if svrData
+     svrData.each do |key,value|
+       Puppet.debug("Value....... is #{value}")
+       servname = value["name"]
+       val = value["IP Reputation"]
+       Puppet.debug("VAL is ... #{val}")
+       instances <<  new(
+          :ensure => :present,
+          :name => servname,
+          :tor_nodes => val["tor-nodes"],
+          :geoip_enable_logging => val["geoip-enable-logging"],
+          :satellite_provider => val["satellite-provider"],
+          :geoip_action => val["geoip-action"],
+          :apply_policy_at => val["apply-policy-at"],
+          :anonymous_proxy => val["anonymous-proxy"],
+          :enable_ip_reputation_filter => val["enable-ip-reputation-filter"],
+          :geo_pool => val["geo-pool"],
+          :barracuda_reputation_blocklist => val["barracuda-reputation-blocklist"]
+       )
+     end
+   end
+
+  end # do end services
+  return instances
+end
+
+
+#this method get all services from WAF system and builds the instances array
+def self.getservices
+
+  Puppet.debug("Calling getservices  method of serverprovider: ")
+  service_instances = []
+
+  login_instance = Login.new
+  auth_header = login_instance.get_auth_header
+  service_instance = SwaggerClient::ServiceApi.new
+
+# get all services from WAF
+  data,status_code,headers = service_instance.services_get(auth_header,{})
+  Puppet.debug("WAF Get all services response:    #{data}")
+  unless data == '{}'
     if status_code == 200
-       true
-    elsif status_code == 404
-      false
-    else
-      fail("Not able to process the request. Pleae check your request parameters.")
-    end
-  end
-
-
-  def self.instances
-    Puppet.debug("Calling instances method of service_ip_reputationprovider: ")
-    instances = []
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    service_instance = SwaggerClient::ServiceApi.new
-    # get all service_ip_reputation from WAF
-    data,status_code,headers = service_instance.services_get(auth_header,{})
-    Puppet.debug("WAF Get all service_ip_reputation response:    #{data}"
-	unless data == '{}'
-      if status_code == 200
       response = JSON.parse(data)
       svcobj = response["object"]
       Puppet.debug("Object is  #{svcobj}")
       svcData = response["data"]
-      Puppet.debug("Service  data:  #{svcData}")
-		svcData.each do |key,value|
-		    val= value
-			instances <<  new(
-			:ensure => :present,
-			:name => val["name"],
-			) 
+      Puppet.debug("Service  data - having servers:  #{svcData}")
+      svcData.each do |key,value|
+        service_instances.push(value["name"])
       end
    end # if end
  end  # unless end
-    return instances
-  end
+ return service_instances
+
+end
 
 
-  def self.prefetch(resources)
-    Puppet.debug("Calling prefetch method of service_ip_reputationprovider: ")
-    services = instances
-    resources.keys.each do |name|
-		if provider = services.find { |service| service.name == name}
-		   resources[name].provider=provider
-		end
+def self.prefetch(resources)
+  Puppet.debug("Calling prefetch method of service_ip_reputationprovider: ")
+  services = instances
+  resources.keys.each do |name|
+    if provider = services.find { |service| service.name == name}
+       resources[name].provider=provider
     end
   end
+end
 
-  def flush
-    Puppet.debug("Calling flush method of service_ip_reputationprovider: ")
-    if @property_hash != {}
-		login_instance = Login.new
-		auth_header = login_instance.get_auth_header
-                service_iprep_instance = SwaggerClient::IpReputationApi.new
-		svcName=@resource[:name]
-		data,status_code,headers= service_iprep_instance.services_web_application_name_ip_reputation_put(auth_header,svcName,message(resource),{})
-		Puppet.debug("WAF services PUT response:  #{data}"
-    end
-    return data
-  end
-
-
-  def message(object)
-    opts=object.to_hash
-    opts.delete(:provider)
-    opts.delete(:ensure)
-    opts.delete(:loglevel)
-    opts=convert_underscores(opts)
-    params=opts
-
-    Puppet.debug("PARAM....................#{params}")
-    return params
-  end
-
-  def convert_underscores(hash)
-    hash.each_with_object({}) do |(k ,v), obj|
-      key = k.to_s.gsub(/_/, '-').to_sym
-      obj[key] = v
-    end
-  end
-
-
-  def create
-    Puppet.debug("Calling create method of service_ip_reputationprovider: ")
-=begin
+def flush
+  Puppet.debug("Calling flush method of service_ip_reputationprovider: ")
+  if @property_hash != {}
     login_instance = Login.new
     auth_header = login_instance.get_auth_header
-    service_instance = SwaggerClient::ServiceApi.new
+    service_iprep_instance = SwaggerClient::IpReputationApi.new
     svcName=@resource[:name]
-    data,status_code,headers= service_instance.services_web_application_name_put(auth_header,svcName,message(resource),{})
-    Puppet.debug("WAF services CREATE response:  #{data}"
-    if status_code == 201
-      @property_hash.clear
-      return data
-    else
-      fail("Not able to create the service. Please check the service api parameters")
-    end
-=end
+    data,status_code,headers= service_iprep_instance.services_web_application_name_ip_reputation_put(auth_header,svcName,message(resource),{})
+    Puppet.debug("WAF services PUT response:  #{data}")
   end
+  return data
+end
 
-  def destroy
-    Puppet.debug("Calling destroy method of service_ip_reputationprovider: ")
-=begin
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    service_instance = SwaggerClient::ServiceApi.new
-    svcName=@resource[:name]
-    data,status_code,headers= service_instance.services_web_application_name_put(auth_header,svcName,message(resource),{})
-      @property_hash.clear
-      return data
-=end
+def message(object)
+  opts=object.to_hash
+  opts.delete(:provider)
+  opts.delete(:ensure)
+  opts.delete(:loglevel)
+  opts=convert_underscores(opts)
+  params=opts
+  Puppet.debug("PARAM....................#{params}")
+  return params
+end
+
+def convert_underscores(hash)
+  hash.each_with_object({}) do |(k ,v), obj|
+    key = k.to_s.gsub(/_/, '-').to_sym
+    obj[key] = v
   end
+end
+
+
+def create
+  Puppet.debug("Calling create method of service_ip_reputationprovider: ")
+end
+
+def destroy
+  Puppet.debug("Calling destroy method of service_ip_reputationprovider: ")
+end
 end

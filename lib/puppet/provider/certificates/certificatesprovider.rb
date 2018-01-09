@@ -99,6 +99,7 @@ Puppet::Type.type(:certificates).provide(:certificatesprovider) do
   end
 
   def flush
+    Puppet.notice("def flush")
     Puppet.debug("inside flush method: there is no put call for waf certificates")
   end
 

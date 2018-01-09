@@ -1,0 +1,70 @@
+#init.pp##
+
+class barracudawaf {
+
+#   real_server  {  'WAFTestServer-1':
+#          ensure            => present,
+#          name              => 'waftesttest1',
+#          identifier        => 'IP Address',
+#          address_version   => 'IPv4',
+#          status            => 'In Service',
+#          ip_address        => '12.12.12.13',
+#          service_name      => 'httpsApp1',
+#          port              => 80,
+#          comments          => 'Updating comments again'
+#        } 
+
+  service_caching {   'ServiceCaching-1':
+    ensure          => present,
+    name            => 'httpsApp1',
+    status          => 'On',
+    expiry_age      => 61
+  }
+
+#  service_basic_security {   'ServiceBasicSecurity-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    mode            => 'Active',
+#    web_firewall_policy => 'owa'
+#  }
+
+
+ 
+#  service_authentication {   'ServiceAuth-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    status          => 'On'
+#  }
+
+
+#  service_advanced_configuration  {  'ServiceAdvancedConfiguration-1':
+#    ensure          => present,
+#    name            => 'httpsApp1',
+#    enable_vdi          => 'No',
+#    enable_web_application_firewall => 'Yes',
+#    enable_websocket => 'Yes'
+#  }
+
+
+
+# service_adaptive_profiling  {  'ServiceAdaptiveProfiling-1':
+ #   ensure          => present,
+ #   name            => 'httpsApp1',
+ #   status          => 'Off',
+ #   response_learning => 'Successes Only',
+ #   request_learning => 'Successes Only'
+ # }
+
+
+#  rule_group_server  { 'RuleGroupServer-1':
+#    ensure        => present,
+#    name          => 'rgServer1',
+#    service_name  => 'httpsApp1',
+#    rule_group_name => 'Rule1',
+#    identifier    => 'Hostname',
+#    hostname      => 'barracuda.com',
+#    comments      => 'updating rule group server',
+#  }
+
+
+}

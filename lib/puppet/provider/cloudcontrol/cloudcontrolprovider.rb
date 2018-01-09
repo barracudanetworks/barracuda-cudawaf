@@ -53,8 +53,10 @@ Puppet::Type.type(:cloudcontrol).provide(:cloudcontrolprovider) do
       auth_header = login_instance.get_auth_header
 
       Puppet.debug("WAF authorization token:  #{auth_header}")
-
-      response = RestClient.put base_url + "/control-center", {
+      base = base_url+"/control-center"
+      Puppet.debug(" BASE>>>>>>>>>> #{base}")
+      response = RestClient.put base, {
+    #  response = RestClient.put base_url+"/control-center", {
         "connect_mode" => @resource["connect_mode"],
         "state" => "connected",
         "username" => @resource["username"],

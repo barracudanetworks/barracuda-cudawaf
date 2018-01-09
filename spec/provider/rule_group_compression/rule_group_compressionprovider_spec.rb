@@ -5,9 +5,10 @@ provider_class = Puppet::Type.type(:rule_group_compression).provider(:rule_group
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:rule_group_compression).new(
-       
-       
-       
+	name:'Rule1',
+    	service_name:'httpsApp1',
+    	status:'On',
+    	min_size:10111,
     )
   }
 

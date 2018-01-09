@@ -29,7 +29,7 @@ module SwaggerClient
     # @return [nil]
     def services_web_application_name_ftp_security_get(authorization, web_application_name, opts = {})
        data, status_code, headers = services_web_application_name_ftp_security_get_with_http_info(authorization, web_application_name, opts)
-      return nil
+      return data,status_code,headers
     end
 
     # FETCH Information of ftp security

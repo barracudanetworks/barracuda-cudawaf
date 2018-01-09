@@ -14,91 +14,52 @@ Puppet::Type.type(:rule_group_server_redirect).provide(:rule_group_server_redire
   def exists?
     Puppet.debug("Calling exists method of rule_group_server_redirectprovider: ")
     @property_hash[:ensure] == :present
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    service_instance = SwaggerClient::ServiceApi.new
-    rule_group_instance = SwaggerClient::RuleGroupApi.new
-    rule_group_server_instance = SwaggerClient::RuleGroupServerApi.new
-    #call get service
-    serviceName = @resource[:service_name]
-    rule_group_name = @resource[:rule_group_name]
-    rule_grp_server_Name = @resource[:name]
-    Puppet.debug("WAF rule_grp_server_Name in manifest:  #{rule_grp_server_Name}")
-    Puppet.debug("WAF rule_group_name in manifest : #{rule_group_name}")
-    Puppet.debug("WAF serviceName in manifest : #{serviceName}")
-    serviceresponse = service_instance.services_web_application_name_get(auth_header,serviceName,{})
-    service_parsed_response = JSON.parse(serviceresponse)
-    service_status_code=service_parsed_response["status_code"]
-    if serviceresponse.to_s.empty?
-       fail("Not able to process the request. Please check the request parameters")
-    end
-    # Checking if the service exists in the WAF system.
-    if service_status_code === '200'
-    # check if the rule group exists'
-         data,status_code,headers=rule_group_instance.services_web_application_name_content_rules_rule_group_name_get(auth_header,serviceName,rule_group_name)
-      Puppet.debug("status_code received from WAF api GET rule group:  #{status_code}")
-         if status_code === 200
-           data,status_code,headers=rule_server_instance.services_web_application_name_content_rules_get(auth_header,serviceName,rule_grp_server_Name)
-             if status_code === 200
-                true
-              elsif status_code == 404
-                false
-              else
-                fail("Not able to process the request. Please check your request parameters.")
-              end
-            # get rule group server call ends
-         elsif status_code == 404
-            fail("Not able to process the request. Please check your request parameters.")
-         else
-            fail("Not able to process the request. Please check your request parameters.")
-         end
-   # get rule group call ends
-      elsif status_code == 404
-        fail("Not able to process the request. Please check your request parameters.")
-      else
-        fail("Not able to process the request. Please check your request parameters.")
-      end
-   # get service call ends
   end
 
   def self.instances
+    Puppet.debug("Calling self.instances method")
 
-    Puppet.debug("Calling getservices method")
     services = getservices()
-    Puppet.debug("List of services .................. #{services}")
+    #Puppet.debug("List of services .................. #{services}")
+
     instances = []
     services.each do |service|
-      serviceName=service
+      serviceName = service
       rules = getrules(serviceName)
+
       rules.each do |rule|
         rule_name = rule
-        Puppet.debug("Calling getInstances method of rule_group_server_redirectprovider: ")
-        Puppet.debug("Service Name : #{serviceName}")
-        Puppet.debug("rule group Name : #{rule_name}")
+        Puppet.debug("Service Name : #{serviceName} rule group Name : #{rule_name}")
+
         login_instance = Login.new
         auth_header = login_instance.get_auth_header
         rule_group_server_instance = SwaggerClient::RuleGroupServerApi.new
-        # get all rule_group_server_redirect from WAF
-        data,status_code,headers = rule_server_instance.services_web_application_name_content_rules_rule_group_name_content_rule_servers_get(auth_header,serviceName,rule_name,{})
-        Puppet.debug("WAF Get all rule_group_server_redirect response:    #{data}")
+
+        # get all rule_group_server from WAF
+        data,status_code,headers = rule_group_server_instance.services_web_application_name_content_rules_rule_group_name_content_rule_servers_get(auth_header,serviceName,rule_name,{})
+        Puppet.debug("WAF Get all rule_group_server response:    #{data}")
         response = JSON.parse(data)
         svrData =response["data"]
         service_name = response["Service"]
         rule_group_name = response["Rule Group"]
         Puppet.debug("The DATA:::::: #{svrData}")
+
         if svrData
           svrData.each do |key,value|
              rule_grp_server_name = value["name"]
-             val= value
+             val = value["Redirect"]
+             #Puppet.debug("Instances method.. VAL is #{val}")
+
              instances <<  new(
                :ensure => :present,
                :name => rule_grp_server_name,
                :rule_group_name => rule_group_name,
-               :service_name => response["Service"]
+               :service_name => response["Service"],
              )
         end
       end # if end
-    end# do end services 
+     end  # if end for rules
+    end# do end services
     return instances
   end
 
@@ -126,6 +87,7 @@ Puppet::Type.type(:rule_group_server_redirect).provide(:rule_group_server_redire
      end
     return service_instances
   end
+
   #this method get all rules from WAF system and builds the instances array
   def self.getrules(service_name)
      Puppet.debug("Calling getrules  method of rule_group_server_redirectprovider: ")
@@ -143,22 +105,27 @@ Puppet::Type.type(:rule_group_server_redirect).provide(:rule_group_server_redire
           Puppet.debug("Object is  #{svcobj}")
           svcData = response["data"]
          Puppet.debug("rule group  data - having rules:  #{svcData}")
+           unless svcData.nil?
             svcData.each do |key,value|
                rule_group_instances.push(value["name"])
             end
+          end
         end
      end
     return rule_group_instances
   end
+
   def self.prefetch(resources)
-    Puppet.debug("Calling prefetch method of rule_group_server_redirectprovider: ")
     rules = instances
-    resources.keys.each do |name,service_name|
-      if provider = rules.find { |rule_server| rule_server.name == name && rule_server.service_name == service_name && rule_server.rule_group_name == rule_group_name}
-         resources[name].provider=provider
+    resources.keys.each do |name|
+      provider = rules.find do |rule|
+        resources[name][:name].to_s == rule.name.to_s &&
+        resources[name][:service_name].to_s == rule.service_name.to_s &&
+        resources[name][:rule_group_name].to_s == rule.rule_group_name.to_s
       end
+      resources[name].provider = provider unless provider.nil?
     end
-  end
+  end # self.prefetch
 
   def flush
     Puppet.debug("Calling flush method of rule_group_server_redirectprovider: ")

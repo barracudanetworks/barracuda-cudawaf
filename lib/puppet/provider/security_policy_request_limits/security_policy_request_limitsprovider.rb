@@ -15,22 +15,6 @@ Puppet::Type.type(:security_policy_request_limits).provide(:security_policy_requ
   def exists?
     Puppet.debug("Calling exists method of security_policy_request_limitsprovider: ")
     @property_hash[:ensure] == :present
-    # getting waf authorization token
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    security_policy_req_limits_instance = SwaggerClient::SecurityPolicyRequestLimitsApi.new
-    Puppet.debug("WAF authorization token:  #{auth_header}")
-    #call get security_policy_request_limits
-    policyName=@resource[:name]
-    Puppet.debug("WAF secuirty policy name in manifest:  #{policyName}")
-    data,status_code,headers=security_policy_req_limits_instance.security_policies_policy_name_request_limits_get(auth_header,policyName)
-    if status_code == 200
-       true
-    elsif status_code == 404
-      false
-    else
-      fail("Not able to process the request. Please check your request parameters.")
-    end
   end
 
  #this method get all secuirty policys from WAF system and builds the instances array 
@@ -53,10 +37,22 @@ Puppet::Type.type(:security_policy_request_limits).provide(:security_policy_requ
          policyData = response["data"]
          Puppet.debug("Service  data:  #{policyData}")
          policyData.each do |key,value|
-           val= value
+           policyName=value["name"]
+           val= value["Request Limit"]
            instances <<  new(
            :ensure => :present,
-           :name => val["name"],
+           :name => policyName,
+           :enable => val["enable"],
+           :max_cookie_name_length => val["max-cookie-name-length"],
+           :max_cookie_value_length => val["max-cookie-value-length"],
+           :max_header_name_length => val["max-header-name-length"],
+           :max_header_value_length => val["max-header-value-length"],
+           :max_number_of_cookies => val["max-number-of-cookies"],
+           :max_number_of_headers => val["max-number-of-headers"],
+           :max_query_length => val["max-query-length"],
+           :max_request_length => val["max-request-length"],
+           :max_request_line_length => val["max-request-line-length"],
+           :max_url_length => val["max-url-length"]
            )
         end
       end # if end

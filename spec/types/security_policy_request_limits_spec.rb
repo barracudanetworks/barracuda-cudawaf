@@ -10,7 +10,17 @@ describe type_class do
 
   let :properties do
     [
-      
+	:enable,
+	:max_cookie_name_length,
+	:max_cookie_value_length,
+	:max_header_name_length,
+	:max_header_value_length,
+	:max_number_of_cookies,
+	:max_number_of_headers,
+	:max_query_length,
+	:max_request_length,
+	:max_request_line_length,
+	:max_url_length,      
     ]
   end
 

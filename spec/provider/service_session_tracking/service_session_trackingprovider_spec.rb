@@ -5,9 +5,8 @@ provider_class = Puppet::Type.type(:service_session_tracking).provider(:service_
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_session_tracking).new(
-       
-       
-       
+	name:'session_tracting',
+	status:'Off',       
     )
   }
 

@@ -5,9 +5,9 @@ provider_class = Puppet::Type.type(:service_ssl_security).provider(:service_ssl_
 describe provider_class do
   let(:resource) {
     Puppet::Type.type(:service_ssl_security).new(
-       
-       
-       
+	name:'security',
+	ciphers:'Default',
+	enable_sni:'No',       
     )
   }
 

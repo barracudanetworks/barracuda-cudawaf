@@ -14,77 +14,52 @@ Puppet::Type.type(:server_advanced_configuration).provide(:server_advanced_confi
   def exists?
     Puppet.debug("Calling exists method of server_advanced_configurationprovider: ")
     @property_hash[:ensure] == :present
-    # getting waf authorization token
-    login_instance = Login.new
-    auth_header = login_instance.get_auth_header
-    Puppet.debug("WAF authorization token:  #{auth_header}")
-    service_instance = SwaggerClient::ServiceApi.new
-    server_instance = SwaggerClient::ServerApi.new
-    adv_server_instance = SwaggerClient::AdvancedConfigurationApi.new
-    #call get service
-    serverName = @resource[:name]
-    serviceName = @resource[:service_name]
-    Puppet.debug("WAF server name in manifest:  #{serverName}")
-    Puppet.debug("WAF service name in manifest : #{serviceName}")
-    # Check for the existance of the Service before calling the server api.
-    serviceresponse = service_instance.services_web_application_name_get(auth_header,serviceName,{})
-    service_parsed_response = JSON.parse(serviceresponse)
-    service_status_code=service_parsed_response["status_code"]
-    if serviceresponse.to_s.empty?
-       fail("Not able to process the request. Please check the request parameters")
-    end
-    # Checking if the service exists in the WAF system.
-    if service_status_code === '200'
-       # call get server
-      data,status_code,headers=adv_server_instance.services_web_application_name_servers_web_server_name_advanced_configuration_get(auth_header,serviceName,serverName)
-       Puppet.debug("status_code received from WAF api GET server:  #{status_code}")
-       if status_code === 200
-         true
-       elsif status_code == 404
-         false
-       else
-         fail("Not able to process the request. Pleae check your request parameters.")
-       end
-       # get server call ends
-    elsif service_status_code === '404'
-       fail("You can not create the server as the service associated is not available. ")
-    else
-       fail("Not able to process the request. Please check your request parameters.")
-    end
-   # get service call ends
   end
 
   def self.instances
+    Puppet.debug("Calling self.instances method")
 
     Puppet.debug("Calling getservices method")
     services = getservices()
-    Puppet.debug("List of services .................. #{services}")
+
     instances = []
     services.each do |service|
       svc = service
-      Puppet.debug("Calling getInstances method of server_advanced_configurationprovider: ")
-      serviceName=svc
+      serviceName = svc
       Puppet.debug("Service Name : #{serviceName}")
+
       login_instance = Login.new
       auth_header = login_instance.get_auth_header
       server_instance = SwaggerClient::ServerApi.new
-      adv_server_instance = SwaggerClient::AdvancedConfigurationApi.new
+
       # get all server_advanced_configuration from WAF
       data,status_code,headers = server_instance.services_web_application_name_servers_get(auth_header,serviceName,{})
-      Puppet.debug("WAF Get all server_advanced_configuration response:    #{data}")
+      Puppet.debug("WAF Get all servers response:    #{data}")
+
       response = JSON.parse(data)
       Puppet.debug("parsed response object is #{response}")
-      svrData =response["data"]
-      serviceName = response["Service"]
-      Puppet.debug("The DATA:::::: #{svrData}")
+
+      if !response.has_key?("data") then
+        next
+      end
+ 
+      svrData = response["data"]
+
       if svrData
          svrData.each do |key,value|
-           servname = value["name"]
-           val= value
+           val = value["Advanced Configuration"]
            instances <<  new(
-           :ensure => :present,
-           :name => val["name"],
-           :service_name => response["Service"]
+             :ensure => :present,
+             :name => value["name"],
+             :service_name => response["Service"],
+             :client_impersonation => val["client-impersonation"],
+             :max_connections => val["max-connections"],
+             :max_establishing_connections => val["max-establishing-connections"],
+             :max_keepalive_requests => val["max-keepalive-requests"],
+             :max_requests => val["max-requests"],
+             :max_spare_connections => val["max-spare-connections"],
+             :source_ip_to_connect => val["source-ip-to-connect"],
+             :timeout => val["timeout"],
            )
         end
       end # if end
@@ -116,15 +91,17 @@ Puppet::Type.type(:server_advanced_configuration).provide(:server_advanced_confi
      end
     return service_instances
   end
+
   def self.prefetch(resources)
-    Puppet.debug("Calling prefetch method of server_advanced_configurationprovider: ")
     servers = instances
-    resources.keys.each do |name,service_name|
-      if provider = servers.find { |server| server.name == name && server.service_name == service_name}
-         resources[name].provider=provider
+    resources.keys.each do |name|
+      provider = servers.find do |server|
+        resources[name][:name].to_s == server.name.to_s &&
+        resources[name][:service_name].to_s == server.service_name.to_s
       end
+      resources[name].provider = provider unless provider.nil?
     end
-  end
+  end # self.prefetch
 
   def flush
     Puppet.debug("Calling flush method of server_advanced_configurationprovider: ")
