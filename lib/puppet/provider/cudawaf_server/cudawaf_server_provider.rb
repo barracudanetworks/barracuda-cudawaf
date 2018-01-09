@@ -26,7 +26,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
 
   #this method get all servers from WAF system and builds the instances array
   def self.instances()
-    device_url = Puppet::Util::NetworkDevice.current.url.to_s
+    device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
     services = getservices(device_url)
 
     Puppet.debug("List of services .................. #{services}")
@@ -34,7 +34,6 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
 
     services.each do |service|
       serviceName = service
-      Puppet.debug("Service Name : #{serviceName}")
 
       # get all servers from WAF
       response, status_code, headers = Puppet::Provider::Cudawaf.get(device_url, "Server", serviceName, {})
@@ -107,7 +106,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
   def flush
     Puppet.debug("Calling  flush method of serverprovider: ")
     if @property_hash != {}
-      device_url = Puppet::Util::NetworkDevice.current.url.to_s
+      device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
       response, status_code, headers = Puppet::Provider::Cudawaf.put(device_url, "Server", @resource[:service_name], @resource[:name], message(resource), {})
 
       if status_code == 200
@@ -135,9 +134,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
 
   # this is a util method to build the JSON array to post the request to WAF
   def message(object)
-    Puppet.debug("Object.......... #{object}")
     parameters = object.to_hash
-    Puppet.debug("Parameters.......... #{parameters}")
     serverName=@resource[:name]
 
     val = parameters.has_key?(:identifier)
@@ -185,9 +182,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
   end
 
   def postmessage(object)
-    Puppet.debug("Object.......... #{object}")
     parameters = object.to_hash
-    Puppet.debug("Parameters.......... #{parameters}")
     serverName=@resource[:name]
 
     val = parameters.has_key?(:identifier)
@@ -228,16 +223,11 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
     parameters.delete(:loglevel)
     parameters.delete(:service_name)
     parameters=convert_underscores(parameters)
-    Puppet.debug("Parameters.......... second time....................... #{parameters}")
+
     return parameters
   end
 
   def convert_underscores(hash)
-    # Here lies some evil magic.  We want to replace all _'s with -'s in the
-    # key names of the hash we create from the object we've passed into message.
-    #
-    # We do this by passing in an object along with .each, giving us an empty
-    # hash to then build up with the fixed names.
     hash.each_with_object({}) do |(k ,v), obj|
       key = k.to_s.gsub(/_/, '-').to_sym
       obj[key] = v
@@ -251,9 +241,8 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
   # this method does a POST call to create a server in WAF.this method will be called if the ensure is present and exists method return false
   def create
     Puppet.debug("Calling create method of serverprovider:")
-    serviceName=@resource[:service_name]
 
-    device_url = Puppet::Util::NetworkDevice.current.url.to_s
+    device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
     response, status_code, headers = Puppet::Provider::Cudawaf.post(device_url, "Server", @resource[:service_name], postmessage(resource), {})
 
     @property_hash.clear
@@ -264,7 +253,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
   def destroy
     Puppet.debug("Calling serverprovider destroy method: ")
 
-    device_url = Puppet::Util::NetworkDevice.current.url.to_s
+    device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
     response, status_code, headers = Puppet::Provider::Cudawaf.delete(device_url, "Server", @resource[:service_name], @resource[:name], {})
 
     @property_hash.clear

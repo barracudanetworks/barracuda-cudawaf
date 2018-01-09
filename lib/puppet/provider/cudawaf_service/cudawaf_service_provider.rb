@@ -23,8 +23,7 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, :parent =
     Puppet.debug("Calling self.instances method of cudawaf_service_provider: ")
     instances = []
 
-    device_url = Puppet::Util::NetworkDevice.current.url.to_s
-
+    device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
     data, status_code, headers = Puppet::Provider::Cudawaf.get(device_url, "Service", {})
     Puppet.debug("WAF Get all services response: #{data}")
 
@@ -78,7 +77,7 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, :parent =
     Puppet.debug("Calling flush method of cudawaf_service_provider: ")
 
     if @property_hash != {}
-      device_url = Puppet::Util::NetworkDevice.current.url.to_s
+      device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
       response, status_code, headers = Puppet::Provider::Cudawaf.put(device_url, "Service", @resource[:name], message(resource, "PUT"), {})
     end
 
@@ -89,7 +88,7 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, :parent =
   def create
     Puppet.debug("Calling create method of cudawaf_service_provider:")
 
-    device_url = Puppet::Util::NetworkDevice.current.url.to_s
+    device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
     response, status_code, headers = Puppet::Provider::Cudawaf.post(device_url, "Service", message(resource, "POST"), {})
 
     return response, status_code, headers
@@ -99,7 +98,7 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, :parent =
   def destroy
     Puppet.debug("Calling cudawaf_service_provider destroy method: ")
 
-    device_url = Puppet::Util::NetworkDevice.current.url.to_s
+    device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
     response, status_code, headers = Puppet::Provider::Cudawaf.delete(device_url, "Service", @resource[:name], {})
 
     # We clear the hash here to stop flush from triggering.
@@ -127,7 +126,6 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, :parent =
     opts = convert_underscores(opts)
     params = opts
 
-    #Puppet.debug("PARAM....................#{params}")
     return params
   end
 
