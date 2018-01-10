@@ -21,7 +21,7 @@ class barracudawaf::skannan {
           ensure            => present,
           connect_mode      => 'cloud',
           state             => 'not_connected',
-          username          => 'aravindan.acct@selahcloud.in',
-          password          => 'bcc4me123!'
+          username          => 'customer_account@example.com',
+          password          => 'xxxxxxxx'
         }
 }
