@@ -191,7 +191,7 @@ Puppet::Type.type(:cudawaf_certificate).provide(:cudawaf_certificate_provider, :
       response = Puppet::Provider::Cudawaf.client_post url, payload
     end
 
-    Puppet.debug("WAF certificates POST method response:  #{result}") 
+    Puppet.debug("WAF certificates POST method response:  #{response}") 
 
     # Clear the hash here to stop flush from triggering.
     @property_hash.clear
