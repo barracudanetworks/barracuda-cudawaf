@@ -20,7 +20,7 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
 
   def parse_device_facts
     facts = {
-      :firmwareversion => :Cudawaf
+      :productType => :Cudawaf
     }
 
     Puppet.debug("Parsing facts for device - " + @url.host)
@@ -61,11 +61,6 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
       api_fact_name = fact.to_s.gsub(/_/, "-")
       facts[fact] = items[api_fact_name.to_s]
     end
-
-    #
-    #  Map the device name to the node name in device.conf to easily identify this WAF.
-    #
-    facts[:node] = device_url
 
     Puppet.debug("Facts - #{facts}")
     return facts

@@ -17,7 +17,7 @@ require 'uri'
 $mapped_object_types = {
                         "System" => "system", 
                         "Service" => "web_application_name", 
-                        "SecurityPolicy" => "web_firewall_policy_name", 
+                        "SecurityPolicy" => "policy_name", 
                         "Server" => "server_name",
                         "RuleGroup" => "rule_group_name",
                         "RuleGroupServer" => "rg_web_server_name" }
@@ -84,7 +84,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     end
 
     failure?(parsed_response, status_code)
-    return parsed_response, status_code
+    return parsed_response, status_code, headers
   end
 
   #
@@ -110,7 +110,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
       Puppet.debug("Response received from WAF for POST operation:  #{parsed_response}")
 
       failure?(parsed_response, status_code)
-      return parsed_response
+      return parsed_response, status_code, headers
     #else
     #  fail('Invalid JSON detected in API request body.')
     #end
@@ -140,7 +140,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
       Puppet.debug("Response received from WAF for PUT operation:  #{parsed_response}")
 
       failure?(parsed_response, status_code)
-      return parsed_response
+      return parsed_response, status_code, headers
     #else
     #  fail('Invalid JSON detected in API request body.')
     #end
@@ -169,7 +169,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     Puppet.debug("Response received from WAF for DELETE operation:  #{parsed_response}")
 
     failure?(parsed_response, status_code)
-    return parsed_response
+    return parsed_response, status_code, headers
   end
 
   #

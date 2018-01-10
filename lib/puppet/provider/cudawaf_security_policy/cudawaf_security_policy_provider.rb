@@ -61,7 +61,7 @@ Puppet::Type.type(:cudawaf_security_policy).provide(:cudawaf_security_policy_pro
     Puppet.debug("Calling flush method of security_policyprovider: ")
     if @property_hash != {}
       device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
-      response, status_code, headers = Puppet::Provider::Cudawaf.get(device_url, "SecurityPolicy", @resource[:name], message(resource), {})
+      response, status_code, headers = Puppet::Provider::Cudawaf.put(device_url, "SecurityPolicy", @resource[:name], message(resource), {})
     end
     
     return response, status_code, headers
@@ -92,7 +92,7 @@ Puppet::Type.type(:cudawaf_security_policy).provide(:cudawaf_security_policy_pro
     Puppet.debug("Calling create method of security_policyprovider:")
 
     device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
-    response, status_code, headers = Puppet::Provider::Cudawaf.get(device_url, "SecurityPolicy", message(resource), {})
+    response, status_code, headers = Puppet::Provider::Cudawaf.post(device_url, "SecurityPolicy", message(resource), {})
 
     if status_code == 201
        @property_hash.clear
@@ -107,7 +107,7 @@ Puppet::Type.type(:cudawaf_security_policy).provide(:cudawaf_security_policy_pro
     Puppet.debug("Calling securitypolicy_provider destroy method: ")
 
     device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
-    response, status_code, headers = Puppet::Provider::Cudawaf.get(device_url, "SecurityPolicy", @resource[:name], {})
+    response, status_code, headers = Puppet::Provider::Cudawaf.delete(device_url, "SecurityPolicy", @resource[:name], {})
 
     @property_hash.clear
     return response, status_code, headers

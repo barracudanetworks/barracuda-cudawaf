@@ -11,4 +11,9 @@ class barracudawaf::skannan {
 	  address_version   => 'IPv4',
 	  comments          => 'Demo service',
 	}
+
+        cudawaf_security_policy  {  'securitypolicy1':
+          ensure            => present,
+          name              => 'custom',
+        }
 }

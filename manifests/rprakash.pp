@@ -12,15 +12,15 @@ class barracudawaf::rprakash {
 	  comments          => 'Demo service',
 	}
 
-  cudawaf_server  {  'WAFSERVER-2':
-    ensure           => present,
-    name             => 'waftestserver2',
-    identifier       => 'IP Address',
-    address_version  => 'IPv4',
-    status           => 'In Service',
-    ip_address       => '5.5.5.5',
-    service_name     => 'MyService',
-    port             => 80,
-    comments         => 'Creating the server'
-  }
+        cudawaf_server  {  'Real Server':
+          ensure           => present,
+          name             => 'DemoServer',
+          identifier       => 'IP Address',
+          address_version  => 'IPv4',
+          status           => 'In Service',
+          ip_address       => '5.5.5.5',
+          service_name     => 'MyService',
+          port             => 80,
+          comments         => 'Creating the server'
+        }
 }
