@@ -23,36 +23,34 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, :parent =
     Puppet.debug("Calling self.instances method of cudawaf_service_provider: ")
     instances = []
 
-    device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
-    data, status_code, headers = Puppet::Provider::Cudawaf.get(device_url, "Service", {})
+    data, status_code, headers = Puppet::Provider::Cudawaf.get("Service", {})
     Puppet.debug("WAF Get all services response: #{data}")
 
     unless data == '{}'
       if status_code == 200
         response = data
-
         svcobj = response["object"]
         svcData = response["data"]
         
         svcData.each do |key,value|
           val = value
           instances <<  new(
-                             :ensure => :present,
-                             :name => val["name"],
-                             :address_version=>val["address-version"],
-                             :status => val["status"],
-                             :certificate=>val["certificate"],
-                             :comments => val["comments"],
-                             :port => val["port"],
-                             :enable_access_logs =>val["enable-access-logs"],
-                             :session_timeout => val["session-timeout"],
-                             :app_id => val["app-id"],
-                             :group => val ["group"],
-                             :type => val["type"],
-                             :ip_address => val["ip-address"],
-                             :vsite => val["vsite"],
-                             :mask => val["mask"]
-                           ) 
+            :ensure => :present,
+            :name => val["name"],
+            :address_version=>val["address-version"],
+            :status => val["status"],
+            :certificate=>val["certificate"],
+            :comments => val["comments"],
+            :port => val["port"],
+            :enable_access_logs =>val["enable-access-logs"],
+            :session_timeout => val["session-timeout"],
+            :app_id => val["app-id"],
+            :group => val ["group"],
+            :type => val["type"],
+            :ip_address => val["ip-address"],
+            :vsite => val["vsite"],
+            :mask => val["mask"]
+          ) 
         end
       end
     end
@@ -77,8 +75,7 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, :parent =
     Puppet.debug("Calling flush method of cudawaf_service_provider: ")
 
     if @property_hash != {}
-      device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
-      response, status_code, headers = Puppet::Provider::Cudawaf.put(device_url, "Service", @resource[:name], message(resource, "PUT"), {})
+      response, status_code, headers = Puppet::Provider::Cudawaf.put("Service", @resource[:name], message(resource, "PUT"), {})
     end
 
     return response, status_code, headers
@@ -88,8 +85,7 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, :parent =
   def create
     Puppet.debug("Calling create method of cudawaf_service_provider:")
 
-    device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
-    response, status_code, headers = Puppet::Provider::Cudawaf.post(device_url, "Service", message(resource, "POST"), {})
+    response, status_code, headers = Puppet::Provider::Cudawaf.post("Service", message(resource, "POST"), {})
 
     return response, status_code, headers
   end
@@ -98,8 +94,7 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, :parent =
   def destroy
     Puppet.debug("Calling cudawaf_service_provider destroy method: ")
 
-    device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
-    response, status_code, headers = Puppet::Provider::Cudawaf.delete(device_url, "Service", @resource[:name], {})
+    response, status_code, headers = Puppet::Provider::Cudawaf.delete("Service", @resource[:name], {})
 
     # We clear the hash here to stop flush from triggering.
     @property_hash.clear

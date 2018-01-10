@@ -3,6 +3,8 @@ require 'puppet/util/network_device/transport'
 require 'puppet/util/network_device/transport/base'
 require 'puppet_x/swagger_client/configuration'
 
+#Dir[File.dirname(__FILE__) + '../../../../puppet_x/modules/*.rb'].each { |file| require file }
+
 require 'puppet_x/modules/login_info'
 require 'puppet_x/modules/system_api'
 require 'puppet_x/modules/service_api'
@@ -13,6 +15,7 @@ require 'json'
 require 'logger'
 require 'base64'
 require 'uri'
+require 'rest-client'
 
 $mapped_object_types = {
                         "System" => "system", 
@@ -267,20 +270,50 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
   #  Support the major API methods via the Transport layer using the RestClient library here.
   #  Supported methods - GET, POST, PUT and DELETE.
   #
-  def client_get(device, instance, *args)
-    *get_args, last = *args
+  def client_get(device, api_url, *args)
+    @config = SwaggerClient::Configuration.new(device)
+    rest_url = @config.base_url + api_url
+    auth_header = get_auth_header(device)
+
+    response = RestClient.get rest_url, { :Authorization => "#{auth_header}", accept: :json }
+    parsed_response = JSON.parse(response)
+
+    return parsed_response
   end
 
-  def client_put(device, instance, *args)
-    *put_args, last = *args
+  def client_put(device, api_url, *args)
+    @config = SwaggerClient::Configuration.new(device)
+    rest_url = @config.base_url + api_url
+    auth_header = get_auth_header(device)
+    postdata = *args
+
+    response = RestClient.put rest_url, postdata, { :Authorization => "#{auth_header}", accept: :json, content_type: :json }
+    parsed_response = JSON.parse(response)
+
+    return parsed_response
   end
 
-  def client_post(device, instance, *args)
-    *post_args, last = *args
+  def client_post(device, api_url, *args)
+    @config = SwaggerClient::Configuration.new(device)
+    rest_url = @config.base_url + api_url
+    auth_header = get_auth_header(device)
+    postdata = *args
+
+    response = RestClient.post rest_url, postdata, { :Authorization => "#{auth_header}", accept: :json, content_type: :json }
+    parsed_response = JSON.parse(response)
+
+    return parsed_response
   end
 
-  def client_delete(device, instance, *args)
-    *delete_args, last = *args
+  def client_delete(device, api_url, *args)
+    @config = SwaggerClient::Configuration.new(device)
+    rest_url = @config.base_url + api_url
+    auth_header = get_auth_header(device)
+
+    response = RestClient.delete rest_url, { :Authorization => "#{auth_header}", accept: :json }
+    parsed_response = JSON.parse(response)
+
+    return parsed_response
   end
 
 end

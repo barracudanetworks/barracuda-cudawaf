@@ -26,9 +26,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
 
   #this method get all servers from WAF system and builds the instances array
   def self.instances()
-    device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
-    services = getservices(device_url)
-
+    services = getservices()
     Puppet.debug("List of services .................. #{services}")
     instances=[]
 
@@ -36,7 +34,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
       serviceName = service
 
       # get all servers from WAF
-      response, status_code, headers = Puppet::Provider::Cudawaf.get(device_url, "Server", serviceName, {})
+      response, status_code, headers = Puppet::Provider::Cudawaf.get("Server", serviceName, {})
       Puppet.debug("WAF Get all servers response:    #{response}")
   
       svrData =response["data"]
@@ -65,21 +63,20 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
 
 
   #this method get all services from WAF system and builds the instances array
-  def self.getservices(url)
+  def self.getservices
     Puppet.debug("Calling getservices  method of serverprovider: ")
     service_instances = []
 
     # get all services from WAF
-    data, status_code, headers = Puppet::Provider::Cudawaf.get(url, "Service", {})
+    data, status_code, headers = Puppet::Provider::Cudawaf.get("Service", {})
     Puppet.debug("WAF Get all services response:    #{data}")
 
     unless data == '{}'
       if status_code == 200
         response = data
         svcobj = response["object"]
-        Puppet.debug("Object is  #{svcobj}")
         svcData = response["data"]
-        Puppet.debug("Service data - having servers:  #{svcData}")
+
         svcData.each do |key,value|
           service_instances.push(value["name"])
         end
@@ -101,13 +98,11 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
     end
   end # self.prefetch
 
-
   # this method does a put call to waf servers. This will be triggered with ensure is present and exists method return true.
   def flush
     Puppet.debug("Calling  flush method of serverprovider: ")
     if @property_hash != {}
-      device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
-      response, status_code, headers = Puppet::Provider::Cudawaf.put(device_url, "Server", @resource[:service_name], @resource[:name], message(resource), {})
+      response, status_code, headers = Puppet::Provider::Cudawaf.put("Server", @resource[:service_name], @resource[:name], message(resource), {})
 
       if status_code == 200
         return response, status_code, headers
@@ -242,8 +237,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
   def create
     Puppet.debug("Calling create method of serverprovider:")
 
-    device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
-    response, status_code, headers = Puppet::Provider::Cudawaf.post(device_url, "Server", @resource[:service_name], postmessage(resource), {})
+    response, status_code, headers = Puppet::Provider::Cudawaf.post("Server", @resource[:service_name], postmessage(resource), {})
 
     @property_hash.clear
     return response, status_code, headers
@@ -253,10 +247,10 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
   def destroy
     Puppet.debug("Calling serverprovider destroy method: ")
 
-    device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
-    response, status_code, headers = Puppet::Provider::Cudawaf.delete(device_url, "Server", @resource[:service_name], @resource[:name], {})
+    response, status_code, headers = Puppet::Provider::Cudawaf.delete("Server", @resource[:service_name], @resource[:name], {})
 
     @property_hash.clear
+
     return response, status_code, headers
   end
 

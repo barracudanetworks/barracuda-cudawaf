@@ -17,42 +17,53 @@ class Puppet::Provider::Cudawaf < Puppet::Provider
     end
   end
 
+  def self.device_url
+    Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
+  end
+
   #
   #  The API is invoked on the Cudawaf by two major means -
   #    1. Swagger SDK API client is used for 90% of the configuration objects (including services, servers etc).
   #    2. RestClient library is used for the remaining objects (including login, certificates and cloud control).
   #
 
-  def self.get(url, instance, *args)
-    transport.get(url, instance, *args)
+  #
+  #  The following API methods are for accessing the WAF via the Swagger SDK.
+  #
+  def self.get(instance, *args)
+    transport.get(device_url, instance, *args)
   end
 
-  def self.post(url, instance, *args)
-    transport.post(url, instance, *args)
+  def self.post(instance, *args)
+    transport.post(device_url, instance, *args)
   end
 
-  def self.put(url, instance, *args)
-    transport.put(url, instance, *args)
+  def self.put(instance, *args)
+    transport.put(device_url, instance, *args)
   end
 
-  def self.delete(url, instance, *args)
-    transport.delete(url, instance, *args)
+  def self.delete(instance, *args)
+    transport.delete(device_url, instance, *args)
   end
 
-  def self.client_get(url, instance, *args)
-    transport.client_get(url, instance, *args)
+  #
+  #  The following API methods are for accessing the WAF via the RestClient library.
+  #
+  def self.client_get(instance, *args)
+    transport.client_get(device_url, instance, *args)
   end
 
-  def self.client_post(url, instance, *args)
-    transport.client_post(url, instance, *args)
+  def self.client_post(instance, *args)
+    #device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
+    transport.client_post(device_url, instance, *args)
   end
 
-  def self.client_put(url, instance, *args)
-    transport.client_put(url, instance, *args)
+  def self.client_put(instance, *args)
+    transport.client_put(device_url, instance, *args)
   end
 
-  def self.client_delete(url, instance, *args)
-    transport.client_delete(url, instance, *args)
+  def self.client_delete(instance, *args)
+    transport.client_delete(device_url, instance, *args)
   end
 
   #def self.facts
