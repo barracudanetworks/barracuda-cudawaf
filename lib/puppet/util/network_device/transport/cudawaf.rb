@@ -10,6 +10,7 @@ require 'puppet_x/modules/system_api'
 require 'puppet_x/modules/service/service_api'
 require 'puppet_x/modules/server/server_api'
 require 'puppet_x/modules/rule_group/rule_group_api'
+require 'puppet_x/modules/rule_group_server/rule_group_server_api'
 require 'puppet_x/modules/security_policy/security_policy_api'
 
 require 'json'
@@ -24,7 +25,7 @@ $mapped_object_types = {
                         "SecurityPolicy" => "policy_name", 
                         "Server" => "server_name",
                         "ContentRule" => "rule_group_name",
-                        "ContentRuleServer" => "rg_web_server_name" }
+                        "ContentRuleServer" => "web_server_name" }
 
 class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDevice::Transport::Base
   attr_reader :transport, :url
@@ -275,10 +276,8 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     @config = SwaggerClient::Configuration.new(device)
     rest_url = @config.base_url + api_url
     auth_header = get_auth_header(device)
-    Puppet.debug("REST URL - " + rest_url)
 
     response = RestClient.get rest_url, { :Authorization => "#{auth_header}", accept: :json }
-    Puppet.debug("Response - #{response}")
     parsed_response = JSON.parse(response)
 
     if response.code == 200
@@ -294,8 +293,6 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     @config = SwaggerClient::Configuration.new(device)
     rest_url = @config.base_url + api_url
     auth_header = get_auth_header(device)
-    Puppet.debug("REST URL - " + rest_url)
-    Puppet.debug("Post data - " + postdata)
 
     response = RestClient.put rest_url, postdata, { :Authorization => "#{auth_header}", accept: :json, content_type: :json }
     Puppet.debug("Response - #{response}")
