@@ -1,11 +1,9 @@
-##init.pp##
 class barracudawaf {
-wafcloudcontrol{ 'WAFCouldControl-1':
-  ensure => present,
-  connect_mode => 'cloud',
-  state => 'connected',
-  username => 'aravindan.acct@selahcloud.in',
-  password => 'bcc4me123!'
-}
-
+    cudawaf_cloudcontrol { 'WAFCloudControlSettings':
+      ensure         => present,
+      connect_mode   => 'cloud',
+      state          => 'connected',
+      username       => 'customer_account@example.com',
+      password       => 'xxxxxxxx'
+    }
 }
