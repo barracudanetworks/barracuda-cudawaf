@@ -276,7 +276,13 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     auth_header = get_auth_header(device)
 
     response = RestClient.get rest_url, { :Authorization => "#{auth_header}", accept: :json }
-    parsed_response = JSON.parse(response)
+    parsed_response = JSON.parse(response.body)
+
+    if response.code == 200
+      return parsed_response
+    else
+      Puppet.debug("Error in GET operation for " + rest_url) 
+    end
 
     return parsed_response
   end
@@ -288,9 +294,13 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     postdata = *args
 
     response = RestClient.put rest_url, postdata, { :Authorization => "#{auth_header}", accept: :json, content_type: :json }
-    parsed_response = JSON.parse(response)
+    parsed_response = JSON.parse(response.body)
 
-    return parsed_response
+    if response.code == 200 or response.code == 202
+      return parsed_response
+    else
+      Puppet.debug("Error in GET operation for " + rest_url)
+    end
   end
 
   def client_post(device, api_url, *args)
@@ -300,9 +310,13 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     postdata = *args
 
     response = RestClient.post rest_url, postdata, { :Authorization => "#{auth_header}", accept: :json, content_type: :json }
-    parsed_response = JSON.parse(response)
+    parsed_response = JSON.parse(response.body)
 
-    return parsed_response
+    if response.code == 200 or response.code == 201 or response.code == 202
+      return parsed_response
+    else
+      Puppet.debug("Error in GET operation for " + rest_url)
+    end
   end
 
   def client_delete(device, api_url, *args)
@@ -311,9 +325,13 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     auth_header = get_auth_header(device)
 
     response = RestClient.delete rest_url, { :Authorization => "#{auth_header}", accept: :json }
-    parsed_response = JSON.parse(response)
+    parsed_response = JSON.parse(response.body)
 
-    return parsed_response
+    if response.code == 200 or response.code == 202
+      return parsed_response
+    else
+      Puppet.debug("Error in GET operation for " + rest_url)
+    end
   end
 
 end
