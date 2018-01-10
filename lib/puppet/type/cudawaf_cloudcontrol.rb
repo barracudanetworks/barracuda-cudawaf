@@ -4,7 +4,7 @@ Puppet::Type.newtype(:cudawaf_cloudcontrol) do
   apply_to_device
   ensurable
 
-  newparam(:state, :namevar => true) do
+  newparam(:state, namevar: true) do
     desc 'Cloud Control Connection State'
     defaultto 'not_connected'
     newvalues('connected', 'not_connected')
@@ -17,16 +17,15 @@ Puppet::Type.newtype(:cudawaf_cloudcontrol) do
   end
 
   newproperty(:password) do
-   desc 'Password'
+    desc 'Password'
   end
- 
+
   newproperty(:username) do
-   desc 'Username'
+    desc 'Username'
   end
 
   newproperty(:validation_token) do
-   desc 'validation_token'
-   defaultto:'validation_token'
+    desc 'validation_token'
+    defaultto :validation_token
   end
-
 end
