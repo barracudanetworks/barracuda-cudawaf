@@ -239,11 +239,8 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
   #  Given an object name, convert it to the plural version since the SDK is written that way.
   #
   def convert_plural(object_name)
-    pluralized_string = object_name
-    Puppet.debug("Pluralizing object - " + object_name)
-
     object_name = object_name.gsub(/([a-z])([A-Z])/, '\1_\2')
-    Puppet.debug("Pluralized string v1 - " + object_name)
+    pluralized_string = object_name
 
     if object_name =~ /^System$/i
       #  do nothing
