@@ -63,9 +63,4 @@ Puppet::Type.type(:cudawaf_cloudcontrol).provide(:cudawaf_cloudcontrol_provider,
     return response
   end
 
-  # this method does not do anything for cloudcontrol 
-  def destroy
-    Puppet.debug("Calling cudawaf_cloudcontrol_provider destroy method - nothing to do here.")
-  end
-
 end
