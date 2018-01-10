@@ -7,9 +7,10 @@ require 'puppet_x/swagger_client/configuration'
 
 require 'puppet_x/modules/login_info'
 require 'puppet_x/modules/system_api'
-require 'puppet_x/modules/service_api'
-require 'puppet_x/modules/server_api'
-require 'puppet_x/modules/security_policy_api'
+require 'puppet_x/modules/service/service_api'
+require 'puppet_x/modules/server/server_api'
+require 'puppet_x/modules/rule_group/rule_group_api'
+require 'puppet_x/modules/security_policy/security_policy_api'
 
 require 'json'
 require 'logger'
@@ -22,8 +23,8 @@ $mapped_object_types = {
                         "Service" => "web_application_name", 
                         "SecurityPolicy" => "policy_name", 
                         "Server" => "server_name",
-                        "RuleGroup" => "rule_group_name",
-                        "RuleGroupServer" => "rg_web_server_name" }
+                        "ContentRule" => "rule_group_name",
+                        "ContentRuleServer" => "rg_web_server_name" }
 
 class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDevice::Transport::Base
   attr_reader :transport, :url
