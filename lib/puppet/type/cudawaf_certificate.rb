@@ -130,7 +130,7 @@ Puppet::Type.newtype(:cudawaf_certificate) do
 
   newproperty(:upload) do
     desc 'Upload Type'
-    defaultto :signed
+    #defaultto :signed
     newvalues(:signed, :trusted, :trusted_server)
   end
 

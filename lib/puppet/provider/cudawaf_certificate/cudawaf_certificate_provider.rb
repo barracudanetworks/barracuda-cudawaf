@@ -51,6 +51,7 @@ Puppet::Type.type(:cudawaf_certificate).provide(:cudawaf_certificate_provider, :
         :name => certObj['name']
       )
     end
+
     return instances
   end
 
@@ -65,7 +66,12 @@ Puppet::Type.type(:cudawaf_certificate).provide(:cudawaf_certificate_provider, :
   end
 
   def message(object)
-    upload = @resource[:upload].to_s
+    #upload = @resource[:upload].to_s
+
+   unless @resource[:upload].nil? 
+     upload = @resource[:upload].to_s
+   end
+   
     opts = {}
 
     type_resource = @resource.class
@@ -141,7 +147,12 @@ Puppet::Type.type(:cudawaf_certificate).provide(:cudawaf_certificate_provider, :
     Puppet.debug("WAF certificates create method: ")
 
     payload = message(resource)
-    upload = @resource[:upload].to_s
+    upload = ""
+
+    unless @resource[:upload].nil? 
+      upload = @resource[:upload].to_s
+    end
+
     url = "/certificates"
     if upload == "signed" || upload == "trusted" || upload == "trusted_server"
       url = url + "?upload=" + upload
