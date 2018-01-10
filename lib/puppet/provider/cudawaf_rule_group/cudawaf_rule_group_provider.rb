@@ -96,7 +96,7 @@ Puppet::Type.type(:cudawaf_rule_group).provide(:cudawaf_rule_group_provider, :pa
   def flush
     Puppet.debug("Calling  flush method of cudawaf_rule_group_provider: ")
     if @property_hash != {}
-      response, status_code, headers = Puppet::Provider::Cudawaf.put("ContentRule", @resource[:service_name], @resource[:name], message(resource,"flush"), {})
+      response, status_code, headers = Puppet::Provider::Cudawaf.put("ContentRule", @resource[:service_name], @resource[:name], message(resource), {})
 
       if status_code == 200
         return response, status_code, headers
@@ -108,16 +108,15 @@ Puppet::Type.type(:cudawaf_rule_group).provide(:cudawaf_rule_group_provider, :pa
   end
 
   # this is a util method to build the JSON array to post the request to WAF
-  def message(object, method)
+  def message(object)
     parameters = object.to_hash
-    Puppet.debug("Parameters.......... #{parameters}")
-    ruleName = @resource[:name]
 
     parameters.delete(:provider)
     parameters.delete(:ensure)
     parameters.delete(:loglevel)
     parameters.delete(:service_name)
     parameters = convert_underscores(parameters)
+
     return parameters
   end
 
@@ -132,7 +131,7 @@ Puppet::Type.type(:cudawaf_rule_group).provide(:cudawaf_rule_group_provider, :pa
   def create
     Puppet.debug("Calling create method of cudawaf_rule_group_provider:")
 
-    response, status_code, headers = Puppet::Provider::Cudawaf.post("ContentRule", @resource[:service_name], message(resource, "create"), {})
+    response, status_code, headers = Puppet::Provider::Cudawaf.post("ContentRule", @resource[:service_name], message(resource), {})
 
     # We clear the hash here to stop flush from triggering.
     @property_hash.clear

@@ -30,7 +30,7 @@ Puppet::Type.type(:cudawaf_cloudcontrol).provide(:cudawaf_cloudcontrol_provider,
     instances <<  new(
       :ensure => :present,
       :state => cntrlObj['state'],
-      :connect_mode => 'connected',
+      :connect_mode => 'cloud',
       :username => cntrlObj['username'],
       :validation_token => cntrlObj['validation_token']
     )
@@ -40,26 +40,33 @@ Puppet::Type.type(:cudawaf_cloudcontrol).provide(:cudawaf_cloudcontrol_provider,
 
   def self.prefetch(resources)
     Puppet.debug("Calling self.prefetch method of cudawaf_cloudcontrol_provider: ")
+
     cloudobj = instances
     resources.keys.each do |state|
       if provider = cloudobj.find { |cloud| cloud.state == state}
-        resources[state].provider=provider
+        resources[state].provider = provider
       end    
     end
   end
 
   def flush
     Puppet.debug("Calling flush method of cudawaf_cloudcontrol_provider: ")
-    if @property_hash != {}
-      response = Puppet::Provider::Cudawaf.client_put "/control-center", {
-        "connect_mode" => @resource["connect_mode"],
-        "state" => "connected",
-        "username" => @resource["username"],
-        "password" => @resource["password"]
-      }.to_json
 
+    if @property_hash != {}
+      postdata = {
+                   "connect_mode" => @resource["connect_mode"],
+                   "state" => @resource["state"]
+                 }
+
+      if postdata['state'] == "connected"
+        postdata["username"] = @resource["username"]
+        postdata["password"] = @resource["password"]
+      end
+
+      response = Puppet::Provider::Cudawaf.client_put "/control-center", postdata.to_json
       Puppet.debug("Response from PUT cloud-control API:  #{response}")
-    end    
+    end
+
     return response
   end
 

@@ -275,9 +275,11 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     @config = SwaggerClient::Configuration.new(device)
     rest_url = @config.base_url + api_url
     auth_header = get_auth_header(device)
+    Puppet.debug("REST URL - " + rest_url)
 
     response = RestClient.get rest_url, { :Authorization => "#{auth_header}", accept: :json }
-    parsed_response = JSON.parse(response.body)
+    Puppet.debug("Response - #{response}")
+    parsed_response = JSON.parse(response)
 
     if response.code == 200
       return parsed_response
@@ -288,14 +290,16 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     return parsed_response
   end
 
-  def client_put(device, api_url, *args)
+  def client_put(device, api_url, postdata)
     @config = SwaggerClient::Configuration.new(device)
     rest_url = @config.base_url + api_url
     auth_header = get_auth_header(device)
-    postdata = *args
+    Puppet.debug("REST URL - " + rest_url)
+    Puppet.debug("Post data - " + postdata)
 
     response = RestClient.put rest_url, postdata, { :Authorization => "#{auth_header}", accept: :json, content_type: :json }
-    parsed_response = JSON.parse(response.body)
+    Puppet.debug("Response - #{response}")
+    parsed_response = JSON.parse(response)
 
     if response.code == 200 or response.code == 202
       return parsed_response
@@ -304,14 +308,13 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     end
   end
 
-  def client_post(device, api_url, *args)
+  def client_post(device, api_url, postdata)
     @config = SwaggerClient::Configuration.new(device)
     rest_url = @config.base_url + api_url
     auth_header = get_auth_header(device)
-    postdata = *args
 
     response = RestClient.post rest_url, postdata, { :Authorization => "#{auth_header}", accept: :json, content_type: :json }
-    parsed_response = JSON.parse(response.body)
+    parsed_response = JSON.parse(response)
 
     if response.code == 200 or response.code == 201 or response.code == 202
       return parsed_response
@@ -326,7 +329,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     auth_header = get_auth_header(device)
 
     response = RestClient.delete rest_url, { :Authorization => "#{auth_header}", accept: :json }
-    parsed_response = JSON.parse(response.body)
+    parsed_response = JSON.parse(response)
 
     if response.code == 200 or response.code == 202
       return parsed_response

@@ -16,4 +16,12 @@ class barracudawaf::skannan {
           ensure            => present,
           name              => 'custom',
         }
+
+        cudawaf_cloudcontrol  {  'CloudControl':
+          ensure            => present,
+          connect_mode      => 'cloud',
+          state             => 'not_connected',
+          username          => 'aravindan.acct@selahcloud.in',
+          password          => 'bcc4me123!'
+        }
 }

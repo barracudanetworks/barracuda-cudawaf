@@ -6,8 +6,8 @@ Puppet::Type.newtype(:cudawaf_cloudcontrol) do
 
   newparam(:state, :namevar => true) do
     desc 'Cloud Control Connection State'
-    defaultto 'not-connected'
-    newvalues('connected', 'not-connected')
+    defaultto 'not_connected'
+    newvalues('connected', 'not_connected')
   end
 
   newproperty(:connect_mode) do
