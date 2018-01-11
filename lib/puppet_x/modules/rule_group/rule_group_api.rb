@@ -14,7 +14,7 @@ module SwaggerClient
     attr_accessor :api_client
 
     def initialize(url)
-      @api_client = ApiCient.default(url)
+      @api_client = ApiClient.default(url)
     end
 
     # FETCH Information of Rule Group

@@ -58,9 +58,9 @@ Puppet::Type.type(:cudawaf_cloudcontrol).provide(:cudawaf_cloudcontrol_provider,
                    "state" => @resource["state"]
                  }
 
-      if postdata['state'] == "connected"
-        postdata["username"] = @resource["username"]
-        postdata["password"] = @resource["password"]
+      if postdata["state"].to_s == "connected"
+        postdata[:username] = @resource["username"]
+        postdata[:password] = @resource["password"]
       end
 
       response = Puppet::Provider::Cudawaf.client_put "/control-center", postdata.to_json

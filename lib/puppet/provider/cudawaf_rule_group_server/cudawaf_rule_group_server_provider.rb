@@ -29,7 +29,7 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
         response, status_code, headers = Puppet::Provider::Cudawaf.get("ContentRuleServer", service, rule, {})
         Puppet.debug("WAF Get all rule_group_server response:  #{response}")
 
-        svrData =response["data"]
+        svrData = response["data"]
         service_name = response["Service"]
         rule_group_name = response["Rule Group"]
 
@@ -69,7 +69,6 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
      unless data == '{}'
        if status_code == 200
           response = data
-          svcobj = response["object"]
           svcData = response["data"]
 
           svcData.each do |key,value|
@@ -86,13 +85,12 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
      Puppet.debug("Calling getrules method of cudawaf_rule_group_server_provider: ")
      rule_group_instances = []
 
-     data,status_code,headers = Puppet::Provider::Cudawaf.get("Service", service_name, {})
+     data,status_code,headers = Puppet::Provider::Cudawaf.get("ContentRule", service_name, {})
      Puppet.debug("WAF Get all rules response:    #{data}")
 
      unless data == '{}'
        if status_code == 200
           response = data
-          svcobj = response["object"]
           svcData = response["data"]
 
           unless svcData.nil?
