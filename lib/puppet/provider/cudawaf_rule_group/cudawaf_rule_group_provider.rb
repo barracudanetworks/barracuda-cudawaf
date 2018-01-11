@@ -33,12 +33,10 @@ Puppet::Type.type(:cudawaf_rule_group).provide(:cudawaf_rule_group_provider, :pa
       serviceName = response["Service"]
 
       if svrData
-        svrData.each do |key,value|
-          servname = value["name"]
-          val = value
+        svrData.each do |key,val|
           instances <<  new(
             :ensure => :present,
-            :name => servname,
+            :name => val["name"],
             :service_name => response["Service"],
             :app_id => val["app-id"],
             :comments  => val["comments"],
@@ -61,15 +59,12 @@ Puppet::Type.type(:cudawaf_rule_group).provide(:cudawaf_rule_group_provider, :pa
   def self.getservices
     service_instances = []
 
-    data,status_code,headers = Puppet::Provider::Cudawaf.get("Service", {})
-    Puppet.debug("WAF Get all services response:    #{data}")
+    response, status_code, headers = Puppet::Provider::Cudawaf.get("Service", {})
+    Puppet.debug("WAF Get all services response:    #{response}")
 
-    unless data == '{}'
+    unless response == '{}'
       if status_code == 200
-        response = data
-        svcobj = response["object"]
         svcData = response["data"]
-
         svcData.each do |key,value|
           service_instances.push(value["name"])
         end

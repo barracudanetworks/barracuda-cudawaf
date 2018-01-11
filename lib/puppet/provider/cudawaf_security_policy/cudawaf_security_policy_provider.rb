@@ -23,13 +23,11 @@ Puppet::Type.type(:cudawaf_security_policy).provide(:cudawaf_security_policy_pro
     Puppet.debug("Calling self.instances method of cudawaf_security_policy_provider: ")
     instances = []
 
-    data, status_code, headers = Puppet::Provider::Cudawaf.get("SecurityPolicy", {})
-    Puppet.debug("WAF Get all security policies response: #{data}")
+    response, status_code, headers = Puppet::Provider::Cudawaf.get("SecurityPolicy", {})
+    Puppet.debug("WAF Get all security policies response: #{response}")
 
-    unless data == '{}'
+    unless response == '{}'
       if status_code == 200
-        response = data
-        policyobj = response["object"]
         policyData = response["data"]
 
         policyData.each do |key,value|
@@ -73,9 +71,8 @@ Puppet::Type.type(:cudawaf_security_policy).provide(:cudawaf_security_policy_pro
     opts.delete(:ensure)
     opts.delete(:loglevel)
     opts = convert_underscores(opts)
-    params=opts
   
-    return params
+    return opts
   end
 
   def convert_underscores(hash)

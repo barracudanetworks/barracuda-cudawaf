@@ -63,14 +63,12 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
      Puppet.debug("Calling getservices  method of cudawaf_rule_group_server_provider: ")
      service_instances = []
 
-     data,status_code,headers = Puppet::Provider::Cudawaf.get("Service", {})
-     Puppet.debug("WAF Get all services response:    #{data}")
+     response, status_code, headers = Puppet::Provider::Cudawaf.get("Service", {})
+     Puppet.debug("WAF Get all services response:    #{response}")
 
-     unless data == '{}'
+     unless response == '{}'
        if status_code == 200
-          response = data
           svcData = response["data"]
-
           svcData.each do |key,value|
              service_instances.push(value["name"])
           end
@@ -85,12 +83,11 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
      Puppet.debug("Calling getrules method of cudawaf_rule_group_server_provider: ")
      rule_group_instances = []
 
-     data,status_code,headers = Puppet::Provider::Cudawaf.get("ContentRule", service_name, {})
-     Puppet.debug("WAF Get all rules response:    #{data}")
+     response, status_code, headers = Puppet::Provider::Cudawaf.get("ContentRule", service_name, {})
+     Puppet.debug("WAF Get all rules response:    #{response}")
 
-     unless data == '{}'
+     unless response == '{}'
        if status_code == 200
-          response = data
           svcData = response["data"]
 
           unless svcData.nil?
@@ -134,10 +131,7 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
   def message(object,method)
     parameters = object.to_hash
 
-    serverName=@resource[:name]
-
     val = parameters.has_key?(:identifier)
-    val2 = parameters[:identifier]
 
     if parameters.has_key?(:identifier) && parameters[:identifier] == :Hostname
       hostname = nil

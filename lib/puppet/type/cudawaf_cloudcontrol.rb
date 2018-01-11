@@ -26,6 +26,6 @@ Puppet::Type.newtype(:cudawaf_cloudcontrol) do
 
   newproperty(:validation_token) do
     desc 'validation_token'
-    defaultto :validation_token
+    #defaultto :validation_token
   end
 end

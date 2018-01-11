@@ -23,23 +23,20 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, :parent =
     Puppet.debug("Calling self.instances method of cudawaf_service_provider: ")
     instances = []
 
-    data, status_code, headers = Puppet::Provider::Cudawaf.get("Service", {})
-    Puppet.debug("WAF Get all services response: #{data}")
+    response, status_code, headers = Puppet::Provider::Cudawaf.get("Service", {})
+    Puppet.debug("WAF Get all services response: #{response}")
 
-    unless data == '{}'
+    unless response == '{}'
       if status_code == 200
-        response = data
-        svcobj = response["object"]
         svcData = response["data"]
         
-        svcData.each do |key,value|
-          val = value
+        svcData.each do |key,val|
           instances <<  new(
             :ensure => :present,
             :name => val["name"],
-            :address_version=>val["address-version"],
+            :address_version => val["address-version"],
             :status => val["status"],
-            :certificate=>val["certificate"],
+            :certificate => val["certificate"],
             :comments => val["comments"],
             :port => val["port"],
             :enable_access_logs =>val["enable-access-logs"],
@@ -119,9 +116,7 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, :parent =
     #  Munge customer's manifest values into acceptable API format.
     # 
     opts = convert_underscores(opts)
-    params = opts
-
-    return params
+    return opts
   end
 
   #

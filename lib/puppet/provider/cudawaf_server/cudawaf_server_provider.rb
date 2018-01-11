@@ -68,15 +68,12 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
     service_instances = []
 
     # get all services from WAF
-    data, status_code, headers = Puppet::Provider::Cudawaf.get("Service", {})
-    Puppet.debug("WAF Get all services response:    #{data}")
+    response, status_code, headers = Puppet::Provider::Cudawaf.get("Service", {})
+    Puppet.debug("WAF Get all services response:    #{response}")
 
-    unless data == '{}'
+    unless response == '{}'
       if status_code == 200
-        response = data
-        svcobj = response["object"]
         svcData = response["data"]
-
         svcData.each do |key,value|
           service_instances.push(value["name"])
         end
@@ -102,7 +99,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
   def flush
     Puppet.debug("Calling  flush method of serverprovider: ")
     if @property_hash != {}
-      response, status_code, headers = Puppet::Provider::Cudawaf.put("Server", @resource[:service_name], @resource[:name], message(resource), {})
+      response, status_code, headers = Puppet::Provider::Cudawaf.put("Server", @resource[:service_name], @resource[:name], message(resource, "PUT"), {})
 
       if status_code == 200
         return response, status_code, headers
@@ -128,27 +125,26 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
   end
 
   # this is a util method to build the JSON array to post the request to WAF
-  def message(object)
+  def message(object, method)
     parameters = object.to_hash
     serverName=@resource[:name]
 
     val = parameters.has_key?(:identifier)
-    val2 = parameters[:identifier]
 
     if parameters.has_key?(:identifier) && parameters[:identifier] == :Hostname
       hostname = nil
       if parameters.key?:hostname
         hostname = parameters[:hostname]
-       else
+      else
          fail("hostname is required parameter in the manifest if identifier is set to hostname.")
-       end
+      end
 
-       if hostname.nil?
-         fail("hostname is empty. Please add a valid hostname since the identifier is set to hostname.")
-       else
-         parameters[:identifier]="Hostname"
-         parameters[:hostname]=hostname
-       end
+      if hostname.nil?
+        fail("hostname is empty. Please add a valid hostname since the identifier is set to hostname.")
+      else
+        parameters[:identifier] = "Hostname"
+        parameters[:hostname] = hostname
+      end
     else
       ip_address = nil
       if parameters.key?:ip_address
@@ -157,8 +153,8 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
         if ip_address.nil?
           fail("ip_address is empty. Please a valid value for it.")
         else
-           parameters[:identifier]="IP Address"
-           parameters[:ip_address]=ip_address
+          parameters[:identifier] = "IP Address"
+          parameters[:ip_address] = ip_address
         end
       else
         fail("ip_address is required parameter in the manifest.")
@@ -169,55 +165,17 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
     parameters.delete(:ensure)
     parameters.delete(:loglevel)
     parameters.delete(:service_name)
-    parameters.delete(:address_version)
-    parameters.delete(:name)
-    parameters=convert_underscores(parameters)
-    parameters = strip_nil_values(parameters)
-    return parameters
-  end
 
-  def postmessage(object)
-    parameters = object.to_hash
-    serverName=@resource[:name]
-
-    val = parameters.has_key?(:identifier)
-    val2 = parameters[:identifier]
-
-    if parameters.has_key?(:identifier) && parameters[:identifier] == :Hostname
-      hostname = nil
-      if parameters.key?:hostname
-        hostname = parameters[:hostname]
-      else
-        fail("hostname is required parameter in the manifest if identifier is set to hostname.")
-      end
-
-      if hostname.nil?
-        fail("hostname is empty. Please add a valid hostname since the identifier is set to hostname.")
-      else
-        parameters[:identifier]="Hostname"
-        parameters[:hostname]=hostname
-      end
-    else
-      ip_address = nil
-      if parameters.key?:ip_address
-        ip_address = parameters[:ip_address]
-
-        if ip_address.nil?
-          fail("ip_address is empty. Please a valid value for it.")
-        else
-          parameters[:identifier]="IP Address"
-          parameters[:ip_address]=ip_address
-        end
-      else
-         fail("ip_address is required parameter in the manifest.")
-      end
+    if method == "PUT"
+      parameters.delete(:address_version)
+      parameters.delete(:name)
     end
 
-    parameters.delete(:provider)
-    parameters.delete(:ensure)
-    parameters.delete(:loglevel)
-    parameters.delete(:service_name)
     parameters=convert_underscores(parameters)
+
+    if method == "PUT"
+      parameters = strip_nil_values(parameters)
+    end
 
     return parameters
   end
@@ -237,7 +195,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
   def create
     Puppet.debug("Calling create method of serverprovider:")
 
-    response, status_code, headers = Puppet::Provider::Cudawaf.post("Server", @resource[:service_name], postmessage(resource), {})
+    response, status_code, headers = Puppet::Provider::Cudawaf.post("Server", @resource[:service_name], message(resource, "POST"), {})
 
     @property_hash.clear
     return response, status_code, headers

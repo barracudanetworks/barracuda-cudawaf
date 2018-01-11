@@ -66,11 +66,9 @@ Puppet::Type.type(:cudawaf_certificate).provide(:cudawaf_certificate_provider, :
   end
 
   def message(object)
-    #upload = @resource[:upload].to_s
-
-   unless @resource[:upload].nil? 
-     upload = @resource[:upload].to_s
-   end
+    unless @resource[:upload].nil? 
+      upload = @resource[:upload].to_s
+    end
    
     opts = {}
 
@@ -169,7 +167,8 @@ Puppet::Type.type(:cudawaf_certificate).provide(:cudawaf_certificate_provider, :
         :password => payload["password"],
         :key_type => payload["key_type"],
         :multipart => true
-      } 
+      }
+ 
       unless payload["intermediary_certificate"].nil?
         signed_payload[:intermediary_certificate] = File.new(payload["intermediary_certificate"], 'rb')
       end

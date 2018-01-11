@@ -26,13 +26,14 @@ Puppet::Type.type(:cudawaf_cloudcontrol).provide(:cudawaf_cloudcontrol_provider,
     Puppet.debug("Response for GET cloud-control API:  #{response}")
 
     cntrlObj = response["data"]
-    state = cntrlObj['state']
+    Puppet.debug("Response for GET cloud-control API:  #{cntrlObj}")
+
     instances <<  new(
       :ensure => :present,
       :state => cntrlObj['state'],
-      :connect_mode => 'cloud',
+      :connect_mode => "cloud",
       :username => cntrlObj['username'],
-      :validation_token => cntrlObj['validation_token']
+      #:validation_token => cntrlObj['validation_token']
     )
 
     return instances
