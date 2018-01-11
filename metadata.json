@@ -1,10 +1,15 @@
 {
-  "name": "cuda-barracudawaf",
-  "version": "0.1.0",
-  "author": "cuda",
-  "summary": "This module can be used to configure the Barracuda WAF",
-  "license": "Apache-2.0",
+  "name": "puppetlabs-cudawaf",
+  "version": "1.0.0",
+  "author": "Barracuda Networks",
+  "puppetversion": "2017.1.1",
+  "source": "https://github.com/barracudanetworks/puppetlabs-cudawaf",
+  "summary": "This module can be used to configure the Barracuda Web Application Firewall.",
+  "license": "GPL3",
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+    {"name":"puppetlabs-stdlib","version_requirement":">= 4.10.0"},
+    {"name":"rest-client","version_requirement":">= 1.8.0"},
+    {"name":"typhoeus","version_requirement":">= 1.1.0"}
   ],
+  "project_page": "https://github.com/barracudanetworks/"
 }
