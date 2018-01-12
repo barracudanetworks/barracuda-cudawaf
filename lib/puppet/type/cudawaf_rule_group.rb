@@ -76,6 +76,9 @@ Puppet::Type.newtype(:cudawaf_rule_group) do
 
   newproperty(:web_firewall_policy) do
     desc 'Web Firewall Policy'
+    validate do |value|
+      raise("Invalid web_firewall_policy #{value}, Illegal characters present") unless value=~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/
+    end
   end
 
   def self.title_patterns
