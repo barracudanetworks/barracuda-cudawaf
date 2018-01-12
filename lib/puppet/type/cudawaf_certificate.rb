@@ -109,6 +109,9 @@ Puppet::Type.newtype(:cudawaf_certificate) do
 
   newproperty(:password) do
     desc 'Certificate Password'
+    validate do |value|
+      raise("Invalid password #{value}, must be between 8 and 20 characters") unless value =~ /^.{8,20}$/i
+    end
   end
 
   newproperty(:upload) do

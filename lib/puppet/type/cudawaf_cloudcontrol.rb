@@ -6,8 +6,8 @@ Puppet::Type.newtype(:cudawaf_cloudcontrol) do
 
   newparam(:state, namevar: true) do
     desc 'Cloud Control Connection State'
-    defaultto 'not_connected'
-    newvalues('connected', 'not_connected')
+    defaultto :not_connected
+    newvalues(:connected, :not_connected)
   end
 
   newproperty(:connect_mode) do
@@ -18,14 +18,19 @@ Puppet::Type.newtype(:cudawaf_cloudcontrol) do
 
   newproperty(:password) do
     desc 'Password'
+    validate do |value|
+      raise("Invalid password #{value}, must be between 8 and 20 characters") unless value =~ /^.{8,20}$/i
+    end
   end
 
   newproperty(:username) do
     desc 'Username'
+    validate do |value|
+      raise("Invalid username #{value}, Illegal characters present") unless value =~ /^\A([\w+\-_].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z$/i
+    end
   end
 
   newproperty(:validation_token) do
     desc 'validation_token'
-    #defaultto :validation_token
   end
 end
