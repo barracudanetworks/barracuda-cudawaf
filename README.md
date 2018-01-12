@@ -62,12 +62,10 @@ puppet module install puppetlabs-cudawaf --environment=<env-name>
 
 ```
 ### Puppet Device
+To use the module, first configure a Puppet agent that is able to run `puppet device`.
+This agent will be used to act as a "proxy system" for the `puppet device` subcommand.
 
-``` bash
-puppet device -v --user=root
-```
-
-### Create a device.conf file on the Puppet Agent node:
+## Create a device.conf file on the Puppet Agent node:
 
 Path ```/etc/puppetlabs/puppet/device.conf```
 
@@ -79,6 +77,13 @@ Example "device.conf"
    url http://admin:<password>@<ip_address>:8000/
 
 ```
+
+## Command to run puppet device:
+
+``` bash
+puppet device -v --user=root
+```
+
 
 ## Usage Examples
 
