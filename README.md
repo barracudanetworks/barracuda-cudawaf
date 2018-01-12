@@ -41,7 +41,7 @@ The detailed documentation on each of these REST API end points can be found her
 The following components are necessary to use this module:
 
   * A server running as a Puppet master.
-  * A Puppet agent running as a controller to the Barracuda WAF.
+  * A Puppet agent running as a Puppet Device proxy to the Barracuda WAF.
   * A Barracuda Web Application Firewall running the firmware version v9.1 or above
 
 
@@ -57,11 +57,16 @@ puppet module install puppetlabs-cudawaf --environment=<env-name>
 
 ### Installing the gem files on the Puppet Master:
 ``` bash
-/opt/puppetlabs/bin/puppetserver gem install mime-types -v 2.6.2
 /opt/puppetlabs/bin/puppetserver gem install rest-client -v 1.8.0
 /opt/puppetlabs/bin/puppetserver gem install typhoeus
 
 ```
+### Puppet Device
+
+``` bash
+puppet device -v --user=root
+```
+
 ### Create a device.conf file on the Puppet Agent node:
 
 Path ```/etc/puppetlabs/puppet/device.conf```
