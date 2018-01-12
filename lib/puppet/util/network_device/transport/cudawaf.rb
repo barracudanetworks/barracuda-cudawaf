@@ -4,6 +4,8 @@ require 'puppet/util/network_device/transport/base'
 require 'puppet_x/swagger_client/configuration'
 
 require 'puppet_x/modules/login_info'
+require 'puppet_x/modules/utils'
+
 require 'puppet_x/modules/system_api'
 require 'puppet_x/modules/service/service_api'
 require 'puppet_x/modules/server/server_api'
@@ -203,29 +205,6 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
       return true
     rescue
       return false
-  end
-
-  #
-  # Util function to build the JSON array to post the request to WAF.
-  #
-  def message(object)
-    opts=object.to_hash
-    opts.delete(:provider)
-    opts.delete(:ensure)
-    opts.delete(:loglevel)  
-    opts = convert_underscores(opts)
-
-    return opts
-  end
-
-  #
-  #  Puppet doesn't accept hyphenated strings for parameters, so we need to convert them to underscores.
-  #
-  def convert_underscores(hash)
-    hash.each_with_object({}) do |(k ,v), obj|
-      key = k.to_s.gsub(/_/, '-').to_sym
-      obj[key] = v
-    end
   end
 
   #

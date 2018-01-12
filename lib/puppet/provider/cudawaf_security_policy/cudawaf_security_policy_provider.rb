@@ -83,7 +83,7 @@ Puppet::Type.type(:cudawaf_security_policy).provide(:cudawaf_security_policy_pro
   def destroy
     Puppet.debug(self.class.to_s.split('::').last + ': Calling destroy method : ')
 
-    response, status_code, headers = Puppet::Provider::Cudawaf.delete(device_url, 'SecurityPolicy', @resource[:name], {})
+    response, status_code, headers = Puppet::Provider::Cudawaf.delete('SecurityPolicy', @resource[:name], {})
     @property_hash.clear
     [response, status_code, headers]
   end

@@ -54,7 +54,6 @@ class Puppet::Provider::Cudawaf < Puppet::Provider
   end
 
   def self.client_post(instance, *args)
-    # device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
     transport.client_post(device_url, instance, *args)
   end
 
