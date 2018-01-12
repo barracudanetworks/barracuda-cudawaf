@@ -34,6 +34,12 @@ Generated certificates can be self-signed or signed by a trusted third-party CA.
 
 The detailed documentation on each of these REST API end points can be found here : [Barracuda Web Application REST API v3](https://campus.barracuda.com/product/webapplicationfirewall/api)
 
+5. `Rule Group Server` - A rule group server object can be used to configure the networking information of the back-end server to be hosted on the Barracuda Web Application Firewall. Multiple real servers can be added and configured to load balance the incoming traffic for a rule group. The resource type for this feature is “cudawaf_rule_group_server”.
+
+6. `Rule Group` - Rules are used to configure content-aware switching over incoming web traffic. Rules help analyze an HTTP request headers to make load balancing and caching policy decisions. The resource type for this feature is “cudawaf_rule_group”.
+
+7. `Security Policy` - A Security Policy determines what action to take when one or more of the rules match the request. All security policies are global and can be shared among multiple Services configured on the Barracuda Web Application Firewall. The resource type for this feature is “cudawaf_security_policy".
+
 ## Setup
 
 ### Pre-Requisites
