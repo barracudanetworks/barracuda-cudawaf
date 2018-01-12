@@ -55,7 +55,7 @@ puppet module install puppetlabs-cudawaf
 puppet module install puppetlabs-cudawaf --environment=<env-name>
 ```
 
-### Installing the gem files on the Puppet Master:
+### Installing the gem files on the Puppet Agent:
 ``` bash
 /opt/puppetlabs/bin/puppetserver gem install rest-client -v 1.8.0
 /opt/puppetlabs/bin/puppetserver gem install typhoeus
@@ -65,7 +65,7 @@ puppet module install puppetlabs-cudawaf --environment=<env-name>
 To use the module, first configure a Puppet agent that is able to run `puppet device`.
 This agent will be used to act as a "proxy system" for the `puppet device` subcommand.
 
-## Create a device.conf file on the Puppet Agent node:
+### Create a device.conf file on the Puppet Agent node:
 
 Path ```/etc/puppetlabs/puppet/device.conf```
 
@@ -78,16 +78,64 @@ Example "device.conf"
 
 ```
 
-## Command to run puppet device:
+### Command to run puppet device:
 
 ``` bash
 puppet device -v --user=root
 ```
 
-
 ## Usage Examples
 
-### Creating Resources
+### Create a HTTP service with a Rule Group and Rule group Server, and connect the WAF to the Barracuda Cloud Control
+
+```
+
+	cudawaf_service  { 'DemoService2':
+	  ensure       	    => present,
+	  name              => 'MyService2',
+	  type              => 'HTTP',
+	  ip_address        => '10.11.2.2',
+	  port              => 8000,
+	  group             => 'default',
+	  vsite             => 'default',
+	  status            => 'On',
+	  address_version   => 'IPv4',
+	  comments          => 'Demo service',
+	}
+
+        cudawaf_security_policy  {  'securitypolicy1':
+          ensure            => present,
+          name              => 'custom',
+        }
+
+        cudawaf_cloudcontrol  {  'CloudControl':
+          ensure            => present,
+          state             => 'not_connected',
+          connect_mode      => 'cloud',
+          username          => 'user@domain.com',
+          password          => 'password'
+        }
+
+        cudawaf_rule_group {  'RuleGroup-1':
+          ensure            => present,
+          name              => 'ContentRule1',
+          service_name      => 'MyService2',
+          url_match         => '/testing.html',
+          host_match        => 'www.example.com'
+        }
+
+        cudawaf_rule_group_server  { 'RuleGroupServer-1':
+          ensure        => absent,
+          name          => 'rgServer1',
+          service_name  => 'MyService2',
+          rule_group_name => 'ContentRule1',
+          identifier    => 'Hostname',
+          hostname      => 'barracuda.com'
+        }
+
+```
+
+### Creating Resources (Additional examples)
 The following example manifests can be used to create resources on the Barracuda Web Application Firewall:
 
 ### To create a HTTP Service:
