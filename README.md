@@ -22,28 +22,27 @@ This module enables management of the Barracuda Web Application Firewall using P
 The following features can be configured using this module:
 
 ### Service
-	A Virtual Service is a combination of a Virtual IP (VIP) address and a TCP port, which listens and directs the traffic to the 		intended Service. The resource type for this feature is "cudawaf_service".
+A Virtual Service is a combination of a Virtual IP (VIP) address and a TCP port, which listens and directs the traffic to the 		intended Service. The resource type for this feature is "cudawaf_service".
 
 
 ### Server 
-	A server object can be used to configure the networking information of the back-end server to be hosted on the Barracuda Web 		Application Firewall. Multiple real servers can be added and configured to load balance the incoming traffic for a Service. The 	resource type for this feature is "cudawaf_server".
+A server object can be used to configure the networking information of the back-end server to be hosted on the Barracuda Web 		Application Firewall. Multiple real servers can be added and configured to load balance the incoming traffic for a Service. The 	resource type for this feature is "cudawaf_server".
 
 ### Certificates
-	A signed certificate is a digital identity document that enables both server and client to authenticate each other.  Certificates 	  are used with HTTPS protocol to encrypt secure information transmitted over the internet.  A certificate can be generated or 		procured from a third party Certificate Authority (CA). The resource type for this feature is "cudawaf_certificate".
-
-	Generated certificates can be self-signed or signed by a trusted third-party CA. A certificate contains information such as user 	name, expiration date, a unique serial number assigned to the certificate by a trusted CA, the public key, and the name of the CA 	 that issued the certificate.
+A signed certificate is a digital identity document that enables both server and client to authenticate each other.  Certificates 	  are used with HTTPS protocol to encrypt secure information transmitted over the internet.  A certificate can be generated or 		procured from a third party Certificate Authority (CA). The resource type for this feature is "cudawaf_certificate".
+Generated certificates can be self-signed or signed by a trusted third-party CA. A certificate contains information such as user 	name, expiration date, a unique serial number assigned to the certificate by a trusted CA, the public key, and the name of the CA 	 that issued the certificate.
 
 ### Cloud-control
-	A comprehensive cloud-based service that enables administrators to monitor and configure multiple Barracuda Networks products from 	   a single console. The resource type for this feature is "cudawaf_cloudcontrol".
+A comprehensive cloud-based service that enables administrators to monitor and configure multiple Barracuda Networks products from 	   a single console. The resource type for this feature is "cudawaf_cloudcontrol".
 
 ### Rule Group Server 
-	A rule group server object can be used to configure the networking information of the back-end server to be hosted on the 		Barracuda Web Application Firewall. Multiple real servers can be added and configured to load balance the incoming traffic for a 	 rule group. The resource type for this feature is “cudawaf_rule_group_server”.
+A rule group server object can be used to configure the networking information of the back-end server to be hosted on the 		Barracuda Web Application Firewall. Multiple real servers can be added and configured to load balance the incoming traffic for a 	 rule group. The resource type for this feature is “cudawaf_rule_group_server”.
 
 ### Rule Group
-	Rules are used to configure content-aware switching over incoming web traffic. Rules help analyze an HTTP request headers to make 	  load balancing and caching policy decisions. The resource type for this feature is “cudawaf_rule_group”.
+Rules are used to configure content-aware switching over incoming web traffic. Rules help analyze an HTTP request headers to make 	  load balancing and caching policy decisions. The resource type for this feature is “cudawaf_rule_group”.
 
 ### Security Policy
-	A Security Policy determines what action to take when one or more of the rules match the request. All security policies are global 	   and can be shared among multiple Services configured on the Barracuda Web Application Firewall. The resource type for this feature 	      is “cudawaf_security_policy".
+A Security Policy determines what action to take when one or more of the rules match the request. All security policies are global 	   and can be shared among multiple Services configured on the Barracuda Web Application Firewall. The resource type for this feature 	      is “cudawaf_security_policy".
 
 The detailed documentation on each of these REST API end points can be found here : [Barracuda Web Application REST API v3](https://campus.barracuda.com/product/webapplicationfirewall/api)
 
