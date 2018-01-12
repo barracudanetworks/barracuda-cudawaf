@@ -67,11 +67,16 @@ This agent will be used to act as a "proxy system" for the `puppet device` subco
 
 ### Create a device.conf file on the Puppet Agent node:
 
-Path ```/etc/puppetlabs/puppet/device.conf```
+Path and file name:
+
+```bash
+/etc/puppetlabs/puppet/device.conf
+
+```
 
 Example "device.conf"
 
-```
+``` puppet
 [waf-1]
    type cudawaf
    url http://admin:<password>@<ip_address>:8000/
@@ -80,7 +85,7 @@ Example "device.conf"
 
 ### Command to run puppet device:
 
-``` bash
+``` puppet
 puppet device -v --user=root
 ```
 
@@ -88,7 +93,7 @@ puppet device -v --user=root
 
 ### Create a HTTP service with a Rule Group and Rule group Server, and connect the WAF to the Barracuda Cloud Control
 
-```
+``` puppet
 
 	cudawaf_service  { 'DemoService2':
 	  ensure       	    => present,
