@@ -2,14 +2,14 @@
 ### Table of Contents
 
 1. [Description](#description)
-2. [Types](#resource-types)
+2. [Types](#about the resource-types)
 2. [Setup - The basics of getting started with cudawaf](#setup)
 3. [Usage - Configuration options and additional functionality](#usage-examples)
 4. [Reference - An under-the-hood peek at what the module is doing and how](reference---an-under-the-hood-peek-at-what-the-module-is-doing-and-how)
-  * [Service](#service)
-  * [Server](#server)
-  * [Certificates](#certificates)
-  * [Cloud Control](#cloud-control)
+  * [Service](#cudawaf_service)
+  * [Server](#cudawaf_server)
+  * [Certificates](#cudawaf_certificates)
+  * [Cloud Control](#cudawaf_cloudcontrol)
 
 
 ## Description
@@ -74,7 +74,7 @@ Path and file name:
 
 ```
 
-Example "device.conf"
+Example "device.conf" file
 
 ``` puppet
 [waf-1]
