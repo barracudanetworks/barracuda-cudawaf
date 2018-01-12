@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ## Supported Release 1.0.0
 ### Summary
 Initial release of the module that supports configuration of Barracuda Web Application Firewalls.
+Supports configuration of the following objects on the WAF
+    - Virtual service(s)
+    - Real server(s)
+    - Security policies
+    - Content rules and Content rule servers
+    - Certificates
+    - Cloud Control settings
 
 ### Changed
-- N/A
+- This is the first release of the module.
 

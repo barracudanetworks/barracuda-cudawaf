@@ -59,12 +59,12 @@ The following components are necessary to use this module:
 
 ### To install the module
 ``` bash
-puppet module install puppetlabs-cudawaf
+puppet module install barracuda-cudawaf
 ```
 
 ### To install in a specific environment
 ``` bash
-puppet module install puppetlabs-cudawaf --environment=<env-name>
+puppet module install barracuda-cudawaf --environment=<env-name>
 ```
 
 ### Installing the gem files on the Puppet Agent:

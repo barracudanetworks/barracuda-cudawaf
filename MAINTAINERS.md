@@ -1,6 +1,6 @@
 ## Maintenance
 
 Maintainers:
-  - Puppet Forge Modules Team `forge-modules |at| puppet |dot| com`
+  - Barracuda Networks Puppet Team `puppet_support |at| barracuda |dot| com`
 
-Tickets: https://tickets.puppet.com/browse/MODULES. Make sure to set component to `cudawaf`.
+Tickets: https://github.com/barracudanetworks/barracuda-cudawaf/issues. Make sure to set component to `cudawaf`.
