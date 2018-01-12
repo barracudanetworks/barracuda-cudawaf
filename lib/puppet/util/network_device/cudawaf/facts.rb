@@ -7,13 +7,13 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
   attr_reader :transport, :url
 
   def initialize(transport, url)
-    Puppet.debug(self.class.to_s.split("::").first + ": Inside Initialize of Facts!")
+    Puppet.debug(self.class.to_s.split("::").last + ": Inside Initialize of Facts!")
     @transport = transport
     @url = url
   end
 
   def retrieve(url)
-    Puppet.debug(self.class.to_s.split("::").first + ": Retrieving Facts from facts.rb!")
+    Puppet.debug(self.class.to_s.split("::").last + ": Retrieving Facts from facts.rb!")
 
     facts = parse_device_facts()
   end
@@ -23,7 +23,7 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
       :productType => :Cudawaf
     }
 
-    Puppet.debug(self.class.to_s.split("::").first + ": Parsing facts for device - " + @url.host)
+    Puppet.debug(self.class.to_s.split("::").last + ": Parsing facts for device - " + @url.host)
     device_url = @url.scheme + "://" + @url.user + ":" + @url.password + "@" + @url.host + ":" + @url.port.to_s + "/"
 
     #
@@ -31,7 +31,7 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
     #
     response, status_code = @transport.get(device_url, "System", {})
     if status_code == 200 and items = response['data']['System']
-      Puppet.debug(self.class.to_s.split("::").first + ": Response for System API - #{items}")
+      Puppet.debug(self.class.to_s.split("::").last + ": Response for System API - #{items}")
     else
       Puppet.warning("WARNING: Could not receive device details.")
       return facts
@@ -60,7 +60,7 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
       facts[fact] = items[api_fact_name.to_s]
     end
 
-    Puppet.debug(self.class.to_s.split("::").first + ": Facts - #{facts}")
+    Puppet.debug(self.class.to_s.split("::").last + ": Facts - #{facts}")
     return facts
   end
 

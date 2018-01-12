@@ -130,7 +130,7 @@ module SwaggerClient
     def initialize(device_url)
       @url = URI.parse(device_url)
 
-      Puppet.debug(self.class.to_s.split('::').first + ': Initializing Swagger SDK client for device - ' + @url.host)
+      Puppet.debug(self.class.to_s + ': Initializing Swagger SDK client for device - ' + @url.host)
 
       ip = @url.host
       port = @url.port

@@ -1,4 +1,5 @@
 require 'puppet_x/modules/login_info'
+require 'puppet_x/modules/utils'
 require 'puppet/provider/cudawaf'
 require 'puppet/util/network_device'
 
@@ -8,79 +9,77 @@ require 'uri'
 require 'logger'
 require 'rest-client'
 
-Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => Puppet::Provider::Cudawaf) do
+Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, parent: Puppet::Provider::Cudawaf) do
   attr_accessor :transport
 
   mk_resource_methods
 
-  def initialize(value={})
+  def initialize(value = {})
     super(value)
     @property_flush = {}
   end
- 
+
   # this method will get server/servername and return true or false
   def exists?
-    Puppet.debug("Calling exists method of serverprovider: #{@resource[:name]}")
+    Puppet.debug(self.class.to_s.split('::').last + ": Calling exists method for : #{@resource[:name]}")
     @property_hash[:ensure] == :present
   end
 
-  #this method get all servers from WAF system and builds the instances array
-  def self.instances()
-    services = getservices()
-    Puppet.debug("List of services .................. #{services}")
-    instances=[]
+  # this method get all servers from WAF system and builds the instances array
+  def self.instances
+    services = getservices
+    Puppet.debug(self.class.to_s.split('::').last + ": List of services .................. #{services}")
+    instances = []
 
     services.each do |service|
       serviceName = service
 
       # get all servers from WAF
-      response, status_code, headers = Puppet::Provider::Cudawaf.get("Server", serviceName, {})
-      Puppet.debug("WAF Get all servers response:    #{response}")
-  
-      svrData =response["data"]
-      serviceName = response["Service"]
-      if svrData
-        svrData.each do |key,val|
-          servname = val["name"]
-          instances <<  new(
-            :ensure => :present,
-            :name => val["name"],
-            :service_name => response["Service"],
-            :address_version => val["address-version"],
-            :status => val["status"],
-            :hostname => val["hostname"],
-            :comments => val["comments"],
-            :port => val["port"],
-            :identifier => val["identifier"],
-            :ip_address => val["ip-address"]
-          )
-        end
+      response, status_code, headers = Puppet::Provider::Cudawaf.get('Server', serviceName, {})
+      Puppet.debug(self.class.to_s.split('::').last + ": WAF Get all servers response:    #{response}")
+
+      svrData = response['data']
+      serviceName = response['Service']
+      next unless svrData
+      svrData.each do |_key, val|
+        servname = val['name']
+        instances << new(
+          ensure: :present,
+          name: val['name'],
+          service_name: response['Service'],
+          address_version: val['address-version'],
+          status: val['status'],
+          hostname: val['hostname'],
+          comments: val['comments'],
+          port: val['port'],
+          identifier: val['identifier'],
+          ip_address: val['ip-address']
+        )
       end
     end # do end services
 
-    return instances
+    instances
   end
 
-
-  #this method get all services from WAF system and builds the instances array
+  # this method get all services from WAF system and builds the instances array
   def self.getservices
-    Puppet.debug("Calling getservices  method of serverprovider: ")
+    Puppet.debug(self.class.to_s.split('::').last + ': Calling getservices method : ')
     service_instances = []
 
     # get all services from WAF
-    response, status_code, headers = Puppet::Provider::Cudawaf.get("Service", {})
-    Puppet.debug("WAF Get all services response:    #{response}")
+    response, status_code, headers = Puppet::Provider::Cudawaf.get('Service', {})
+    Puppet.debug(self.class.to_s.split('::').last + ": WAF Get all services response:    #{response}")
 
     unless response == '{}'
       if status_code == 200
-        svcData = response["data"]
-        svcData.each do |key,value|
-          service_instances.push(value["name"])
+        svcData = response['data']
+        svcData.each do |_key, value|
+          service_instances.push(value['name'])
         end
       end # if end
-    end  # unless end
- 
-    return service_instances
+    end # unless end
+
+    service_instances
   end
 
   def self.prefetch(resources)
@@ -88,7 +87,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
     resources.keys.each do |name|
       provider = servers.find do |server|
         resources[name][:name].to_s == server.name.to_s &&
-        resources[name][:service_name].to_s == server.service_name.to_s
+          resources[name][:service_name].to_s == server.service_name.to_s
       end
 
       resources[name].provider = provider unless provider.nil?
@@ -97,14 +96,14 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
 
   # this method does a put call to waf servers. This will be triggered with ensure is present and exists method return true.
   def flush
-    Puppet.debug("Calling  flush method of serverprovider: ")
+    Puppet.debug(self.class.to_s.split('::').last + ': Calling flush method : ')
     if @property_hash != {}
-      response, status_code, headers = Puppet::Provider::Cudawaf.put("Server", @resource[:service_name], @resource[:name], message(resource, "PUT"), {})
+      response, status_code, headers = Puppet::Provider::Cudawaf.put('Server', @resource[:service_name], @resource[:name], message(resource, 'PUT'), {})
 
       if status_code == 200
         return response, status_code, headers
       else
-        Puppet.debug("There is some problem to process the request. status_code is #{status_code}")
+        Puppet.debug(self.class.to_s.split('::').last + ": There is some problem to process the request. status_code is #{status_code}")
         return
       end
     end
@@ -127,37 +126,37 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
   # this is a util method to build the JSON array to post the request to WAF
   def message(object, method)
     parameters = object.to_hash
-    serverName=@resource[:name]
+    serverName = @resource[:name]
 
-    val = parameters.has_key?(:identifier)
+    val = parameters.key?(:identifier)
 
-    if parameters.has_key?(:identifier) && parameters[:identifier] == :Hostname
+    if parameters.key?(:identifier) && parameters[:identifier] == :Hostname
       hostname = nil
-      if parameters.key?:hostname
+      if parameters.key? :hostname
         hostname = parameters[:hostname]
       else
-         fail("hostname is required parameter in the manifest if identifier is set to hostname.")
+        raise(self.class.to_s.split('::').last + ': hostname is required parameter in the manifest if identifier is set to hostname.')
       end
 
       if hostname.nil?
-        fail("hostname is empty. Please add a valid hostname since the identifier is set to hostname.")
+        raise(self.class.to_s.split('::').last + ': hostname is empty. Please add a valid hostname since the identifier is set to hostname.')
       else
-        parameters[:identifier] = "Hostname"
+        parameters[:identifier] = 'Hostname'
         parameters[:hostname] = hostname
       end
     else
       ip_address = nil
-      if parameters.key?:ip_address
+      if parameters.key? :ip_address
         ip_address = parameters[:ip_address]
 
         if ip_address.nil?
-          fail("ip_address is empty. Please a valid value for it.")
+          raise(self.class.to_s.split('::').last + ': ip_address is empty. Please a valid value for it.')
         else
-          parameters[:identifier] = "IP Address"
+          parameters[:identifier] = 'IP Address'
           parameters[:ip_address] = ip_address
         end
       else
-        fail("ip_address is required parameter in the manifest.")
+        raise(self.class.to_s.split('::').last + ': ip_address is required parameter in the manifest.')
       end
     end
 
@@ -166,50 +165,33 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, :parent => 
     parameters.delete(:loglevel)
     parameters.delete(:service_name)
 
-    if method == "PUT"
+    if method == 'PUT'
       parameters.delete(:address_version)
       parameters.delete(:name)
     end
 
-    parameters=convert_underscores(parameters)
+    parameters = convert_underscores(parameters)
 
-    if method == "PUT"
-      parameters = strip_nil_values(parameters)
-    end
+    parameters = strip_nil_values(parameters) if method == 'PUT'
 
-    return parameters
-  end
-
-  def convert_underscores(hash)
-    hash.each_with_object({}) do |(k ,v), obj|
-      key = k.to_s.gsub(/_/, '-').to_sym
-      obj[key] = v
-    end
-  end
-
-  def strip_nil_values(hash)
-    hash.reject { |k, v| v.nil? }
+    parameters
   end
 
   # this method does a POST call to create a server in WAF.this method will be called if the ensure is present and exists method return false
   def create
-    Puppet.debug("Calling create method of serverprovider:")
+    Puppet.debug(self.class.to_s.split('::').last + ': Calling create method :')
 
-    response, status_code, headers = Puppet::Provider::Cudawaf.post("Server", @resource[:service_name], message(resource, "POST"), {})
-
+    response, status_code, headers = Puppet::Provider::Cudawaf.post('Server', @resource[:service_name], message(resource, 'POST'), {})
     @property_hash.clear
-    return response, status_code, headers
+    [response, status_code, headers]
   end
 
   # this method will call the delete api of a WAF service
   def destroy
-    Puppet.debug("Calling serverprovider destroy method: ")
+    Puppet.debug(self.class.to_s.split('::').last + ': Calling destroy method: ')
 
-    response, status_code, headers = Puppet::Provider::Cudawaf.delete("Server", @resource[:service_name], @resource[:name], {})
-
+    response, status_code, headers = Puppet::Provider::Cudawaf.delete('Server', @resource[:service_name], @resource[:name], {})
     @property_hash.clear
-
-    return response, status_code, headers
+    [response, status_code, headers]
   end
-
 end

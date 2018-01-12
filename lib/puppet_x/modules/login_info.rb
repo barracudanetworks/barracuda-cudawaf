@@ -53,7 +53,7 @@ class Login
     eula_response = eula_http.request(eula_request)
     eula_output = eula_response.body
 
-    Puppet.debug(self.class.to_s.split("::").first + ": EULA response - #{eula_response}")
+    Puppet.debug(self.class.to_s + ": EULA response - #{eula_response}")
     if eula_response.to_s.match('Net::HTTPOK')
       eula_accept = 'yes'
     else
@@ -66,7 +66,7 @@ class Login
       end
     end
 
-    Puppet.debug(self.class.to_s.split("::").first + ": EULA accept status - " + eula_accept)
+    Puppet.debug(self.class.to_s + ": EULA accept status - " + eula_accept)
   end
 
   #

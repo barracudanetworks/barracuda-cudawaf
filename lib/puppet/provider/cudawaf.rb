@@ -54,7 +54,7 @@ class Puppet::Provider::Cudawaf < Puppet::Provider
   end
 
   def self.client_post(instance, *args)
-    #device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
+    # device_url = Puppet::Util::NetworkDevice.current ? Puppet::Util::NetworkDevice.current.url.to_s : Facter.value(:url)
     transport.client_post(device_url, instance, *args)
   end
 
@@ -65,10 +65,4 @@ class Puppet::Provider::Cudawaf < Puppet::Provider
   def self.client_delete(instance, *args)
     transport.client_delete(device_url, instance, *args)
   end
-
-  #def self.facts
-  #  @device ||= device
-  #  @facts = @device.facts
-  #end
-
 end
