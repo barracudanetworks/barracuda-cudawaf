@@ -10,7 +10,6 @@ class Puppet::Util::NetworkDevice::Cudawaf::Device
 
   def initialize(url, options = {})
     @url = URI.parse(url)
-    Puppet.debug("URL - " + url)
 
     @autoloader = Puppet::Util::Autoload.new(
       self,
@@ -18,13 +17,12 @@ class Puppet::Util::NetworkDevice::Cudawaf::Device
     )
     if @autoloader.load("cudawaf")
       @transport = Puppet::Util::NetworkDevice::Transport::Cudawaf.new(url, options[:debug])
-      Puppet.debug("Inside Device Initialize")
+      Puppet.debug(self.class.to_s.split("::").first + ": Inside Device Initialize")
     end
   end
 
   def facts
-    Puppet.debug("Inside Device FACTS Initialize")
-    Puppet.debug("URL:" + @url.host)
+    Puppet.debug(self.class.to_s.split("::").first + ": Inside Device FACTS Initialize")
     @facts ||= Puppet::Util::NetworkDevice::Cudawaf::Facts.new(@transport, @url)
 
     return @facts.retrieve(@url)

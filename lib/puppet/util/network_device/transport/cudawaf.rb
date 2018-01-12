@@ -3,8 +3,6 @@ require 'puppet/util/network_device/transport'
 require 'puppet/util/network_device/transport/base'
 require 'puppet_x/swagger_client/configuration'
 
-#Dir[File.dirname(__FILE__) + '../../../../puppet_x/modules/*.rb'].each { |file| require file }
-
 require 'puppet_x/modules/login_info'
 require 'puppet_x/modules/system_api'
 require 'puppet_x/modules/service/service_api'
@@ -35,7 +33,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
   #
   def initialize(url, _options = {})
     @device_url = URI.parse(url)
-    Puppet.debug("Puppet::Device::Cudawaf: connecting to WAF device - " + url)
+    Puppet.debug(self.class.to_s.split("::").first + ": Connecting to WAF device - " + url)
 
     #raise ArgumentError, "Invalid scheme #{url.scheme}. Must be https" unless url.scheme == 'https'
     raise ArgumentError, "no user specified" unless @device_url.user
@@ -76,19 +74,18 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     #  Each provider will pass the object type as the instance and we would instantiate the appropriate SwaggerClient object.
     #
     object_instance = "SwaggerClient::#{instance}Api"
-    Puppet.debug("Invoking GET for URL - " + device + ", Instance - " + instance + ", SDK API - " + object_instance, ", GET method - " + get_method)
 
     instance_method = Object.const_get(object_instance).new(device).method(get_method)
     response,status_code,headers = instance_method.call(auth_header, *args)
     parsed_response = JSON.parse(response)
 
-    Puppet.debug("Response received from WAF for GET operation:  #{parsed_response}")
+    Puppet.debug(self.class.to_s.split("::").first + ": Response received from WAF for GET operation:  #{parsed_response}")
 
     if response.to_s.empty?
-      fail("Not able to process the request. Please check the request parameters.")
+      fail(self.class.to_s.split("::").first + ": Not able to process the request. Please check the request parameters.")
     end
 
-    failure?(parsed_response, status_code)
+    failure?(parsed_response, status_code, "GET")
     return parsed_response, status_code, headers
   end
 
@@ -99,26 +96,22 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     instance_plural = convert_plural(instance)
     post_method = instance_plural + "_post_with_http_info"
 
-    #if valid_json?(postdata)
-      auth_header = get_auth_header(device)
+    auth_header = get_auth_header(device)
 
-      #
-      #  Form the instance based on the URL passed and invoke the appropriate SwaggerClient SDK.
-      #  Each provider will pass the object type as the instance and we would instantiate the appropriate SwaggerClient object.
-      #
-      object_instance = "SwaggerClient::#{instance}Api"
+    #
+    #  Form the instance based on the URL passed and invoke the appropriate SwaggerClient SDK.
+     #  Each provider will pass the object type as the instance and we would instantiate the appropriate SwaggerClient object.
+     #
+     object_instance = "SwaggerClient::#{instance}Api"
 
-      instance_method = Object.const_get(object_instance).new(device).method(post_method)
-      response,status_code,headers = instance_method.call(auth_header, *postdata)
-      parsed_response = JSON.parse(response)
+     instance_method = Object.const_get(object_instance).new(device).method(post_method)
+     response,status_code,headers = instance_method.call(auth_header, *postdata)
+     parsed_response = JSON.parse(response)
 
-      Puppet.debug("Response received from WAF for POST operation:  #{parsed_response}")
+     Puppet.debug(self.class.to_s.split("::").first + ": Response received from WAF for POST operation:  #{parsed_response}")
 
-      failure?(parsed_response, status_code)
-      return parsed_response, status_code, headers
-    #else
-    #  fail('Invalid JSON detected in API request body.')
-    #end
+     failure?(parsed_response, status_code, "POST")
+     return parsed_response, status_code, headers
   end
 
   #
@@ -129,26 +122,22 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     instance_var_name = get_mapped_object_name(instance)
     put_method = instance_plural + "_" + instance_var_name + "_put_with_http_info"
 
-    #if valid_json?(postdata)
-      auth_header = get_auth_header(device)
+    auth_header = get_auth_header(device)
 
-      #
-      #  Form the instance based on the URL passed and invoke the appropriate SwaggerClient SDK.
-      #  Each provider will pass the object type as the instance and we would instantiate the appropriate SwaggerClient object.
-      #
-      object_instance = "SwaggerClient::#{instance}Api"
+     #
+     #  Form the instance based on the URL passed and invoke the appropriate SwaggerClient SDK.
+     #  Each provider will pass the object type as the instance and we would instantiate the appropriate SwaggerClient object.
+     #
+     object_instance = "SwaggerClient::#{instance}Api"
 
-      instance_method = Object.const_get(object_instance).new(device).method(put_method)
-      response,status_code,headers = instance_method.call(auth_header, *postdata)
-      parsed_response = JSON.parse(response)
+     instance_method = Object.const_get(object_instance).new(device).method(put_method)
+     response,status_code,headers = instance_method.call(auth_header, *postdata)
+     parsed_response = JSON.parse(response)
 
-      Puppet.debug("Response received from WAF for PUT operation:  #{parsed_response}")
+     Puppet.debug(self.class.to_s.split("::").first + ": Response received from WAF for PUT operation:  #{parsed_response}")
 
-      failure?(parsed_response, status_code)
-      return parsed_response, status_code, headers
-    #else
-    #  fail('Invalid JSON detected in API request body.')
-    #end
+     failure?(parsed_response, status_code, "PUT")
+     return parsed_response, status_code, headers
   end
 
   #
@@ -171,9 +160,9 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     response,status_code,headers = instance_method.call(auth_header, *args)
     parsed_response = JSON.parse(response)
 
-    Puppet.debug("Response received from WAF for DELETE operation:  #{parsed_response}")
+    Puppet.debug(self.class.to_s.split("::").first + ": Response received from WAF for DELETE operation:  #{parsed_response}")
 
-    failure?(parsed_response, status_code)
+    failure?(parsed_response, status_code, "DELETE")
     return parsed_response, status_code, headers
   end
 
@@ -185,7 +174,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     login_instance = Login.new
     auth_header = login_instance.get_auth_header(device)
 
-    Puppet.debug("WAF authorization token:  #{auth_header}")
+    Puppet.debug(self.class.to_s.split("::").first + ": WAF authorization token:  #{auth_header}")
     return auth_header
   end
 
@@ -197,11 +186,11 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
   #
   #  Failure stops further processing and returns the error message to the user.
   #
-  def failure?(result, status_code)
+  def failure?(result, status_code, method)
     if status_code == 200 or status_code == 201 or status_code == 202 then
-      Puppet.debug("API method successfully executed with status code #{status_code}")
+      Puppet.debug(self.class.to_s.split("::").first + ": API method " + method + " successfully executed with status code #{status_code}")
     else
-      fail("REST failure: HTTP status code #{status_code} detected.  Error is: #{result}")
+      fail(self.class.to_s.split("::").first + ": REST failure for " + method + " method: HTTP status code #{status_code} detected.  Error is: #{result}")
     end
   end
 
@@ -211,9 +200,9 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
   #
   def valid_json?(json)
     JSON.parse(json)
-    return true
-  rescue
-    return false
+      return true
+    rescue
+      return false
   end
 
   #
@@ -224,10 +213,9 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     opts.delete(:provider)
     opts.delete(:ensure)
     opts.delete(:loglevel)  
-    opts=convert_underscores(opts)
-    params=opts
-    Puppet.debug("PARAM....................#{params}")
-    return params
+    opts = convert_underscores(opts)
+
+    return opts
   end
 
   #
@@ -283,7 +271,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     if response.code == 200
       return parsed_response
     else
-      Puppet.debug("Error in GET operation for " + rest_url) 
+      Puppet.debug(self.class.to_s.split("::").first + ": Error in GET operation for " + rest_url) 
     end
 
     return parsed_response
@@ -295,13 +283,13 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     auth_header = get_auth_header(device)
 
     response = RestClient.put rest_url, postdata, { :Authorization => "#{auth_header}", accept: :json, content_type: :json }
-    Puppet.debug("Response - #{response}")
+    Puppet.debug(self.class.to_s.split("::").first + "Response - #{response}")
     parsed_response = JSON.parse(response)
 
     if response.code == 200 or response.code == 202
       return parsed_response
     else
-      Puppet.debug("Error in GET operation for " + rest_url)
+      Puppet.debug(self.class.to_s.split("::").first + ": Error in PUT operation for " + rest_url)
     end
   end
 
@@ -316,7 +304,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     if response.code == 200 or response.code == 201 or response.code == 202
       return parsed_response
     else
-      Puppet.debug("Error in GET operation for " + rest_url)
+      Puppet.debug(self.class.to_s.split("::").first + ": Error in POST operation for " + rest_url)
     end
   end
 
@@ -331,7 +319,7 @@ class Puppet::Util::NetworkDevice::Transport::Cudawaf < Puppet::Util::NetworkDev
     if response.code == 200 or response.code == 202
       return parsed_response
     else
-      Puppet.debug("Error in GET operation for " + rest_url)
+      Puppet.debug(self.class.to_s.split("::").first + ": Error in DELETE operation for " + rest_url)
     end
   end
 

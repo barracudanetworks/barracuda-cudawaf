@@ -5,7 +5,7 @@
   "puppetversion": "2017.1.1",
   "source": "https://github.com/barracudanetworks/puppetlabs-cudawaf",
   "summary": "This module can be used to configure the Barracuda Web Application Firewall.",
-  "license": "GPL3",
+  "license": "Apache-2.0",
   "dependencies": [
     {"name":"puppetlabs-stdlib","version_requirement":">= 4.10.0"},
     {"name":"rest-client","version_requirement":">= 1.8.0"},
