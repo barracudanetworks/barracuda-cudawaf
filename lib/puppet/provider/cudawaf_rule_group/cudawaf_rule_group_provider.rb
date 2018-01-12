@@ -18,13 +18,13 @@ Puppet::Type.type(:cudawaf_rule_group).provide(:cudawaf_rule_group_provider, par
   end
 
   def self.instances
-    Puppet.debug(self.class.to_s.split('::').last + ': Calling self.instances method')
+    Puppet.debug(self.to_s.split('::').last + ': Calling self.instances method')
     services = getservices
     instances = []
 
     services.each do |service|
       response, status_code, headers = Puppet::Provider::Cudawaf.get('ContentRule', service, {})
-      Puppet.debug(self.class.to_s.split('::').last + ": WAF get all content rules response :    #{response}")
+      Puppet.debug(self.to_s.split('::').last + ": WAF get all content rules response :    #{response}")
 
       next unless response.key?('data')
 
@@ -58,7 +58,7 @@ Puppet::Type.type(:cudawaf_rule_group).provide(:cudawaf_rule_group_provider, par
     service_instances = []
 
     response, status_code, headers = Puppet::Provider::Cudawaf.get('Service', {})
-    Puppet.debug(self.class.to_s.split('::').last + ": WAF Get all services response:    #{response}")
+    Puppet.debug(self.to_s.split('::').last + ": WAF Get all services response:    #{response}")
 
     unless response == '{}'
       if status_code == 200
@@ -74,7 +74,7 @@ Puppet::Type.type(:cudawaf_rule_group).provide(:cudawaf_rule_group_provider, par
 
   # this method compares the name attribute from instances and resources. If it matches then sets the provider
   def self.prefetch(resources)
-    Puppet.debug(self.class.to_s.split('::').last + ': Calling self.prefetch method : ')
+    Puppet.debug(self.to_s.split('::').last + ': Calling self.prefetch method : ')
 
     servers = instances
     resources.keys.each do |name|

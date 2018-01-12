@@ -21,11 +21,11 @@ Puppet::Type.type(:cudawaf_security_policy).provide(:cudawaf_security_policy_pro
 
   # this method get all security policies from WAF system and builds the instances array
   def self.instances
-    Puppet.debug(self.class.to_s.split('::').last + ': Calling self.instances method : ')
+    Puppet.debug(self.to_s.split('::').last + ': Calling self.instances method : ')
     instances = []
 
     response, status_code, headers = Puppet::Provider::Cudawaf.get('SecurityPolicy', {})
-    Puppet.debug(self.class.to_s.split('::').last + ": WAF Get all security policies response: #{response}")
+    Puppet.debug(self.to_s.split('::').last + ": WAF Get all security policies response: #{response}")
 
     unless response == '{}'
       if status_code == 200
@@ -46,7 +46,7 @@ Puppet::Type.type(:cudawaf_security_policy).provide(:cudawaf_security_policy_pro
 
   # this method compares the name attribute from instances and resources. If it matches then sets the provider
   def self.prefetch(resources)
-    Puppet.debug(self.class.to_s.split('::').last + ': Calling self.prefetch method : ')
+    Puppet.debug(self.to_s.split('::').last + ': Calling self.prefetch method : ')
     security_policies = instances
     resources.keys.each do |name|
       if provider = security_policies.find { |security_policy| security_policy.name == name }

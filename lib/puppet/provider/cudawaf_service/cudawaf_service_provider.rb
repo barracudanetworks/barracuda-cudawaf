@@ -21,11 +21,11 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, parent: P
 
   # this method get all services from WAF system and builds the instances array
   def self.instances
-    Puppet.debug(self.class.to_s.split("::").last + ': Calling self.instances method : ')
+    Puppet.debug(self.to_s.split("::").last + ': Calling self.instances method : ')
     instances = []
 
     response, status_code, headers = Puppet::Provider::Cudawaf.get('Service', {})
-    Puppet.debug(self.class.to_s.split("::").last + ": WAF Get all services response: #{response}")
+    Puppet.debug(self.to_s.split("::").last + ": WAF Get all services response: #{response}")
 
     unless response == '{}'
       if status_code == 200
@@ -58,7 +58,7 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, parent: P
 
   # this method compares the name attribute from instances and resources. If it matches then sets the provider
   def self.prefetch(resources)
-    Puppet.debug(self.class.to_s.split("::").last + ': Calling self.prefetch method of cudawaf_service_provider:')
+    Puppet.debug(self.to_s.split("::").last + ': Calling self.prefetch method :')
     services = instances
 
     resources.keys.each do |name|

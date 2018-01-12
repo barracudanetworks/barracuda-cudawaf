@@ -28,7 +28,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, parent: Pup
   # this method get all servers from WAF system and builds the instances array
   def self.instances
     services = getservices
-    Puppet.debug(self.class.to_s.split('::').last + ": List of services .................. #{services}")
+    Puppet.debug(self.to_s.split('::').last + ": List of services .................. #{services}")
     instances = []
 
     services.each do |service|
@@ -36,7 +36,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, parent: Pup
 
       # get all servers from WAF
       response, status_code, headers = Puppet::Provider::Cudawaf.get('Server', serviceName, {})
-      Puppet.debug(self.class.to_s.split('::').last + ": WAF Get all servers response:    #{response}")
+      Puppet.debug(self.to_s.split('::').last + ": WAF Get all servers response:    #{response}")
 
       svrData = response['data']
       serviceName = response['Service']
@@ -63,12 +63,12 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, parent: Pup
 
   # this method get all services from WAF system and builds the instances array
   def self.getservices
-    Puppet.debug(self.class.to_s.split('::').last + ': Calling getservices method : ')
+    Puppet.debug(self.to_s.split('::').last + ': Calling getservices method : ')
     service_instances = []
 
     # get all services from WAF
     response, status_code, headers = Puppet::Provider::Cudawaf.get('Service', {})
-    Puppet.debug(self.class.to_s.split('::').last + ": WAF Get all services response:    #{response}")
+    Puppet.debug(self.to_s.split('::').last + ": WAF Get all services response:    #{response}")
 
     unless response == '{}'
       if status_code == 200

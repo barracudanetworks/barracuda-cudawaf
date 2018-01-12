@@ -19,12 +19,12 @@ Puppet::Type.type(:cudawaf_cloudcontrol).provide(:cudawaf_cloudcontrol_provider,
   end
 
   def self.instances
-    Puppet.debug(self.class.to_s.split('::').last + ': Inside self instances method : ')
+    Puppet.debug(self.to_s.split('::').last + ': Calling self instances method : ')
     instances = []
 
     response = Puppet::Provider::Cudawaf.client_get '/control-center'
     cntrlObj = response['data']
-    Puppet.debug(self.class.to_s.split('::').last + ": Response for GET cloud-control API:  #{cntrlObj}")
+    Puppet.debug(self.to_s.split('::').last + ": Response for GET cloud-control API:  #{cntrlObj}")
 
     instances << new(
       ensure: :present,
@@ -37,7 +37,7 @@ Puppet::Type.type(:cudawaf_cloudcontrol).provide(:cudawaf_cloudcontrol_provider,
   end
 
   def self.prefetch(resources)
-    Puppet.debug(self.class.to_s.split('::').last + ': Calling self.prefetch method : ')
+    Puppet.debug(self.to_s.split('::').last + ': Calling self.prefetch method : ')
 
     cloudobj = instances
     resources.keys.each do |state|
