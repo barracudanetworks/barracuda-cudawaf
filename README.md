@@ -2,14 +2,14 @@
 ### Table of Contents
 
 1. [Description](#description)
-2. [Types](#resource-types)
+2. [Types](#about-the-resource-types)
 2. [Setup - The basics of getting started with cudawaf](#setup)
 3. [Usage - Configuration options and additional functionality](#usage-examples)
 4. [Reference - An under-the-hood peek at what the module is doing and how](reference---an-under-the-hood-peek-at-what-the-module-is-doing-and-how)
-  * [Service](#service)
-  * [Server](#server)
-  * [Certificates](#certificates)
-  * [Cloud Control](#cloud-control)
+  * [Service](#cudawaf_service)
+  * [Server](#cudawaf_server)
+  * [Certificates](#cudawaf_certificates)
+  * [Cloud Control](#cudawaf_cloudcontrol)
 
 
 ## Description
@@ -17,20 +17,20 @@
 With the Barracuda Web Application Firewall, administrators do not need to wait for clean code or even know how an application works to secure their applications. Organizations can ensure robust security with a Barracuda Web Application Firewall hardware or virtual appliance, deployed either on-premises or in the cloud.
 This module enables management of the Barracuda Web Application Firewall using Puppet..
 
-## Resource Types
+## About the Resource Types
 
 The following features can be configured using this module:
 
-1. `Service` - A Virtual Service is a combination of a Virtual IP (VIP) address and a TCP port, which listens and directs the traffic to the intended Service.
+1. `Service` - A Virtual Service is a combination of a Virtual IP (VIP) address and a TCP port, which listens and directs the traffic to the intended Service. The resource type for this feature is "cudawaf_service".
 
 
-2. `Server` - A server object can be used to configure the networking information of the back-end server to be hosted on the Barracuda Web Application Firewall. Multiple real servers can be added and configured to load balance the incoming traffic for a Service.
+2. `Server` - A server object can be used to configure the networking information of the back-end server to be hosted on the Barracuda Web Application Firewall. Multiple real servers can be added and configured to load balance the incoming traffic for a Service. The resource type for this feature is "cudawaf_server".
 
-3. `Certificates` - A signed certificate is a digital identity document that enables both server and client to authenticate each other.  Certificates are used with HTTPS protocol to encrypt secure information transmitted over the internet.  A certificate can be generated or procured from a third party Certificate Authority (CA).
+3. `Certificates` - A signed certificate is a digital identity document that enables both server and client to authenticate each other.  Certificates are used with HTTPS protocol to encrypt secure information transmitted over the internet.  A certificate can be generated or procured from a third party Certificate Authority (CA). The resource type for this feature is "cudawaf_certificate".
 
 Generated certificates can be self-signed or signed by a trusted third-party CA. A certificate contains information such as user name, expiration date, a unique serial number assigned to the certificate by a trusted CA, the public key, and the name of the CA that issued the certificate.
 
-4. `Cloud-control` - A comprehensive cloud-based service that enables administrators to monitor and configure multiple Barracuda Networks products from a single console.
+4. `Cloud-control` - A comprehensive cloud-based service that enables administrators to monitor and configure multiple Barracuda Networks products from a single console. The resource type for this feature is "cudawaf_cloudcontrol".
 
 The detailed documentation on each of these REST API end points can be found here : [Barracuda Web Application REST API v3](https://campus.barracuda.com/product/webapplicationfirewall/api)
 
@@ -41,7 +41,7 @@ The detailed documentation on each of these REST API end points can be found her
 The following components are necessary to use this module:
 
   * A server running as a Puppet master.
-  * A Puppet agent running as a controller to the Barracuda WAF.
+  * A Puppet agent running as a Puppet Device proxy to the Barracuda WAF.
   * A Barracuda Web Application Firewall running the firmware version v9.1 or above
 
 
@@ -55,36 +55,97 @@ puppet module install puppetlabs-cudawaf
 puppet module install puppetlabs-cudawaf --environment=<env-name>
 ```
 
-### Installing the gem files on the Puppet Master:
+### Installing the gem files on the Puppet Agent:
 ``` bash
-/opt/puppetlabs/bin/puppetserver gem install mime-types -v 2.6.2
 /opt/puppetlabs/bin/puppetserver gem install rest-client -v 1.8.0
 /opt/puppetlabs/bin/puppetserver gem install typhoeus
 
 ```
-### Create a credentials file on the Puppet Agent node:
+### Puppet Device
+To use the module, first configure a Puppet agent that is able to run `puppet device`.
+This agent will be used to act as a "proxy system" for the `puppet device` subcommand.
 
-Path ```/etc/puppetlabs/puppet/credentials.json```
+### Create a device.conf file on the Puppet Agent node:
 
-Example "credentials.json"
+Path and file name:
+
+```bash
+/etc/puppetlabs/puppet/device.conf
 
 ```
-{
-  "username":"admin",
-  "password":"<password>",
-  "host":"ip-address",
-  "port":"<management-port>"
-}
+
+Example "device.conf" file
+
+``` puppet
+[waf-1]
+   type cudawaf
+   url http://admin:<password>@<ip_address>:8000/
+
+```
+
+### Command to run puppet device:
+
+``` puppet
+puppet device -v --user=root
 ```
 
 ## Usage Examples
 
-### Creating Resources
+### Create a HTTP service with a Rule Group and Rule group Server, and connect the WAF to the Barracuda Cloud Control
+
+``` puppet
+
+	cudawaf_service  { 'DemoService2':
+	  ensure       	    => present,
+	  name              => 'MyService2',
+	  type              => 'HTTP',
+	  ip_address        => '10.11.2.2',
+	  port              => 8000,
+	  group             => 'default',
+	  vsite             => 'default',
+	  status            => 'On',
+	  address_version   => 'IPv4',
+	  comments          => 'Demo service',
+	}
+
+        cudawaf_security_policy  {  'securitypolicy1':
+          ensure            => present,
+          name              => 'custom',
+        }
+
+        cudawaf_cloudcontrol  {  'CloudControl':
+          ensure            => present,
+          state             => 'not_connected',
+          connect_mode      => 'cloud',
+          username          => 'user@domain.com',
+          password          => 'password'
+        }
+
+        cudawaf_rule_group {  'RuleGroup-1':
+          ensure            => present,
+          name              => 'ContentRule1',
+          service_name      => 'MyService2',
+          url_match         => '/testing.html',
+          host_match        => 'www.example.com'
+        }
+
+        cudawaf_rule_group_server  { 'RuleGroupServer-1':
+          ensure        => absent,
+          name          => 'rgServer1',
+          service_name  => 'MyService2',
+          rule_group_name => 'ContentRule1',
+          identifier    => 'Hostname',
+          hostname      => 'barracuda.com'
+        }
+
+```
+
+### Creating Resources (Additional examples)
 The following example manifests can be used to create resources on the Barracuda Web Application Firewall:
 
 ### To create a HTTP Service:
 ``` puppet
-wafservices  { 'WAFSVC-1':
+cudawaf_service { 'WAFSVC-1':
   ensure        => present,
   name          => 'WAFSERVICE',
   type          => 'http',
@@ -101,7 +162,7 @@ wafservices  { 'WAFSVC-1':
 ```
 ### To create a Real server:
 ``` puppet
-wafservers { 'WAFSERVER-2':
+cudawaf_server	 { 'WAFSERVER-2':
   ensure => present,
   name => 'server2',
   identifier=> 'IP Address',
@@ -116,7 +177,7 @@ wafservers { 'WAFSERVER-2':
 
 ### To Upload a Signed Certificate:
 ``` puppet
-wafcertificates { 'WAFUPLOADSIGNEDCER-1':
+cudawaf_certificate { 'WAFUPLOADSIGNEDCER-1':
   ensure => present,
   name => 'signedcert1',
   signed_certificate => '/home/wafcertificates/root.pem',
@@ -130,7 +191,7 @@ wafcertificates { 'WAFUPLOADSIGNEDCER-1':
 ```
 ### To Upload a Trusted Certificate:
 ``` puppet
-wafcertificates { 'WAFUPLOADTRUSTEDCER-1':
+cudawaf_certificate	{ 'WAFUPLOADTRUSTEDCER-1':
   ensure => present,
   name => 'trustedcert1',
   trusted_certificate => '/home/wafcertificates/cer.pem',
@@ -140,7 +201,7 @@ wafcertificates { 'WAFUPLOADTRUSTEDCER-1':
 ```
 ### To Upload a Intermediary Signed Certificate:
 ``` puppet
-wafcertificates { 'WAFUPLOADINTERMEDIATESIGNEDCER-1':
+cudawaf_certificate { 'WAFUPLOADINTERMEDIATESIGNEDCER-1':
   ensure => present,
   name => 'signedcertint1',
   signed_certificate => '/home/wafcertificates/root.pem',
@@ -155,7 +216,7 @@ wafcertificates { 'WAFUPLOADINTERMEDIATESIGNEDCER-1':
 ```
 ### To Upload a Trusted Server Certificate:
 ``` puppet
-wafcertificates { 'WAFUPLOADTRUSTEDSERVERCER-1':
+cudawaf_certificate { 'WAFUPLOADTRUSTEDSERVERCER-1':
   ensure => present,
   name => 'trustedservercert1',
   trusted_server_certificate => '/home/wafcertificates/cer.pem',
@@ -164,7 +225,7 @@ wafcertificates { 'WAFUPLOADTRUSTEDSERVERCER-1':
 ```
 ### To connect the WAF to Barracuda Cloud Control
 ``` puppet
-wafcloudcontrol { 'WAFCouldControl-1':
+cudawaf_cloudcontrol { 'WAFCouldControl-1':
   ensure => present,
   connect_mode => 'cloud',
   state => 'connected',
@@ -174,7 +235,7 @@ wafcloudcontrol { 'WAFCouldControl-1':
 ```
 ## Reference - An under-the-hood peek at what the module is doing and how
 
-### `Service`
+### `cudawaf_service`
 A Virtual Service is a combination of a Virtual IP (VIP) address and a TCP port, which listens and directs the traffic to the intended Service.
 
 ### Service Parameters
@@ -221,7 +282,7 @@ Specifies the listening ip address for the service
 #### `mask`
 Specifies the subnet mask for the service
 
-### `Server`
+### `cudawaf_server`
 A server object can be used to configure the networking information of the back-end server to be hosted on the Barracuda Web Application Firewall. Multiple real servers can be added and configured to load balance the incoming traffic for a Service.
 
 ### Server Parameters
@@ -250,7 +311,7 @@ Specifies the port number to be bound with the server
 #### `comments`
 Specifies a description for the server
 
-### `Certificates`
+### `cudawaf_certificate`
 
 ### Signed Certificate Parameters
 #### `upload`
@@ -330,7 +391,7 @@ state:
 
 ```
 
-### `Cloud Control`
+### `cudawaf_cloudcontrol`
 
 ### Barracuda Cloud Control Parameters
 
