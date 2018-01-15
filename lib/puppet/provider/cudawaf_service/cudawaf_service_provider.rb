@@ -26,11 +26,12 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, parent: P
 
     response, status_code, headers = Puppet::Provider::Cudawaf.get('Service', {})
     Puppet.debug(self.to_s.split("::").last + ": WAF Get all services response: #{response}")
-
-    unless response == '{}'
+     
+  #  unless response == '{}'
+     unless response.nil?
       if status_code == 200
         svcData = response['data']
-
+        unless svcData.nil?
         svcData.each do |_key, val|
           instances <<  new(
             ensure: :present,
@@ -50,6 +51,7 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, parent: P
             mask: val['mask']
           )
         end
+       end #unless end
       end
     end
 
@@ -60,15 +62,11 @@ Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, parent: P
   def self.prefetch(resources)
     Puppet.debug(self.to_s.split("::").last + ': Calling self.prefetch method :')
     services = instances
-    unless resources  == '{}'
     resources.keys.each do |name|
-     unless services == '{}'
       if provider = services.find { |service| service.name == name }
         resources[name].provider = provider
       end
-     end # unless end
     end
-   end #unless end
   end
 
   # this method does a put call to waf service. This will be triggered with ensure is present and exists method return true.
