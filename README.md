@@ -69,8 +69,8 @@ puppet module install barracuda-cudawaf --environment=<env-name>
 
 ### Installing the gem files on the Puppet Agent:
 ``` bash
-/opt/puppetlabs/bin/puppetserver gem install rest-client -v 1.8.0
-/opt/puppetlabs/bin/puppetserver gem install typhoeus
+/opt/puppetlabs/puppet/bin/gem install rest-client -v 1.8.0
+/opt/puppetlabs/puppet/bin/gem install typhoeus
 
 ```
 ### Puppet Device
