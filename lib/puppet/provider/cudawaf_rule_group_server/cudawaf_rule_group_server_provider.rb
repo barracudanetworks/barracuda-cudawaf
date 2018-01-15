@@ -67,13 +67,15 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
     response, status_code, headers = Puppet::Provider::Cudawaf.get('Service', {})
     Puppet.debug(self.to_s.split('::').last + ": WAF Get all services response:    #{response}")
 
-    unless response == '{}'
+    unless response.nil?
       if status_code == 200
         svcData = response['data']
-        svcData.each do |_key, value|
-          service_instances.push(value['name'])
-        end
-       end
+        if svcData.nil?
+          svcData.each do |_key, value|
+            service_instances.push(value['name'])
+          end
+        end  # if svcData check end
+      end
     end
 
     service_instances
@@ -87,7 +89,7 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
     response, status_code, headers = Puppet::Provider::Cudawaf.get('ContentRule', service_name, {})
     Puppet.debug(self.to_s.split('::').last + ": WAF Get all rules response:    #{response}")
 
-    unless response == '{}'
+    unless response.nil?
       if status_code == 200
         svcData = response['data']
 
