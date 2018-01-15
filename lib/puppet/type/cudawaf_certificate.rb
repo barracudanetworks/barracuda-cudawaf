@@ -91,6 +91,9 @@ Puppet::Type.newtype(:cudawaf_certificate) do
 
   newproperty(:signed_certificate) do
     desc 'Signed Certificate File Path'
+    validate do |value|
+      raise("Invalid signed_certificate #{value}, File Path is not correct") unless value =~ /((?:^.*\/)?)([^\/]+)(\..*$)/
+    end
   end
 
   newproperty(:assign_associated_key) do
@@ -105,6 +108,9 @@ Puppet::Type.newtype(:cudawaf_certificate) do
 
   newproperty(:intermediary_certificate) do
     desc 'Intermediary Certificate File Path'
+    validate do |value|
+      raise("Invalid intermediary_certificate #{value}, File Path is not correct") unless value =~ /((?:^.*\/)?)([^\/]+)(\..*$)/
+    end
   end
 
   newproperty(:password) do
@@ -122,10 +128,16 @@ Puppet::Type.newtype(:cudawaf_certificate) do
 
   newproperty(:trusted_certificate) do
     desc 'Trusted Certificate File Path'
+    validate do |value|
+      raise("Invalid trusted_certificate #{value}, File Path is not correct") unless value =~ /((?:^.*\/)?)([^\/]+)(\..*$)/
+    end
   end
 
   newproperty(:trusted_server_certificate) do
     desc 'Trusted Server Certificate File Path'
+    validate do |value|
+      raise("Invalid trusted_server_certificate #{value}, File Path is not correct") unless value =~ /((?:^.*\/)?)([^\/]+)(\..*$)/
+    end
   end
 
   newproperty(:type) do
