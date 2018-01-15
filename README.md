@@ -8,7 +8,7 @@
 4. [Reference - An under-the-hood peek at what the module is doing and how](reference---an-under-the-hood-peek-at-what-the-module-is-doing-and-how)
   * [Service](#cudawaf_service)
   * [Server](#cudawaf_server)
-  * [Certificates](#cudawaf_certificates)
+  * [Certificates](#cudawaf_certificate)
   * [Cloud Control](#cudawaf_cloudcontrol)
 
 
