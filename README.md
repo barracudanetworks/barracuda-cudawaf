@@ -418,3 +418,18 @@ Specifies the state of the connection
 
 #### `username`
 Specifies the Barracuda Cloud Control username for the connection. This should be available before using this resource type.
+
+
+## Limitations
+
+This module is intended to be supported on [all PE-supported platforms](https://forge.puppetlabs.com/supported#compat-matrix). However, it has been currently tested on Ubuntu/Linux platforms only.
+
+## Development
+
+Barracuda modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. Please follow our guidelines when contributing changes.
+
+For more information, see our [module contribution guide.](https://docs.puppetlabs.com/forge/contributing.html)
+
+### Contributors
+
+To see who's already involved, see the [list of contributors.](https://github.com/barracudanetworks/barracuda-cudawaf/graphs/contributors)
