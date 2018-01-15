@@ -19,7 +19,7 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
   end
 
   def self.instances
-    Puppet.debug(self.to_s.split('::').last + ': Calling self.instances method')
+    Puppet.debug(to_s.split('::').last + ': Calling self.instances method')
 
     services = getservices
     instances = []
@@ -28,7 +28,7 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
       rules = getrules(service)
       rules.each do |rule|
         response, status_code, headers = Puppet::Provider::Cudawaf.get('ContentRuleServer', service, rule, {})
-        Puppet.debug(self.to_s.split('::').last + ": WAF Get all rule_group_server response:  #{response}")
+        Puppet.debug(to_s.split('::').last + ": WAF Get all rule_group_server response:  #{response}")
 
         svrData = response['data']
         service_name = response['Service']
@@ -61,11 +61,11 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
 
   # this method get all services from WAF system and builds the instances array
   def self.getservices
-    Puppet.debug(self.to_s.split('::').last + ': Calling getservices method : ')
+    Puppet.debug(to_s.split('::').last + ': Calling getservices method : ')
     service_instances = []
 
     response, status_code, headers = Puppet::Provider::Cudawaf.get('Service', {})
-    Puppet.debug(self.to_s.split('::').last + ": WAF Get all services response:    #{response}")
+    Puppet.debug(to_s.split('::').last + ": WAF Get all services response:    #{response}")
 
     unless response.nil?
       if status_code == 200
@@ -74,7 +74,7 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
           svcData.each do |_key, value|
             service_instances.push(value['name'])
           end
-        end  # if svcData check end
+        end # if svcData check end
       end
     end
 
@@ -83,11 +83,11 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
 
   # this method get all rules from WAF system and builds the instances array
   def self.getrules(service_name)
-    Puppet.debug(self.to_s.split('::').last + ': Calling getrules method : ')
+    Puppet.debug(to_s.split('::').last + ': Calling getrules method : ')
     rule_group_instances = []
 
     response, status_code, headers = Puppet::Provider::Cudawaf.get('ContentRule', service_name, {})
-    Puppet.debug(self.to_s.split('::').last + ": WAF Get all rules response:    #{response}")
+    Puppet.debug(to_s.split('::').last + ": WAF Get all rules response:    #{response}")
 
     unless response.nil?
       if status_code == 200

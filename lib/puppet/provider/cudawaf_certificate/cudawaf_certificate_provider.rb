@@ -33,12 +33,12 @@ Puppet::Type.type(:cudawaf_certificate).provide(:cudawaf_certificate_provider, p
 
   # this method will return the instances array
   def self.instances
-    Puppet.debug(self.to_s.split('::').last + ': Calling self instances method')
+    Puppet.debug(to_s.split('::').last + ': Calling self instances method')
     instances = []
 
     # get all Certificates  from WAF
     response = Puppet::Provider::Cudawaf.client_get '/certificates'
-    Puppet.debug(self.to_s.split('::').last + ": GET certificate name response : #{response}")
+    Puppet.debug(to_s.split('::').last + ": GET certificate name response : #{response}")
     data = response['data']
     unless data.nil?
       data.each do |certObj|
@@ -53,7 +53,7 @@ Puppet::Type.type(:cudawaf_certificate).provide(:cudawaf_certificate_provider, p
   end
 
   def self.prefetch(resources)
-    Puppet.debug(self.to_s.split('::').last + ': Calling self prefetch method : ')
+    Puppet.debug(to_s.split('::').last + ': Calling self prefetch method : ')
     certificates = instances
     resources.keys.each do |name|
       if provider = certificates.find { |certificate| certificate.name == name }
