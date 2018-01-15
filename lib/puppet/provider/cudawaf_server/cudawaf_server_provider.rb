@@ -70,12 +70,14 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, parent: Pup
     response, status_code, headers = Puppet::Provider::Cudawaf.get('Service', {})
     Puppet.debug(self.to_s.split('::').last + ": WAF Get all services response:    #{response}")
 
-    unless response == '{}'
+    unless response.nil?
       if status_code == 200
         svcData = response['data']
-        svcData.each do |_key, value|
-          service_instances.push(value['name'])
-        end
+        if svcData.nil?
+          svcData.each do |_key, value|
+            service_instances.push(value['name'])
+          end
+        end  # if svcData check
       end # if end
     end # unless end
 
