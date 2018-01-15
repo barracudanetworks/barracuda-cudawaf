@@ -27,17 +27,18 @@ Puppet::Type.type(:cudawaf_security_policy).provide(:cudawaf_security_policy_pro
     response, status_code, headers = Puppet::Provider::Cudawaf.get('SecurityPolicy', {})
     Puppet.debug(self.to_s.split('::').last + ": WAF Get all security policies response: #{response}")
 
-    unless response == '{}'
+    unless response.nil?
       if status_code == 200
         policyData = response['data']
-
-        policyData.each do |_key, value|
-          val = value
-          instances << new(
-            ensure: :present,
-            name: val['name']
-          )
-        end
+        unless policyData.nil?
+          policyData.each do |_key, value|
+            val = value
+            instances << new(
+              ensure: :present,
+              name: val['name']
+            )
+          end
+        end # if policyData end
       end # if end
     end # unless end
 
