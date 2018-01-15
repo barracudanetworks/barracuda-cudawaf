@@ -40,15 +40,15 @@ Puppet::Type.type(:cudawaf_certificate).provide(:cudawaf_certificate_provider, p
     response = Puppet::Provider::Cudawaf.client_get '/certificates'
     Puppet.debug(self.to_s.split('::').last + ": GET certificate name response : #{response}")
     data = response['data']
-
-    data.each do |certObj|
-      certificate_name = certObj['name']
-      instances << new(
-        ensure: :present,
-        name: certObj['name']
-      )
-    end
-
+    unless data.nil?
+      data.each do |certObj|
+        certificate_name = certObj['name']
+        instances << new(
+          ensure: :present,
+          name: certObj['name']
+        )
+      end
+    end # unless check end
     instances
   end
 
