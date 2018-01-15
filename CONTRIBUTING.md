@@ -260,9 +260,5 @@ The record of someone performing the merge is the record that they performed the
 * [General GitHub documentation](http://help.github.com/)
 * [GitHub pull request documentation](http://help.github.com/send-pull-requests/)
 
-### On chat
-* Slack (slack.puppet.com) #forge-modules, #puppet-dev, #windows, #voxpupuli
-* IRC (freenode) #puppet-dev, #voxpupuli
-
 
 [rspec-puppet]: http://rspec-puppet.com/
