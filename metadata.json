@@ -1,6 +1,6 @@
 {
   "name": "barracuda-cudawaf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Barracuda Networks",
   "puppetversion": "2017.1.1",
   "source": "https://github.com/barracudanetworks/barracuda-cudawaf",
