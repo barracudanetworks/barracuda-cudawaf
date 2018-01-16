@@ -10,6 +10,9 @@
   * [Server](#cudawaf_server)
   * [Certificates](#cudawaf_certificate)
   * [Cloud Control](#cudawaf_cloudcontrol)
+  * [Security_Policy] (#cudawaf_security_policy)
+  * [Rule_Group] (#cudawaf_rule_group)
+  * [Rule_Group_Server] (#cudawaf_rule_group_server)
 
 
 ## Description
@@ -418,6 +421,99 @@ Specifies the state of the connection
 
 #### `username`
 Specifies the Barracuda Cloud Control username for the connection. This should be available before using this resource type.
+
+### `cudawaf_security_policy`
+
+### Security Policy Parameters
+
+#### `name`
+Specifies the name for the security policy
+
+### `cudawaf_rule_group`
+
+### Rule Group Parameters
+
+#### `name`
+Specifies the name for the rule group
+
+#### `service_name`
+Specifies the name of the service under which the rule group should be created
+
+#### `app_id`
+Specifies the app id for the rule group
+
+#### `comments`
+Specifies any user comments under the rule group created
+
+#### `extended_match`
+Specifies the extended match to be used with the rule group for matching the incoming request
+
+#### `extended_match_sequence`
+Specifies the extended match sequence number for the rule
+
+#### `host_match`
+Specifies the host header match for the rule group
+
+#### `mode`
+Specifies the security policy mode for the rule group
+
+#### `status`
+Specifies if the rule group is enabled or disabled
+
+#### `url_match`
+Specifies the url match for the rule group
+
+#### `web_firewall_policy`
+Specifies the security policy for the rule group
+
+
+### `cudawaf_rule_group_server`
+
+### Rule Group Server Parameters
+
+#### `name`
+Specifies the name for the rule group server
+#### `identifier`
+Specifies if the server identifier should be an ip address i.e "IP Address" or a hostname i.e "hostname"
+
+#### `address-version`
+Specifies IP Protocol. Must be IPv4
+
+#### `status`
+Specifies if the real server should be enabled or disabled. Must be set as one of In Service, Out of Service Maintenance, Out of Service Sticky, Out of Service All
+
+#### `name`
+Specifies the name for the server
+
+#### `ip-address`
+Specifies the ip address for the server. Must be set if the identifier is set as "IP Address"
+
+#### `hostname`
+Specifies the hostname for the server. Must be set if the identifier is set as "hostname"
+
+#### `port`
+Specifies the port number to be bound with the server
+
+#### `comments`
+Specifies a description for the server
+
+#### `rule_group_name`
+Specifies the name of the rule group under which the server has to be created
+
+#### `service_name`
+Specifies the name of the service
+
+#### `backup_server`
+Specifies the ip address of the backup server if the primary server is not reachable
+
+#### `identifier`
+Specifies the identifier for the server. Mention "IP Address" or "Hostname"
+
+#### `hostname`
+Specifies the hostname if the identifier is set to Hostname
+
+#### `weight`
+Specifies the weight for the rule group server
 
 
 ## Limitations
