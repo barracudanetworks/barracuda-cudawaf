@@ -1,5 +1,5 @@
 {
-  "name": "barracuda",
+  "name": "barracuda-cudawaf",
   "version": "1.0.0",
   "author": "Barracuda Networks",
   "puppetversion": "2017.1.1",
