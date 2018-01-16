@@ -28,7 +28,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, parent: Pup
   # this method get all servers from WAF system and builds the instances array
   def self.instances
     services = getservices
-    Puppet.debug(self.to_s.split('::').last + ": List of services .................. #{services}")
+    Puppet.debug(to_s.split('::').last + ": List of services .................. #{services}")
     instances = []
 
     services.each do |service|
@@ -36,7 +36,7 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, parent: Pup
 
       # get all servers from WAF
       response, status_code, headers = Puppet::Provider::Cudawaf.get('Server', serviceName, {})
-      Puppet.debug(self.to_s.split('::').last + ": WAF Get all servers response:    #{response}")
+      Puppet.debug(to_s.split('::').last + ": WAF Get all servers response:    #{response}")
 
       svrData = response['data']
       serviceName = response['Service']
@@ -63,21 +63,21 @@ Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, parent: Pup
 
   # this method get all services from WAF system and builds the instances array
   def self.getservices
-    Puppet.debug(self.to_s.split('::').last + ': Calling getservices method : ')
+    Puppet.debug(to_s.split('::').last + ': Calling getservices method : ')
     service_instances = []
 
     # get all services from WAF
     response, status_code, headers = Puppet::Provider::Cudawaf.get('Service', {})
-    Puppet.debug(self.to_s.split('::').last + ": WAF Get all services response:    #{response}")
+    Puppet.debug(to_s.split('::').last + ": WAF Get all services response:    #{response}")
 
     unless response.nil?
       if status_code == 200
         svcData = response['data']
-        if svcData.nil?
+        unless svcData.nil?
           svcData.each do |_key, value|
             service_instances.push(value['name'])
           end
-        end  # if svcData check
+        end # unless svcData check
       end # if end
     end # unless end
 

@@ -70,11 +70,11 @@ Puppet::Type.type(:cudawaf_rule_group_server).provide(:cudawaf_rule_group_server
     unless response.nil?
       if status_code == 200
         svcData = response['data']
-        if svcData.nil?
+        unless svcData.nil?
           svcData.each do |_key, value|
             service_instances.push(value['name'])
           end
-        end # if svcData check end
+        end # unless svcData check end
       end
     end
 
