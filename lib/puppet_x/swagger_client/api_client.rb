@@ -116,8 +116,8 @@ module SwaggerClient
 
       # set custom cert, if provided
       req_opts[:cainfo] = @config.ssl_ca_cert if @config.ssl_ca_cert
-
-      if %i[post patch put delete].include?(http_method)
+      
+      if [:post, :patch, :put, :delete].include?(http_method)
         req_body = build_request_body(header_params, form_params, opts[:body])
         req_opts.update body: req_body
         if @config.debugging
