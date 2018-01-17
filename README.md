@@ -59,6 +59,8 @@ The following components are necessary to use this module:
   * A Puppet agent running as a Puppet Device proxy to the Barracuda WAF.
   * A Barracuda Web Application Firewall running the firmware version v9.1 or above
 
+Set the Ruby Library Path with the following command:
+  export RUBYLIB=/etc/puppetlabs/code/environments/<env name>/modules/cudawaf/lib/:$RUBYLIB , where "env name" is the name of the Puppet environment.
 
 ### To install the module
 ``` bash
