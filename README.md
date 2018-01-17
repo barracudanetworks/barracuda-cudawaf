@@ -10,9 +10,9 @@
   * [Server](#cudawaf_server)
   * [Certificates](#cudawaf_certificate)
   * [Cloud Control](#cudawaf_cloudcontrol)
-  * [Security_Policy] (#cudawaf_security_policy)
-  * [Rule_Group] (#cudawaf_rule_group)
-  * [Rule_Group_Server] (#cudawaf_rule_group_server)
+  * [Security_Policy](#cudawaf_security_policy)
+  * [Rule_Group](#cudawaf_rule_group)
+  * [Rule_Group_Server](#cudawaf_rule_group_server)
 
 
 ## Description
