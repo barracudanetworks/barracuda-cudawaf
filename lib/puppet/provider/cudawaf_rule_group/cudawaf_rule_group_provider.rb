@@ -1,5 +1,5 @@
-require 'puppet_x/modules/login_info'
-require 'puppet_x/modules/utils'
+require_relative '../../../puppet_x/modules/login_info'
+require_relative '../../../puppet_x/modules/utils'
 require 'puppet/provider/cudawaf'
 require 'puppet/util/network_device'
 

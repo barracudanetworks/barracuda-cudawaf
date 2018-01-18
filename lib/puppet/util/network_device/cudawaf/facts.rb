@@ -1,6 +1,6 @@
 require 'puppet/util/network_device/cudawaf'
-require 'puppet_x/modules/login_info'
-require 'puppet_x/modules/system_api'
+require_relative '../../../../puppet_x/modules/login_info'
+require_relative '../../../../puppet_x/modules/system_api'
 require 'uri'
 
 class Puppet::Util::NetworkDevice::Cudawaf::Facts
