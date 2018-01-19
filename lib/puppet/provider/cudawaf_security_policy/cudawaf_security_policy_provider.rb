@@ -7,6 +7,7 @@ require 'json'
 require 'base64'
 require 'uri'
 require 'logger'
+require 'typhoeus'
 
 Puppet::Type.type(:cudawaf_security_policy).provide(:cudawaf_security_policy_provider, parent: Puppet::Provider::Cudawaf) do
   attr_accessor :transport

@@ -6,6 +6,7 @@ require 'json'
 require 'base64'
 require 'uri'
 require 'logger'
+require 'rest-client'
 
 Puppet::Type.type(:cudawaf_cloudcontrol).provide(:cudawaf_cloudcontrol_provider, parent: Puppet::Provider::Cudawaf) do
   attr_accessor :transport

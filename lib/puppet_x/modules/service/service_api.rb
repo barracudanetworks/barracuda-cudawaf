@@ -10,6 +10,7 @@
 
 require 'uri'
 require_relative '../../swagger_client/api_client'
+require 'typhoeus'
 
 module SwaggerClient
   class ServiceApi

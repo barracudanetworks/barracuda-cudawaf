@@ -8,6 +8,7 @@ require 'base64'
 require 'uri'
 require 'logger'
 require 'rest-client'
+require 'typhoeus'
 
 Puppet::Type.type(:cudawaf_server).provide(:cudawaf_server_provider, parent: Puppet::Provider::Cudawaf) do
   attr_accessor :transport
