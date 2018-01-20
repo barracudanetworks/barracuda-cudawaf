@@ -1,14 +1,18 @@
 {
   "name": "barracuda-cudawaf",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Barracuda Networks",
-  "puppetversion": "2017.1.1",
   "source": "https://github.com/barracudanetworks/barracuda-cudawaf",
   "summary": "This module can be used to configure the Barracuda Web Application Firewall.",
   "license": "Apache-2.0",
-  "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 4.10.0"}
+  "dependencies":[],
+  "requirements": [
+    {"name": "puppet","version_requirement": ">= 4.7.0 < 6.0.0"}
   ],
   "project_page": "https://github.com/barracudanetworks/barracuda-cudawaf",
-  "issues_url": "https://github.com/barracudanetworks/barracuda-cudawaf/issues"
+  "issues_url": "https://github.com/barracudanetworks/barracuda-cudawaf/issues",
+  "tags": [ "cudawaf"],
+  "operatingsystem_support": [
+    {"operatingsystem": "BigIp","operatingsystemrelease": ["12.1"]}
+  ]
 }
