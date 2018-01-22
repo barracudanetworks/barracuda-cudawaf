@@ -108,6 +108,8 @@ Command:
 ### Handling dependencies on the agent:
 The best way to handle these is to use the 'Package' resource and run the puppet agent command on the target node.
 Sample manifest of the Package resource:
+
+```puppet
   package { 'typhoeus' :
     ensure => present,
     provider => 'puppet_gem',
@@ -116,7 +118,8 @@ Sample manifest of the Package resource:
     ensure => '1.8.0',
     provider => 'puppet_gem',
   }
-  
+ ```
+ 
 ### To install the module
 ``` bash
 puppet module install barracuda-cudawaf
