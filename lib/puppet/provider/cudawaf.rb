@@ -1,8 +1,6 @@
 require 'puppet/util/network_device/cudawaf'
 require 'puppet/util/network_device/transport/cudawaf'
 
-require 'typhoeus'
-
 #
 #  Initialize the Cudawaf device.
 #
