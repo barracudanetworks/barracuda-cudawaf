@@ -1,6 +1,6 @@
 {
   "name": "barracuda-cudawaf",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "Barracuda Networks",
   "source": "https://github.com/barracudanetworks/barracuda-cudawaf",
   "summary": "This module can be used to configure the Barracuda Web Application Firewall.",
