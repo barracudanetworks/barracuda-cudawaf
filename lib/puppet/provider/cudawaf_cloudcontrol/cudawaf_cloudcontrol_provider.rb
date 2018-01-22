@@ -1,6 +1,5 @@
 require_relative '../../../puppet_x/modules/login_info'
-require 'puppet/provider/cudawaf'
-require 'puppet/util/network_device'
+require File.join(File.dirname(__FILE__), '../cudawaf')
 
 require 'json'
 require 'base64'

@@ -1,13 +1,11 @@
 require_relative '../../../puppet_x/modules/login_info'
 require_relative '../../../puppet_x/modules/utils'
-require 'puppet/provider/cudawaf'
-require 'puppet/util/network_device'
+require File.join(File.dirname(__FILE__), '../cudawaf')
 
 require 'json'
 require 'base64'
 require 'uri'
 require 'logger'
-require 'typhoeus'
 
 Puppet::Type.type(:cudawaf_service).provide(:cudawaf_service_provider, parent: Puppet::Provider::Cudawaf) do
   attr_accessor :transport
