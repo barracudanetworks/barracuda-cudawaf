@@ -1,4 +1,6 @@
-require 'puppet/util/network_device/cudawaf'
+# require 'puppet/util/network_device/cudawaf'
+require File.join(File.dirname(__FILE__), '../cudawaf')
+
 require_relative '../../../../puppet_x/modules/login_info'
 require_relative '../../../../puppet_x/modules/system_api'
 require 'uri'

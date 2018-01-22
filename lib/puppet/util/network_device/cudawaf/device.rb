@@ -1,7 +1,11 @@
 require 'puppet/util/network_device/base'
-require 'puppet/util/network_device/cudawaf'
-require 'puppet/util/network_device/cudawaf/facts'
-require 'puppet/util/network_device/transport/cudawaf'
+# require 'puppet/util/network_device/cudawaf'
+# require 'puppet/util/network_device/cudawaf/facts'
+# require 'puppet/util/network_device/transport/cudawaf'
+
+require File.join(File.dirname(__FILE__), '../cudawaf')
+require File.join(File.dirname(__FILE__), '../cudawaf/facts')
+require File.join(File.dirname(__FILE__), '../transport/cudawaf')
 
 require "uri"
 
