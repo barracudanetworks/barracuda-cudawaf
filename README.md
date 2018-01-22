@@ -62,23 +62,48 @@ The following components are necessary to use this module:
 ### Configuration on the Puppet Master
 Install the following gems:
 1. Typhoeus
+
 2. Rest-Client v 1.8.0
 Commands : 
+```bash 
 /opt/puppetlabs/bin/puppetserver gem install typhoeus
+```
+```bash 
 /opt/puppetlabs/bin/puppetserver gem install rest-client -v 1.8.0
+```
+
 If the rest client needs any additional dependencies to be installed, most likely gcc and gcc-c++ follow the instructions below:
+
 Install gcc and gcc-c++ :
+
 On CentOS:
+
+```bash 
 yum install gcc
+```
+
+```bash
 yum install gcc-c++
+```
 
 Elevating the Permissions for the gemspec files
 In some cases, external dependencies can cause errors such as "Error in retreiving resource statement". Increasing read and execute permissions to the gemspec on the master can help solve this problem.
-Location:
+
+Default Location:
+```bash 
 /opt/puppetlabs/puppet/lib/ruby/gems/2.0.1/specifications
-chmod 777 to all the files here. (Can be less permissive depending on what the error is)
-Please note: If you are changing permissions, please remember to restart the puppetserver daemon. Command: /opt/puppetlabs/bin/puppetserver stop
+```
+
+Execute chmod 777 to all the files here. (Can be less permissive depending on what the error is)
+
+Please note: If you are changing permissions, please remember to restart the puppetserver daemon. 
+Command: 
+```bash 
+/opt/puppetlabs/bin/puppetserver stop
+```
+```bash
 /opt/puppetlabs/bin/puppetserver start
+```
 
 ### Handling dependencies on the agent:
 The best way to handle these is to use the 'Package' resource and run the puppet agent command on the target node.
