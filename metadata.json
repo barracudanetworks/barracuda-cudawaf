@@ -13,6 +13,6 @@
   "issues_url": "https://github.com/barracudanetworks/barracuda-cudawaf/issues",
   "tags": [ "cudawaf"],
   "operatingsystem_support": [
-    {"operatingsystem": "BigIp","operatingsystemrelease": ["12.1"]}
+    {"operatingsystem": "waf/firmware","operatingsystemrelease": ["9.1.1"]}
   ]
 }
