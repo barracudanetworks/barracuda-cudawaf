@@ -13,6 +13,6 @@
   "issues_url": "https://github.com/barracudanetworks/barracuda-cudawaf/issues",
   "tags": [ "cudawaf"],
   "operatingsystem_support": [
-    {"operatingsystem": "waf/firmware","operatingsystemrelease": ["9.1.1"]}
+    {"operatingsystem": "barracudawaf/firmware v9.1.1+","operatingsystemrelease": ["9.1.1"]}
   ]
 }
