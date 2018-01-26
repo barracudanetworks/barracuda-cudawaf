@@ -64,26 +64,27 @@ Install the following gems:
 1. Typhoeus
 
 2. Rest-Client v 1.8.0
-Commands : 
+	Rest client needs dependencies to be installed, most likely gcc and gcc-c++ follow the instructions below:
+
+	Install gcc and gcc-c++ :
+
+	On CentOS:
+
+	```bash 
+	yum install gcc, gcc-c++
+	```
+
+To install the gem files:
+
 ```bash 
-/opt/puppetlabs/bin/puppetserver gem install typhoeus
-```
-```bash 
+Using the puppetserver gem binary (required):
+
+/opt/puppetlabs/bin/puppetserver gem install typhoeus -v 1.3.0
 /opt/puppetlabs/bin/puppetserver gem install rest-client -v 1.8.0
-```
 
-If the rest client needs any additional dependencies to be installed, most likely gcc and gcc-c++ follow the instructions below:
-
-Install gcc and gcc-c++ :
-
-On CentOS:
-
-```bash 
-yum install gcc
-```
-
-```bash
-yum install gcc-c++
+Using the Puppet agent gem binary (required)
+/opt/puppetlabs/puppet/bin/gem insall typhoeus -v 1.3.0
+/opt/puppetlabs/puppet/bin/gem install rest-client -v 1.8.0
 ```
 
 Elevating the Permissions for the gemspec files
@@ -96,7 +97,7 @@ chmod 777 rest-client-1.8.0.gemspec
 chmod 777 typhoeus-1.*
 ```
 
-Please note: After you are changing permissions, please remember to restart the puppetserver daemon. 
+#### Please note: After you are changing permissions, please remember to restart the puppetserver daemon. 
 
 ```bash 
 /opt/puppetlabs/bin/puppetserver stop
