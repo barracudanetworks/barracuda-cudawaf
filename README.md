@@ -87,12 +87,14 @@ Using the Puppet agent gem binary (required)
 /opt/puppetlabs/puppet/bin/gem install rest-client -v 1.8.0
 ```
 
-Elevating the Permissions for the gemspec files
+#### Elevating the Permissions for the gemspec files
 In some cases, external dependencies can cause errors such as "Error in retreiving resource statement". Increasing read and execute permissions to the gemspec on the master can help solve this problem.
 
-Default Location:
+Default Location of the gemspec files:
 ```bash 
 /opt/puppetlabs/puppet/lib/ruby/gems/2.0.1/specifications
+
+To change permissions:
 chmod 777 rest-client-1.8.0.gemspec
 chmod 777 typhoeus-1.*
 ```
