@@ -93,16 +93,14 @@ Default Location:
 ```bash 
 /opt/puppetlabs/puppet/lib/ruby/gems/2.0.1/specifications
 chmod 777 rest-client-1.8.0.gemspec
-
+chmod 777 typhoeus-1.*
 ```
 
+Please note: After you are changing permissions, please remember to restart the puppetserver daemon. 
 
-Please note: If you are changing permissions, please remember to restart the puppetserver daemon. 
-Command: 
 ```bash 
 /opt/puppetlabs/bin/puppetserver stop
-```
-```bash
+
 /opt/puppetlabs/bin/puppetserver start
 ```
 
