@@ -92,9 +92,10 @@ In some cases, external dependencies can cause errors such as "Error in retreivi
 Default Location:
 ```bash 
 /opt/puppetlabs/puppet/lib/ruby/gems/2.0.1/specifications
+chmod 777 rest-client-1.8.0.gemspec
+
 ```
 
-Execute chmod 777 to all the files here. (Can be less permissive depending on what the error is)
 
 Please note: If you are changing permissions, please remember to restart the puppetserver daemon. 
 Command: 
