@@ -22,7 +22,7 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
 
   def parse_device_facts
     facts = {
-      :productType => :Cudawaf
+      'productType' => 'Cudawaf'
     }
 
     Puppet.debug(self.class.to_s.split("::").last + ": Parsing facts for device - " + @url.host)
@@ -51,12 +51,12 @@ class Puppet::Util::NetworkDevice::Cudawaf::Facts
     #        }
     #
 
-    [ :device_name,
-      :hostname,
-      :model,
-      :serial,
-      :domain,
-      :time_zone
+    [ 'device_name',
+      'hostname',
+      'model',
+      'serial',
+      'domain',
+      'time_zone'
     ].each do |fact|
       api_fact_name = fact.to_s.gsub(/_/, "-")
       facts[fact] = items[api_fact_name.to_s]
